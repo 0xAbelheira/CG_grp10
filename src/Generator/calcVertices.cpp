@@ -130,13 +130,13 @@ figure generate::createBox(float size, float nrDiv){
             box.addPoint(x, -y, -z + az);
             box.addPoint(x, -y + ay, -z);
 
-            x -= ax;
+            y -= ay;
         }
-        y -= ay;
-        x += nrDiv*ax;
+        z -= az;
+        y += nrDiv*ay;
     }
 
-    y += nrDiv*ay;
+    z += nrDiv*az;
 
     // Parede da esquerda
     for(int i = 0; i < nrDiv; i++){
@@ -150,14 +150,14 @@ figure generate::createBox(float size, float nrDiv){
             box.addPoint(-x, -y, -z + az);
             box.addPoint(-x, -y + ay, -z + az);
 
-            x -= ax;
+            y -= ay;
         }
-        y -= ay;
-        x += nrDiv*ax;
+        z -= az;
+        y += nrDiv*ay;
     }
     return box;
 }
-""" ESPERAR PELA AULA PRÁTICA
+/* ESPERAR PELA AULA PRÁTICA
 
 // Função que cria a esfera 
 figure generate::createSphere(float radius, int slices, int stacks){
@@ -248,10 +248,4 @@ figure generate::createCone(float radius, float height, int slices, int stacks) 
     }
     return cone;
 }
-"""
-
-
-
-
-
-
+*/
