@@ -1,5 +1,6 @@
 #include "drawFunc.hpp"
 
+
 // funçao auxiliar que desenha triangulos
 void drawTriangle(point p1, point p2, point p3) {
 
