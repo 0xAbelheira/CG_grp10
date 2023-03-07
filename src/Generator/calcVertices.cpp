@@ -164,8 +164,10 @@ figure generate::createSphere(float radius, int slices, int stacks){
 	float beta = (float)M_PI / stacks;
 
     figure sphere;
+    //Desenhar apenas um triangulo nas extremidades para evitar pontos desnecessarios
 
 	for(int i = 0; i < slices; i++) {
+        //topo
 		sphere.addPoint(0, radius, 0);
 		sphere.addPoint(radius * sin(beta) * sin(alpha*i), radius * cos(beta), radius * sin(beta) * cos(alpha*i));
 		sphere.addPoint(radius * sin(beta) * sin(alpha*(i+1)), radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
@@ -180,6 +182,7 @@ figure generate::createSphere(float radius, int slices, int stacks){
 			sphere.addPoint(radius * sin(beta*(j+1)) * sin(alpha*(i+1)), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*(i+1)));
 		}
 
+        //parte baixo
 		sphere.addPoint(radius * sin(beta) * sin(alpha*(i+1)), -radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
 		sphere.addPoint(radius * sin(beta) * sin(alpha*i), -radius * cos(beta), radius * sin(beta) * cos(alpha*i));
 		sphere.addPoint(0, -radius, 0);
