@@ -4,7 +4,7 @@
 #include "calcVertices.hpp"
 
 // Função que cria o Plano. Recebe o tamanho dele e o número de divisões (sub-quadrado)
-figure generate::createPlane(float size, float nrDiv){
+figure generate::createPlane(float size, int nrDiv){
     float x, z, ax, az;
     x = z = (float)size/2;
     ax = az = (float)size/nrDiv;
@@ -31,7 +31,7 @@ figure generate::createPlane(float size, float nrDiv){
 }
 
 // Função que cria a Box. Recebe o tamanho dela e o número de divisões (sub-quadrados) de cada face
-figure generate::createBox(float size, float nrDiv){
+figure generate::createBox(float size, int nrDiv){
     float x, y, z, ax, ay, az;
     x = y = z = (float)size/2;
     ax = ay = az = (float)size/nrDiv;
@@ -187,6 +187,8 @@ figure generate::createSphere(float radius, int slices, int stacks){
 		sphere.addPoint(radius * sin(beta) * sin(alpha*i), -radius * cos(beta), radius * sin(beta) * cos(alpha*i));
 		sphere.addPoint(0, -radius, 0);
 	}
+
+    return sphere;
 }
 
 // Função que cria o Cone. Recebe o raio da base, altura, slices e stacks
