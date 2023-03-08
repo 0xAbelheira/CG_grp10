@@ -1,15 +1,20 @@
-#include "drawFunc.hpp"
-#include "../tinyXML/tinyxml.h"
+#include "drawFunc.cpp"
+#include "../tinyxml/tinyxml.h"
 
 #include <iostream>
 #include <iterator>
 #include <map>
+#include <GL/glut.h>
 
 using namespace draw;
 using namespace std;
 
+map<int, figure> figurasMap;
+int ativarFig = 0; //Vai buscar a chave/identificador da figura para desenha-la após obter permissão
+
 int window_size_w;
 int window_size_h;
+vector<string> model;
 
 void changeSize(int w, int h)
 {
@@ -56,62 +61,21 @@ void renderScene(void){
 	glutSwapBuffers();
 }
 
-models xml_models(XMLElement* models_e) {
-	models ms = models();
+void xml_models(XMLElement* models_e)
+{
 	XMLElement* model_e = models_e->FirstChildElement("model");
 	while (model_e) {
-		bool exists = true;
-		model m = model();
-		const char* filename = model_e->Attribute("file");
-		ifstream file(filename);
-		m.add_name(filename);
-		if (file.is_open()) { //abre o ficheiro
-			cout << "Loading file model " << filename << "...";
-			string line;
-			while (getline(file, line)) { //l� linha a linha
-				if (line[0] == 'i') {
-					int idx = stoi(line.substr(1, line.length()));
-					m.add_index(idx); //cada indice corresponde a 3 coords.
-				}
-				else {
-					point p = point(line);
-					m.add_point(p);
-				}
-			}
-			file.close();
-			cout << " loaded.\n";
-			XMLElement* texture_e = model_e->FirstChildElement("texture");
-			if (texture_e) {
-				const char* texturename = texture_e->Attribute("file");
-				m.add_texture(texturename);
-			}
-			XMLElement* color_e = model_e->FirstChildElement("color");
-			if (color_e) {
-				m.add_color(xml_color(color_e));
-			}
-			ms.add_model(m);
-		}
-		else {
-			exists = false;
-			cout << "WARNING! File model " << filename << " does not exist!(IGNORED)\n";
-		}
-		model_e = model_e->NextSiblingElement("model");
+		string x;
+		model_e->QueryAttribute("file", &x);
+		model.push_back(x);
 	}
-	return ms;
 }
 
-group xml_group(XMLElement* group_e) {
-	group g = group();
+void xml_group(XMLElement* group_e) {
 	XMLElement* models_e = group_e->FirstChildElement("models");
 	if (models_e) {
-		g.add_models(xml_models(models_e));
+		xml_models(models_e);
 	}
-	XMLElement* othergroup_e = group_e->FirstChildElement("group");
-	while (othergroup_e) {
-		g.add_group(xml_group(othergroup_e));
-		othergroup_e = othergroup_e->NextSiblingElement("group");
-	}
-	return g;
 }
 
 void xml_camera(XMLElement* camera_e) {
@@ -172,7 +136,7 @@ int xml_world(XMLElement* world_e) {
 	}
 	XMLElement* group_e = world_e->FirstChildElement("group");
 	if (group_e) {
-		principal_g = xml_group(group_e);
+		xml_group(group_e);
 	}
 	else {
 		cout << "ERROR: \"group\" not detected.";

@@ -21,5 +21,4 @@ namespace utilities{
     };
 
     std::string getPath();
-
 }

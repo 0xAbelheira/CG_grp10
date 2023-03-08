@@ -1,5 +1,4 @@
-#include "../Utilities/utilities.hpp"
-#include "calcVertices.hpp"
+#include "../Utilities/utilities.cpp"
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -7,11 +6,11 @@
 #include <GL/glut.h>
 #endif
 
-//using namespace utilities;
+using namespace utilities;
 
 namespace draw {
 
-    //void drawFigure(utils::figure);
+    void drawFigure(figure);
     void drawReferencial();
 
 }
