@@ -61,7 +61,7 @@ void renderScene(void){
 	glutSwapBuffers();
 }
 
-void xml_models(XMLElement* models_e)
+void xml_models(XmlElement* models_e)
 {
 	XMLElement* model_e = models_e->FirstChildElement("model");
 	while (model_e) {
