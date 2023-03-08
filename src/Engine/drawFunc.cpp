@@ -1,7 +1,5 @@
 #include "drawFunc.hpp"
 
-
-
 // funçao auxiliar que desenha triangulos
 void drawTriangle(point p1, point p2, point p3) {
 
@@ -21,10 +19,10 @@ void drawTriangle(point p1, point p2, point p3) {
 // recebe a lista de pontos, e o n�mero de pontos contidos na lista
 void draw::drawFigure(figure f) {
 	int i;
-	int n = f.pontos.size();
+	int n = f.points.size();
 	for (i = 0; i+2 <= n; i+=3) {
 		//desenha os triangulos partindo da lista de pontos da figura
-		drawTriangle(f.pontos[i], f.pontos[i + 1], f.pontos[i + 2]);
+		drawTriangle(f.points[i], f.points[i + 1], f.points[i + 2]);
 	}
 }
 
