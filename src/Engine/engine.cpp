@@ -67,51 +67,45 @@ void renderScene(void){
 	glutSwapBuffers();
 }
 
+void nextFigureKey (unsigned char key, int x, int y){
+
+    switch (key) {
+        case 'd':
+            if(ativarFig<(figurasMap.size()-1)){
+                ativarFig++;
+                renderScene();
+            }
+            break;
+        case 'a':
+            if(ativarFig>0){
+                ativarFig--;
+                renderScene();
+            }
+            break;
+        default:
+            break;
+    }
+    //renderScene(); para mudar de cor :)
+}
+
 int glut_main(int argc, char** argv) {
+
 	// init GLUT and the window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(100, 100);
-	glutInitWindowSize(800, 800);
+	glutInitWindowSize(window_size_w, window_size_h);
 	glutCreateWindow("CG_PROJECT");
-	// ilInit();
-	// timebase = glutGet(GLUT_ELAPSED_TIME);
 
 	// Required callback registry 
 	glutDisplayFunc(renderScene);
-	glutIdleFunc(renderScene);
 	glutReshapeFunc(changeSize);
 
+	glutKeyboardFunc(nextFigureKey);
 
-	// put here the registration of the keyboard callbacks
-	// glutKeyboardFunc(keyboardfunc);
-	// glutMouseFunc(processMouseButtons);
-	// glutMotionFunc(processMouseMotion);
-
-	// init GLEW
-// #ifndef __APPLE__
-	// glewInit();
-// #endif
 	//  OpenGL settings
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_NORMALIZE);
-	glEnable(GL_TEXTURE_2D);
-	
-	// if (nls > 0) {
-	// 	glEnable(GL_LIGHTING);
-	// 	for (int i = 0; i < nls; i++) {
-	// 		glEnable(GL_LIGHT0 + i);
-	// 	}
-	// 	cout << "Preparing lights...";
-	// 	ls.init_lights();
-	// 	cout << " prepared.\n";
-	// }
-	// cout << "Preparing data...";
-	// principal_g.prepare_data();
 
 	cout << " prepared.\n";
 
@@ -119,13 +113,6 @@ int glut_main(int argc, char** argv) {
 	glutMainLoop();
 
 	return 1;
-}
-
-void remake_lookAt() {
-	r = sqrt(pow((cam.px - cam.lx), 2) + pow((cam.py - cam.ly), 2) + pow((cam.pz - cam.lz), 2));
-	beta_ = (180 * asin((cam.py - cam.ly) / r)) / 3.14;
-	float aux = (cam.px - cam.lx) / (r * cos((beta_ * 3.14) / 180));
-	alpha = (180 * asin(aux)) / 3.14;
 }
 
 void xml_models(XMLElement* models_e)
@@ -166,6 +153,7 @@ void xml_models(XMLElement* models_e)
 		else{
 			std::cout << "Can't open file!"<< std::endl;
 		}
+		model_e = model_e->NextSiblingElement("model");
 	}
 }
 
@@ -191,7 +179,6 @@ void xml_camera(XMLElement* camera_e) {
 		lookAt_e->QueryAttribute("x", &cam.lx);
 		lookAt_e->QueryAttribute("y", &cam.ly);
 		lookAt_e->QueryAttribute("z", &cam.lz);
-		remake_lookAt();
 	}
 	else {
 		cout << "WARNING: \"lookAt\" (element of \"camera\") not detected. Using default values...";
@@ -266,17 +253,6 @@ int main(int argc, char** argv) {
 		else {
 			int err = xml_world(world_e);
 			if (err == -1) return -1;
-			cout << "------------Controls:---------------\n";
-			cout << "Show coordinates system: press R\n";
-			cout << "Activate a pointer of lookAt camera: press P\n";
-			cout << "Change between GL_LINE and GL_FILL: press M\n";
-			cout << "Zoom-in/Zoom-out: press MOUSE-2 and move\n";
-			cout << "Move camera: press MOUSE-1 and move\n";
-			cout << "Move lookAT camera: press\n";
-			cout << " > W and S (Y axis)\n";
-			cout << " > A and D (X axis)\n";
-			cout << " > E and Q (Z axis)\n";
-			cout << "------------------------------------\n";
 		}
 	}
 	else {
