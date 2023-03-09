@@ -1,4 +1,4 @@
-#include "../Utilities/utilities.cpp"
+#include "../Utilities/utilities.hpp"
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>

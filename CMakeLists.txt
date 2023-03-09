@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.5)
 
 # Project Name
-PROJECT(generator)
+PROJECT(Fase1)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-add_executable(${PROJECT_NAME} ./src/Generator/generator.cpp ./src/Generator/calcVertices.cpp ./src/Utilities/utilities.cpp)
-# add_executable(${PROJECT_NAME} ./src/Engine/engine.cpp )
+add_executable(generator ./src/Generator/generator.cpp ./src/Generator/calcVertices.cpp ./src/Utilities/utilities.cpp)
+add_executable(engine ./src/Engine/engine.cpp ./src/Utilities/tinyxml2/tinyxml2.cpp ./src/Engine/drawFunc.cpp ./src/Utilities/utilities.cpp)
 
 
 find_package(OpenGL REQUIRED)

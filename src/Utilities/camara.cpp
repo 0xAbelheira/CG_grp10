@@ -1,4 +1,3 @@
-#include <stdio.h>
 class camera {
 public:
 	float px, py, pz, lx, ly, lz, ux, uy, uz, fov, near, far;

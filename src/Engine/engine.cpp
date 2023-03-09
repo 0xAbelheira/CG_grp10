@@ -1,5 +1,5 @@
-#include "drawFunc.cpp"
-#include "../Utilities/tinyxml2/tinyxml2.cpp"
+#include "drawFunc.hpp"
+#include "../Utilities/tinyxml2/tinyxml2.h"
 #include "../Utilities/camara.cpp"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
