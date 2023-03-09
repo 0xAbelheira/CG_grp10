@@ -18,10 +18,10 @@ int createFileType (vector<point> vertices, string name){
     }
 
     if(!file){
-        cout<<"\n       Error in creating file!!!\n";
+        cout<<"\n!!!Error in creating file!!!\n";
         return -1;
     }
-    cout<<"File created successfully.";
+    cout<<"File created successfully!" << endl;
     file.close();
     return 0;
 }
@@ -29,11 +29,11 @@ int createFileType (vector<point> vertices, string name){
 int main(int argc, char* argv[]) {
     figure f;
 
-    if(argc<=1) cout << "Missing Arguments" << endl;
+    if(argc<=1) cout << "Missing Arguments.." << endl;
     else {
 
         //Gerar os vértices para o desenho do plano e transcrever para o ficheiro .3d
-        if ((strcmp(argv[1], "Plane") == 0) && (argc == 5)) {
+        if ((strcmp(argv[1], "plane") == 0) && (argc == 5)) {
 
             float x = std::stof(argv[2]);
             stringstream aux(argv[3]);
@@ -41,29 +41,22 @@ int main(int argc, char* argv[]) {
             aux >> camadas;
 
             f = createPlane(x, camadas);
-
-            if (createFileType(f.points, argv[4]) == 0) {
-                std::cout << "Done\n" << std::endl;
-            }
-
+            createFileType(f.points, argv[4]);
         }
 
             //Gerar os vértices para o desenho do cubo/caixa e transcrever para o ficheiro .3d
-        else if ((strcmp(argv[1], "Box") == 0) && (argc == 5)) {
+        else if ((strcmp(argv[1], "box") == 0) && (argc == 5)) {
             float l = std::stof(argv[2]);
             stringstream aux(argv[3]);
             int camadas = 0;
             aux >> camadas;
 
             f = createBox(l , camadas);
-
-            if (createFileType(f.points, argv[4]) == 0) {
-                std::cout << "Done\n" << std::endl;
-            }
+            createFileType(f.points, argv[4]);
         }
 
             //Gerar os vértices para o desenho da esfera e transcrever para o ficheiro .3d
-        else if ((strcmp(argv[1], "Sphere") == 0) && (argc == 6)) {
+        else if ((strcmp(argv[1], "sphere") == 0) && (argc == 6)) {
             float radius = std::stof(argv[2]);
             stringstream aux(argv[3]);
             int slices = 0;
@@ -74,15 +67,12 @@ int main(int argc, char* argv[]) {
 
             f = createSphere(radius, stacks, slices);
 
-            if (createFileType(f.points, argv[5]) == 0) {
-                //write_XML(argv[5],argv[6]);
-                std::cout << "Done\n" << std::endl;
-            }
+            createFileType(f.points, argv[5]);
 
         }
 
             //Gerar os vértices para o desenho do cone e transcrever para o ficheiro .3d
-        else if ((strcmp(argv[1], "Cone") == 0) && (argc == 7)) {
+        else if ((strcmp(argv[1], "cone") == 0) && (argc == 7)) {
             float radius = std::stof(argv[2]);
             float height = std::stof(argv[3]);
             stringstream aux(argv[4]);
@@ -94,10 +84,8 @@ int main(int argc, char* argv[]) {
 
             f = createCone(radius, height, stacks, slices);
 
-            if (createFileType(f.points, argv[6]) == 0) {
-                //write_XML(argv[6],argv[7]);
-                std::cout << "Done\n" << std::endl;
-            }
+            createFileType(f.points, argv[6]);
+                
         }
 
             //Tela de ajuda e comandos
