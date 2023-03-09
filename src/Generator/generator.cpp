@@ -1,5 +1,5 @@
-#include "calcVertices.cpp"
 #include <string.h>
+#include "calcVertices.hpp"
 
 using namespace std;
 using namespace generate;

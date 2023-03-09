@@ -1,6 +1,5 @@
 #include "utilities.hpp"
 
-#define __unix__
 #ifdef __unix__
 #include <unistd.h>
 #define getDir getcwd
