@@ -1,11 +1,15 @@
 #include "drawFunc.cpp"
 #include "../Utilities/tinyxml2/tinyxml2.cpp"
 #include "../Utilities/camara.cpp"
-
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glew.h>
+#include <GL/glut.h>
+#endif
 #include <iostream>
 #include <iterator>
 #include <map>
-#include <GL/glut.h>
 #include <math.h>
 
 using namespace tinyxml2;
