@@ -23,5 +23,5 @@ void figure::addPoint(float a, float b, float c){
 
 std::string utilities::getPath(){
     char path[90];
-    return getDir(path, 90) + slash + "3dFiles" + slash;
+    return getDir(path, 90) + slash + ".." + slash + "3dFiles" + slash;
 }

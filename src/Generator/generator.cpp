@@ -8,7 +8,6 @@ using namespace generate;
 int createFileType (vector<point> vertices, string name){
 
     fstream file;
-    cout << utilities::getPath() << "asdasdasd" << endl;
 
     file.open(utilities::getPath() + name,ios::out);
     for(point p : vertices){
