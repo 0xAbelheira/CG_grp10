@@ -5,9 +5,9 @@
 
 // Função que cria o Plano. Recebe o tamanho dele e o número de divisões (sub-quadrado)
 figure generate::createPlane(float size, int nrDiv){
-    float x, z, ax, az;
+    float x, z, av;
     x = z = (float)size/2;
-    ax = az = (float)size/nrDiv;
+    av = (float)size/nrDiv;
 
     figure pl;
 
@@ -15,26 +15,26 @@ figure generate::createPlane(float size, int nrDiv){
         for(int j = 0; j < nrDiv; j++) {
 
             pl.addPoint(-x ,0.0f, -z);
-            pl.addPoint(-x,0.0f, -z + az);
-            pl.addPoint(-x + ax,0.0f, -z);
+            pl.addPoint(-x,0.0f, -z + av);
+            pl.addPoint(-x + av,0.0f, -z);
 
-            pl.addPoint(-x + ax ,0.0f, -z + az);
-            pl.addPoint(-x + ax,0.0f, -z);
-            pl.addPoint(-x,0.0f, -z + az);
+            pl.addPoint(-x + av ,0.0f, -z + av);
+            pl.addPoint(-x + av,0.0f, -z);
+            pl.addPoint(-x,0.0f, -z + av);
 
-            x -= ax;
+            x -= av;
         }
-        z -= az;
-        x += nrDiv*ax;
+        z -= av;
+        x += nrDiv*av;
     }
     return pl;
 }
 
 // Função que cria a Box. Recebe o tamanho dela e o número de divisões (sub-quadrados) de cada face
 figure generate::createBox(float size, int nrDiv){
-    float x, y, z, ax, ay, az;
+    float x, y, z, av;
     x = y = z = (float)size/2;
-    ax = ay = az = (float)size/nrDiv;
+    av = (float)size/nrDiv;
 
     figure box;
 
@@ -42,118 +42,118 @@ figure generate::createBox(float size, int nrDiv){
     for(int i = 0; i < nrDiv; i++) {
         for(int j = 0; j < nrDiv; j++) {
 
-            box.addPoint(-x + ax, -y, -z);
-            box.addPoint(-x, -y, -z + az);
+            box.addPoint(-x + av, -y, -z);
+            box.addPoint(-x, -y, -z + av);
             box.addPoint(-x , -y, -z);
 
-            box.addPoint(-x, -y, -z + az);
-            box.addPoint(-x + ax, -y, -z);
-            box.addPoint(-x + ax , -y, -z + az);
+            box.addPoint(-x, -y, -z + av);
+            box.addPoint(-x + av, -y, -z);
+            box.addPoint(-x + av , -y, -z + av);
 
-            x -= ax;
+            x -= av;
         }
-        z -= az;
-        x += nrDiv*ax;
+        z -= av;
+        x += nrDiv*av;
     }
 
-    z += nrDiv*az;
+    z += nrDiv*av;
 
     // Teto da caixa
     for(int i = 0; i < nrDiv; i++) {
         for(int j = 0; j < nrDiv; j++) {
 
             box.addPoint(-x , y, -z);
-            box.addPoint(-x, y, -z + az);
-            box.addPoint(-x + ax, y, -z);
+            box.addPoint(-x, y, -z + av);
+            box.addPoint(-x + av, y, -z);
 
-            box.addPoint(-x + ax , y, -z + az);
-            box.addPoint(-x + ax, y, -z);
-            box.addPoint(-x, y, -z + az);
+            box.addPoint(-x + av , y, -z + av);
+            box.addPoint(-x + av, y, -z);
+            box.addPoint(-x, y, -z + av);
 
-            x -= ax;
+            x -= av;
         }
-        z -= az;
-        x += nrDiv*ax;
+        z -= av;
+        x += nrDiv*av;
     }
 
-    z += nrDiv*az;
+    z += nrDiv*av;
 
     // Parede da frente
     for(int i = 0; i < nrDiv; i++) {
         for(int j = 0; j < nrDiv; j++) {
 
             box.addPoint(-x, -y, z);
-            box.addPoint(-x + ax, -y, z);
-            box.addPoint(-x,-y + ay, z);
+            box.addPoint(-x + av, -y, z);
+            box.addPoint(-x,-y + av, z);
 
-            box.addPoint(-x + ax, -y + ay,z);
-            box.addPoint(-x, -y + ay, z);
-            box.addPoint(-x + ax, -y, z);
+            box.addPoint(-x + av, -y + av,z);
+            box.addPoint(-x, -y + av, z);
+            box.addPoint(-x + av, -y, z);
 
-            x -= ax;
+            x -= av;
         }
-        y -= ay;
-        x += nrDiv*ax;
+        y -= av;
+        x += nrDiv*av;
     }
 
-    y += nrDiv*ay;
+    y += nrDiv*av;
 
     // Parede de trás
     for(int i = 0; i < nrDiv; i++) {
         for(int j = 0; j < nrDiv; j++) {
 
-            box.addPoint(-x,-y + ay, -z);
-            box.addPoint(-x + ax, -y, -z);
+            box.addPoint(-x,-y + av, -z);
+            box.addPoint(-x + av, -y, -z);
             box.addPoint(-x, -y, -z);
 
-            box.addPoint(-x + ax, -y, -z);
-            box.addPoint(-x, -y + ay, -z);
-            box.addPoint(-x + ax, -y + ay,-z);
+            box.addPoint(-x + av, -y, -z);
+            box.addPoint(-x, -y + av, -z);
+            box.addPoint(-x + av, -y + av,-z);
 
-            x -= ax;
+            x -= av;
         }
-        y -= ay;
-        x += nrDiv*ax;
+        y -= av;
+        x += nrDiv*av;
     }
 
-    y += nrDiv*ay;
+    y += nrDiv*av;
 
     // Parede da direita
     for(int i = 0; i < nrDiv; i++){
         for(int j = 0; j < nrDiv; j++){
 
             box.addPoint(x, -y, -z);
-            box.addPoint(x, -y + ay, -z);
-            box.addPoint(x, -y, -z + az);
+            box.addPoint(x, -y + av, -z);
+            box.addPoint(x, -y, -z + av);
 
-            box.addPoint(x, -y + ay, -z + az);
-            box.addPoint(x, -y, -z + az);
-            box.addPoint(x, -y + ay, -z);
+            box.addPoint(x, -y + av, -z + av);
+            box.addPoint(x, -y, -z + av);
+            box.addPoint(x, -y + av, -z);
 
-            y -= ay;
+            y -= av;
         }
-        z -= az;
-        y += nrDiv*ay;
+        z -= av;
+        y += nrDiv*av;
     }
 
-    z += nrDiv*az;
+    z += nrDiv*av;
 
     // Parede da esquerda
     for(int i = 0; i < nrDiv; i++){
         for(int j = 0; j < nrDiv; j++){
 
-            box.addPoint(-x, -y, -z + az);
-            box.addPoint(-x, -y + ay, -z);
+            box.addPoint(-x, -y, -z + av);
+            box.addPoint(-x, -y + av, -z);
             box.addPoint(-x, -y, -z);
 
-            box.addPoint(-x, -y + ay, -z);
-            box.addPoint(-x, -y, -z + az);
-            box.addPoint(-x, -y + ay, -z + az);
+            box.addPoint(-x, -y + av, -z);
+            box.addPoint(-x, -y, -z + av);
+            box.addPoint(-x, -y + av, -z + av);
 
-            y -= ay;
+            y -= av;
         }
-        z -= az;
-        y += nrDiv*ay;
+        z -= av;
+        y += nrDiv*av;
     }
     return box;
 }

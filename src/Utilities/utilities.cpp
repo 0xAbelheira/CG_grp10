@@ -1,11 +1,6 @@
 #include "utilities.hpp"
 
-#ifdef __unix__ 
-#include <unistd.h>
-#define getDir getcwd
-static const std::string slash = "/";
-#endif
-#ifdef __APPLE__
+#if  defined(__unix__) || defined(__APPLE__) 
 #include <unistd.h>
 #define getDir getcwd
 static const std::string slash = "/";

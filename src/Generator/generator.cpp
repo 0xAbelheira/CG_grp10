@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
             int stacks = 0;
             aux2 >> stacks;
 
-            f = createSphere(radius, stacks, slices);
+            f = createSphere(radius, slices, stacks);
 
             createFileType(f.points, argv[5]);
 
@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
             int stacks = 0;
             aux2 >> stacks;
 
-            f = createCone(radius, height, stacks, slices);
+            f = createCone(radius, height, slices, stacks);
 
             createFileType(f.points, argv[6]);
                 
@@ -90,12 +90,12 @@ int main(int argc, char* argv[]) {
 
             //Tela de ajuda e comandos
         else if (strcmp(argv[1], "-help") == 0) {
-            std::cout << "Plane         [x] [y] [file.3d] [file.xml]\n"
-                         "Box           [x] [y] [z] [divisions per edge] [file.3d] [file.xml]\n"
-                         "Sphere        [radius] [slices] [stacks] [file.3d] [file.xml]\n"
-                         "Cone          [radius] [height] [stacks] [slices] [file.3d] [file.xml]\n" << std::endl;
+            std::cout << "plane         [size] [divisions] [file.3d]\n"
+                         "box           [size] [divisions per edge] [file.3d]\n"
+                         "sphere        [radius] [slices] [stacks] [file.3d]\n"
+                         "cone          [radius] [height] [slices] [stacks] [file.3d]\n" << std::endl;
         } else {
-            std::cout << "\nMissing arguments\n" << std::endl;
+            std::cout << "\nInvalid arguments.\n" << std::endl;
         }
     }
 
