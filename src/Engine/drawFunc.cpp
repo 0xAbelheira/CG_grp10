@@ -5,7 +5,7 @@ void drawTriangle(point p1, point p2, point p3) {
 
 	glBegin(GL_TRIANGLES);
 
-	glColor3ub(rand() % 255, rand() % 255, rand() % 255);
+	glColor3f(1,1,1);
 
 	//desenhar os 3 vertices do triangulo
 	glVertex3f(p1.x, p1.y, p1.z);
