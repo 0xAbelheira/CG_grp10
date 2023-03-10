@@ -21,6 +21,14 @@ int ativarFig = 0; //Vai buscar a chave/identificador da figura para desenha-la 
 int window_size_w;
 int window_size_h;
 camera cam = camera();
+float mouse_x = 0;
+float mouse_y = 0; 
+float px = cam.px;
+float py = cam.py;
+float pz = cam.pz;
+float r = hypot(hypot(px, py), pz);
+float betaC = asin(py/r);
+float alphaC = asin(pz/(r*cos(betaC)));
 
 void changeSize(int w, int h)
 {
@@ -48,7 +56,7 @@ void renderScene(void){
 
 	// set camera
 	glLoadIdentity();
-	gluLookAt(cam.px, cam.py, cam.pz,
+	gluLookAt(px, py, pz,
 			cam.lx, cam.ly, cam.lz,
 			cam.ux, cam.uy, cam.uz);
 
@@ -88,6 +96,31 @@ void nextFigureKey (unsigned char key, int x, int y){
     //renderScene(); para mudar de cor :)
 }
 
+void mouseFunc(int button, int state,int x, int y) {
+	mouse_x = x;
+	mouse_y = y;
+}
+
+void motionFunc(int x, int y) {
+	int dx = mouse_x - x;
+	int dy = mouse_y - y;
+
+	alphaC += dx*M_PI/400;
+	betaC -= dy*M_PI/400;
+    if(betaC >= M_PI/2) betaC = 1.57079;
+    if(betaC <= -M_PI/2) betaC = -1.57079;
+
+
+    px = r * cos(betaC) * sin(alphaC);
+	py = r * sin(betaC);
+	pz = r * cos(betaC) * cos(alphaC);
+
+	glutPostRedisplay();
+
+	mouse_x = x;
+	mouse_y = y;
+}
+
 int glut_main(int argc, char** argv) {
 
 	// init GLUT and the window
@@ -101,7 +134,10 @@ int glut_main(int argc, char** argv) {
 	glutDisplayFunc(renderScene);
 	glutReshapeFunc(changeSize);
 
+	// Callback registration for keyboard processing
 	glutKeyboardFunc(nextFigureKey);
+    glutMouseFunc(mouseFunc);
+	glutMotionFunc(motionFunc);
 
 	//  OpenGL settings
 	glEnable(GL_DEPTH_TEST);

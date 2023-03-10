@@ -209,7 +209,7 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
 		cone.addPoint(radius*sin(alpha*i), 0, radius*cos(alpha*i));
 		cone.addPoint(0, 0, 0);
 
-        for(int j = 0; j < stacks; j++) {
+        for(int j = 0; j < stacks-1; j++) {
             rTop = rLow - difR;
             hTop = hLow + difH;
 
@@ -223,6 +223,13 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
             rLow = rTop;
             hLow += difH;
         }
+
+        rTop = rLow - difR;
+        hTop = hLow + difH;
+
+        cone.addPoint(rLow*sin(alpha*i), hLow, rLow*cos(alpha*i));
+        cone.addPoint(rLow*sin(alpha*(i+1)), hLow, rLow*cos(alpha*(i+1)));
+		cone.addPoint(rTop*sin(alpha*i), hTop, rTop*cos(alpha*i));
 	}
 
     return cone;
