@@ -22,9 +22,6 @@ int window_size_w;
 int window_size_h;
 camera cam = camera();
 
-float alpha = 0, beta_ = 0;
-float r = 0;
-
 void changeSize(int w, int h)
 {
 	// Prevent a divide by zero, when window is too short
