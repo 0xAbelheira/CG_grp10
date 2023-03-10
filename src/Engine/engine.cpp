@@ -16,7 +16,6 @@ using namespace draw;
 using namespace std;
 
 map<int, figure> figurasMap;
-int ativarFig = 0; //Vai buscar a chave/identificador da figura para desenha-la após obter permissão
 
 int window_size_w;
 int window_size_h;
@@ -62,38 +61,13 @@ void renderScene(void){
 
 
 	drawReferencial();
-    auto pos = figurasMap.find(ativarFig);
-    if (pos == figurasMap.end()) {
-        cout << "Não existem mais figuras." << endl; // alterar este bloco 
-        glutDestroyWindow(0);
-    } else {
-        figure value = pos->second;
+	for (auto i : figurasMap) {
+        figure value = i.second;
         drawFigure(value);
     }
 
 	// End of frame
 	glutSwapBuffers();
-}
-
-void nextFigureKey (unsigned char key, int x, int y){
-
-    switch (key) {
-        case 'd':
-            if(ativarFig<(figurasMap.size()-1)){
-                ativarFig++;
-                renderScene();
-            }
-            break;
-        case 'a':
-            if(ativarFig>0){
-                ativarFig--;
-                renderScene();
-            }
-            break;
-        default:
-            break;
-    }
-    //renderScene(); para mudar de cor :)
 }
 
 void mouseFunc(int button, int state,int x, int y) {
@@ -135,7 +109,6 @@ int glut_main(int argc, char** argv) {
 	glutReshapeFunc(changeSize);
 
 	// Callback registration for keyboard processing
-	glutKeyboardFunc(nextFigureKey);
     glutMouseFunc(mouseFunc);
 	glutMotionFunc(motionFunc);
 
@@ -209,7 +182,7 @@ void xml_camera(XMLElement* camera_e) {
 		position_e->QueryAttribute("z", &cam.pz);
 	}
 	else {
-		cout << "WARNING: \"position\" (element of \"camera\") not detected. Using default values...";
+		cout << "WARNING: \"position\" (element of \"camera\") not detected.";
 	}
 	XMLElement* lookAt_e = camera_e->FirstChildElement("lookAt");
 	if (lookAt_e) {
@@ -218,7 +191,7 @@ void xml_camera(XMLElement* camera_e) {
 		lookAt_e->QueryAttribute("z", &cam.lz);
 	}
 	else {
-		cout << "WARNING: \"lookAt\" (element of \"camera\") not detected. Using default values...";
+		cout << "WARNING: \"lookAt\" (element of \"camera\") not detected.";
 	}
 	XMLElement* up_e = camera_e->FirstChildElement("up");
 	if (up_e) {
@@ -227,7 +200,7 @@ void xml_camera(XMLElement* camera_e) {
 		up_e->QueryAttribute("z", &cam.uz);
 	}
 	else {
-		cout << "WARNING: \"up\" (element of \"camera\") not detected. Using default values...";
+		cout << "WARNING: \"up\" (element of \"camera\") not detected.";
 	}
 	XMLElement* projection_e = camera_e->FirstChildElement("projection");
 	if (projection_e) {
@@ -236,7 +209,7 @@ void xml_camera(XMLElement* camera_e) {
 		projection_e->QueryAttribute("far", &cam.far);
 	}
 	else {
-		cout << "WARNING: \"projection\" (element of \"camera\") not detected. Using default values...";
+		cout << "WARNING: \"projection\" (element of \"camera\") not detected.";
 	}
 }
 
@@ -254,7 +227,7 @@ int xml_world(XMLElement* world_e) {
 		xml_camera(camera_e);
 	}
 	else {
-		cout << "WARNING: \"camera\" not detected. Using default values...";
+		cout << "WARNING: \"camera\" not detected.";
 	}
 	XMLElement* group_e = world_e->FirstChildElement("group");
 	if (group_e) {
