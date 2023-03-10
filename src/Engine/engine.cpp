@@ -41,7 +41,7 @@ void changeSize(int w, int h)
 	// Set the viewport to be the entire window
 	glViewport(0, 0, w, h);
 	// Set the perspective
-	gluPerspective(45.0f, ratio, 1.0f, 1000.0f);
+	gluPerspective(cam.fov, ratio, cam.near, cam.far);
 	// return to the model view matrix mode
 	glMatrixMode(GL_MODELVIEW);
 }
@@ -52,9 +52,9 @@ void renderScene(void){
 
 	// set camera
 	glLoadIdentity();
-	gluLookAt(5.0, 5.0, 5.0,
-		0.0, 0.0, 0.0,
-		0.0f, 1.0f, 0.0f);
+	gluLookAt(cam.px, cam.py, cam.pz,
+			cam.lx, cam.ly, cam.lz,
+			cam.ux, cam.uy, cam.uz);
 
 
 	drawReferencial();
