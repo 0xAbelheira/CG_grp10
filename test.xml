@@ -8,10 +8,14 @@
     </camera>
 	<group> 
   		<models> 
-			<model file="Sphere.3d" /> 
+			<model file="Plane.3d" /> 
 			<model file="Box.3d"    />
 			<model file="Cone.3d"   />
 			<model file="Plane.3d"  />
  		</models>
  	</group>
 </world>
+
+
+
+

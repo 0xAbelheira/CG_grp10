@@ -9,6 +9,7 @@
 #include <iostream>
 #include <iterator>
 #include <map>
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 using namespace tinyxml2;
