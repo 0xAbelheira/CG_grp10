@@ -22,12 +22,12 @@ int window_size_h;
 camera cam = camera();
 float mouse_x = 0;
 float mouse_y = 0; 
-float px = cam.px;
-float py = cam.py;
-float pz = cam.pz;
-float r = hypot(hypot(px, py), pz);
-float betaC = asin(py/r);
-float alphaC = asin(pz/(r*cos(betaC)));
+float px;
+float py;
+float pz;
+float r;
+float betaC ;
+float alphaC;
 
 void changeSize(int w, int h)
 {
@@ -270,7 +270,13 @@ int main(int argc, char** argv) {
 		return -1;
 	}
 
-
+	px = cam.px;
+	py = cam.py;
+	pz = cam.pz;
+	r = hypot(hypot(px, py), pz);
+	betaC = asin(py/r);
+	alphaC = asin(pz/(r*cos(betaC)));
+	
 	glut_main(argc, argv);
 
 	return 0;
