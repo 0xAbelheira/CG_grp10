@@ -276,7 +276,7 @@ int main(int argc, char** argv) {
 	pz = cam.pz;
 	r = hypot(hypot(px, py), pz);
 	betaC = asin(py/r);
-	alphaC = asin(pz/(r*cos(betaC)));
+	alphaC = asin(px/(r*cos(betaC)));
 	
 	glut_main(argc, argv);
 
