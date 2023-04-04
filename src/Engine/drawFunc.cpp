@@ -1,4 +1,13 @@
+#include "../Utilities/utilities.hpp" 
 #include "drawFunc.hpp"
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
+
+using namespace utilities;
 
 // funçao auxiliar que desenha triangulos
 void drawTriangle(point p1, point p2, point p3) {
