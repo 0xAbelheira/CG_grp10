@@ -9,11 +9,41 @@
 using namespace tinyxml2;
 using namespace std;
 using namespace utilities;
+// using namespace group;
 
 extern map<int, figure> figurasMap;
+extern group grupos;
 extern camera cam;
 extern int window_size_w;
 extern int window_size_h;
+
+transform xml_transform(XMLElement* models_e)
+{
+	transform r = transform();
+	XMLElement* model_e = models_e->FirstChildElement("translate");
+	if (model_e)
+	{
+		model_e->QueryAttribute("x", &r.translate->x);
+		model_e->QueryAttribute("y", &r.translate->y);
+		model_e->QueryAttribute("z", &r.translate->z);
+	}
+	model_e = models_e->FirstChildElement("rotate");
+	if (model_e)
+	{
+		model_e->QueryAttribute("x", &r.rotate_points->x);
+		model_e->QueryAttribute("angle", r.rotate_angle);
+		model_e->QueryAttribute("y", &r.rotate_points->y);
+		model_e->QueryAttribute("z", &r.rotate_points->z);
+	}
+	model_e = models_e->FirstChildElement("scale");
+	if (model_e)
+	{
+		model_e->QueryAttribute("x", &r.scale->x);
+		model_e->QueryAttribute("y", &r.scale->y);
+		model_e->QueryAttribute("z", &r.scale->z);
+	}
+	return r;
+}
 
 void xml_models(XMLElement* models_e)
 {
@@ -57,11 +87,32 @@ void xml_models(XMLElement* models_e)
 	}
 }
 
-void xml_group(XMLElement* group_e) {
-	XMLElement* models_e = group_e->FirstChildElement("models");
-	if (models_e) {
-		xml_models(models_e);
+group xml_group(XMLElement* group_e)
+{
+	group grupos_ = group();
+	// XMLElement* models_e = group_e->FirstChildElement("models");
+	// if (models_e) {
+	// 	xml_models(models_e);
+	// }
+	XMLElement* models_e = group_e->FirstChildElement();
+	while (models_e)
+	{
+		if (strcmp(models_e->Value(), "transform") == 0)
+		{
+			grupos_.transformations = new transform;
+			*(grupos_.transformations) = xml_transform(models_e);
+		}
+		else if (strcmp(models_e->Value(), "models") == 0)
+		{
+			xml_models(models_e);	// falta ajeitar o xml_models
+		}
+		else if (strcmp(models_e->Value(), "group") == 0)
+		{
+			grupos_.groups.push_back(xml_group(models_e));
+		}
+		models_e = models_e->NextSiblingElement();
 	}
+	return grupos_;
 }
 
 void xml_camera(XMLElement* camera_e) {
@@ -121,7 +172,7 @@ int xml_world(XMLElement* world_e) {
 	}
 	XMLElement* group_e = world_e->FirstChildElement("group");
 	if (group_e) {
-		xml_group(group_e);
+		grupos = xml_group(group_e);
 	}
 	else {
 		cout << "ERROR: \"group\" not detected.";

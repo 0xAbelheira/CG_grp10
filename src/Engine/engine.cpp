@@ -2,7 +2,6 @@
 #include "drawFunc.hpp"
 #include "../Utilities/tinyxml2/tinyxml2.h"
 #include "../Utilities/camara.cpp"
-#include "../Utilities/group.hpp"
 #include "xmlReader.hpp"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -21,6 +20,7 @@ using namespace std;
 using namespace utilities;
 
 map<int, figure> figurasMap;
+group grupos;
 
 int window_size_w;
 int window_size_h;
