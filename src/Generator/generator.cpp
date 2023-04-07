@@ -1,5 +1,6 @@
 #include <string.h>
 #include "calcVertices.hpp"
+#include <iostream>
 
 using namespace std;
 using namespace generate;

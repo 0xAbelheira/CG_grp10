@@ -66,8 +66,8 @@ void renderScene(void){
 
 
 	drawReferencial();
-	for (auto i : figurasMap) {
-        figure value = i.second;
+	for (auto i : grupos.models) {
+        figure value = i;
         drawFigure(value);
     }
 
@@ -156,8 +156,30 @@ int main(int argc, char** argv) {
 		}
 	}
 	else {
-		cout << "Invalid arguments!";
-		return -1;
+		if (argv[1]) {
+			cout << "Loading " << argv[1] << " ...\n";
+		}
+
+		XMLDocument doc;
+		XMLError err = doc.LoadFile("../../test.xml");
+
+		if (err) {
+			fprintf(stderr, "TINYXML FAILURE! Error code: %d\n", err);
+			return err;
+		}
+
+		//world engloba todo o xml
+		XMLElement* world_e = doc.FirstChildElement("world");
+		if (!world_e) {
+			cout << "XML needs a field called \"world\"";
+			return -1;
+		}
+		else {
+			int err = xml_world(world_e);
+			if (err == -1) return -1;
+		}
+		// cout << "Invalid arguments!";
+		// return -1;
 	}
 
 	px = cam.px;

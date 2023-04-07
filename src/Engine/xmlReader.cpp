@@ -45,10 +45,10 @@ transform xml_transform(XMLElement* models_e)
 	return r;
 }
 
-void xml_models(XMLElement* models_e)
+vector<figure> xml_models(XMLElement* models_e)
 {
+	vector<figure> r = vector<figure>();
 	XMLElement* model_e = models_e->FirstChildElement("model");
-	int iterador = 0;
 	while (model_e) {
 		const char* filename = model_e->Attribute("file");
 		fstream fs;
@@ -76,8 +76,7 @@ void xml_models(XMLElement* models_e)
 				figura.addPoint(x1,y1,z1);
 			}
 			fs.close();
-			figurasMap.insert(pair<int, figure>(iterador,figura));
-			iterador++;
+			r.push_back(figura);
 		}
 
 		else{
@@ -85,6 +84,7 @@ void xml_models(XMLElement* models_e)
 		}
 		model_e = model_e->NextSiblingElement("model");
 	}
+	return r;
 }
 
 group xml_group(XMLElement* group_e)
@@ -104,7 +104,7 @@ group xml_group(XMLElement* group_e)
 		}
 		else if (strcmp(models_e->Value(), "models") == 0)
 		{
-			xml_models(models_e);	// falta ajeitar o xml_models
+			grupos_.models = vector<figure>(xml_models(models_e));	// falta ajeitar o xml_models
 		}
 		else if (strcmp(models_e->Value(), "group") == 0)
 		{

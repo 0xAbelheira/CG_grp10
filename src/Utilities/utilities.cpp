@@ -1,4 +1,6 @@
 #include "utilities.hpp"
+#include <iostream>
+#include <Windows.h>
 
 #if  defined(__unix__) || defined(__APPLE__) 
 #include <unistd.h>
@@ -23,9 +25,22 @@ void figure::addPoint(float a, float b, float c){
     points.push_back(p);
 }
 
+bool folderExists(const std::string& folderPath)
+{
+    DWORD fileAttributes = GetFileAttributesA(folderPath.c_str());
+    return (fileAttributes != INVALID_FILE_ATTRIBUTES && (fileAttributes & FILE_ATTRIBUTE_DIRECTORY));
+}
+
 std::string utilities::getPath(){
-    char path[90];
-    return getDir(path, 90) + slash + ".." + slash + "3dFiles" + slash;
+    char path[128];
+    getDir(path, 90);
+    if(folderExists(path + slash + "3dFiles"))
+        return path + slash + "3dFiles" + slash;
+    if(folderExists(path + slash + ".." + slash + "3dFiles"))
+        return path + slash + ".." + slash + "3dFiles" + slash;
+    if(folderExists(path + slash + ".." + slash + ".." + slash + "3dFiles"))
+        return path + slash + ".." + slash + ".." + slash + "3dFiles" + slash;
+    return "";
 }
 
 utilities::transform::transform()
