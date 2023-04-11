@@ -54,6 +54,41 @@ void changeSize(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void renderFigures(group* grupo)
+{
+	if (grupo->transformations)
+	{
+		float x,y,z;
+		if (grupo->transformations->translate)
+		{
+			x = grupo->transformations->translate->x; y = grupo->transformations->translate->y; z = grupo->transformations->translate->z;
+			glTranslatef(x, y, z);
+		}
+		if (grupo->transformations->rotate_angle)
+		{
+			x = grupo->transformations->rotate_points->x; y = grupo->transformations->rotate_points->y; z = grupo->transformations->rotate_points->z;
+			float angle = *(grupo->transformations->rotate_angle);
+			glRotatef(angle, x, y, z);
+		}
+		if (grupo->transformations->scale)
+		{
+			x = grupo->transformations->scale->x; y = grupo->transformations->scale->y; z = grupo->transformations->scale->z;
+			glScalef(x, y, z);
+		}
+	}
+	for (auto i : grupo->models) {
+        figure value = i;
+        drawFigure(value);
+    }
+	if (grupo->groups.size() > 0)
+	{
+		group r = grupo->groups[0];
+		grupo->groups.pop_back();
+		renderFigures(&r);
+		grupo->groups.push_back(r);
+	}
+}
+
 void renderScene(void){
 	// clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -66,11 +101,9 @@ void renderScene(void){
 
 
 	drawReferencial();
-	for (auto i : grupos.models) {
-        figure value = i;
-        drawFigure(value);
-    }
-
+	glPushMatrix();
+	renderFigures(&grupos);
+	glPopMatrix();
 	// End of frame
 	glutSwapBuffers();
 }
