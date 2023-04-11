@@ -1,6 +1,5 @@
 #include "utilities.hpp"
 #include <iostream>
-#include <Windows.h>
 
 #if  defined(__unix__) || defined(__APPLE__) 
 #include <unistd.h>
@@ -8,6 +7,7 @@
 static const std::string slash = "/";
 #else
 #include <direct.h>
+#include <Windows.h>
 #define getDir _getcwd
 static const std::string slash = "\\";
 #endif
@@ -25,11 +25,27 @@ void figure::addPoint(float a, float b, float c){
     points.push_back(p);
 }
 
+#if  defined(__unix__) || defined(__APPLE__) 
+bool folderExists(const std::string& folderPath)
+{
+    DIR* dir = opendir(folderPath.c_str());
+    if (dir != nullptr)
+    {
+        closedir(dir);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+#else
 bool folderExists(const std::string& folderPath)
 {
     DWORD fileAttributes = GetFileAttributesA(folderPath.c_str());
     return (fileAttributes != INVALID_FILE_ATTRIBUTES && (fileAttributes & FILE_ATTRIBUTE_DIRECTORY));
 }
+#endif
 
 std::string utilities::getPath(){
     char path[128];

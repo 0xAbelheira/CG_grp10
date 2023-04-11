@@ -20,29 +20,33 @@ extern int window_size_h;
 transform xml_transform(XMLElement* models_e)
 {
 	transform r = transform();
-	XMLElement* model_e = models_e->FirstChildElement("translate");
-	if (model_e)
-	{
+    XMLElement* model_e = models_e->FirstChildElement("translate");
+    if (model_e)
+    {
+		r.translate = new point;
 		model_e->QueryAttribute("x", &r.translate->x);
 		model_e->QueryAttribute("y", &r.translate->y);
 		model_e->QueryAttribute("z", &r.translate->z);
-	}
-	model_e = models_e->FirstChildElement("rotate");
-	if (model_e)
-	{
-		model_e->QueryAttribute("x", &r.rotate_points->x);
+    }
+    model_e = models_e->FirstChildElement("rotate");
+    if (model_e)
+    {
+		r.rotate_angle = new float;
+		r.rotate_points = new point;
 		model_e->QueryAttribute("angle", r.rotate_angle);
+		model_e->QueryAttribute("x", &r.rotate_points->x);
 		model_e->QueryAttribute("y", &r.rotate_points->y);
 		model_e->QueryAttribute("z", &r.rotate_points->z);
-	}
-	model_e = models_e->FirstChildElement("scale");
-	if (model_e)
-	{
+    }
+    model_e = models_e->FirstChildElement("scale");
+    if (model_e)
+    {
+		r.scale = new point;
 		model_e->QueryAttribute("x", &r.scale->x);
 		model_e->QueryAttribute("y", &r.scale->y);
 		model_e->QueryAttribute("z", &r.scale->z);
-	}
-	return r;
+    }
+    return r;
 }
 
 vector<figure> xml_models(XMLElement* models_e)
