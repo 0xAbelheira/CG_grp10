@@ -3,6 +3,7 @@
 
 #if  defined(__unix__) || defined(__APPLE__) 
 #include <unistd.h>
+#include <dirent.h>
 #define getDir getcwd
 static const std::string slash = "/";
 #else
