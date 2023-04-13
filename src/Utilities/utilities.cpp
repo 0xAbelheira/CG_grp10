@@ -66,25 +66,6 @@ utilities::transform::transform()
     this->rotate_angle = nullptr;
     this->rotate_points = nullptr;
     this->scale = nullptr;
-}
-
-utilities::transform::transform(utilities::point translate,
-                                float rotate_angle,
-                                utilities::point rotate_points,
-                                utilities::point scale)
-{
-    this->translate = new utilities::point; *(this->translate) = translate;
-    this->rotate_angle = new float; *(this->rotate_angle) = rotate_angle;
-    this->rotate_points = new utilities::point; *(this->rotate_points) = rotate_points;
-    this->scale = new utilities::point; *(this->scale) = scale;
-}
-
-utilities::transform::transform(const transform& transform)
-{
-    this->translate = transform.translate;
-    this->rotate_angle = transform.rotate_angle;
-    this->rotate_points = transform.rotate_points;
-    this->scale = transform.scale;
     this->order = vector<transformtype>();
 }
 
@@ -94,17 +75,3 @@ utilities::group::group()
     this->transformations = nullptr;
     this->models = vector<figure>();
 }
-
-utilities::group::group(vector<group> grupos, transform transformacoes, vector<figure> modelos)
-{
-    this->groups = vector<group>(grupos);
-    this->transformations = new transform; *(this->transformations) = transformacoes;
-    this->models = vector<figure>(modelos);
-}
-
-// utilities::group::group(const group& group)
-// {
-//     this->groups = group.groups;
-//     this->transformations = grou
-//     this->models = 
-// }

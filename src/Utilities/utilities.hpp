@@ -32,8 +32,6 @@ namespace utilities{
             utilities::point* rotate_points;
             utilities::point* scale;
             transform();
-            transform(utilities::point, float, utilities::point, utilities::point);
-            transform(const transform&);
     };
 
     class group
@@ -44,7 +42,5 @@ namespace utilities{
             transform* transformations;
             std::vector<utilities::figure> models;
             group();
-            group(std::vector<group>, transform, std::vector<utilities::figure>);
-            // group(const group&);
     };
 }

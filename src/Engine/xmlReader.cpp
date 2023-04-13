@@ -23,7 +23,7 @@ transform xml_transform(XMLElement* models_e)
     XMLElement* model_e = models_e->FirstChildElement();
 	while(model_e)
 	{
-		if (strcmp(model_e->Value(), "translate"))
+		if (strcmp(model_e->Value(), "translate") == 0)
 		{
 			r.order.push_back(transformtype::translate);
 			r.translate = new point;
@@ -31,7 +31,7 @@ transform xml_transform(XMLElement* models_e)
 			model_e->QueryAttribute("y", &r.translate->y);
 			model_e->QueryAttribute("z", &r.translate->z);
 		}
-		else if (strcmp(model_e->Value(), "rotate"))
+		else if (strcmp(model_e->Value(), "rotate") == 0)
 		{
 			r.order.push_back(transformtype::rotate);
 			r.rotate_angle = new float;
@@ -41,7 +41,7 @@ transform xml_transform(XMLElement* models_e)
 			model_e->QueryAttribute("y", &r.rotate_points->y);
 			model_e->QueryAttribute("z", &r.rotate_points->z);
 		}
-		else if (strcmp(model_e->Value(), "scale"))
+		else if (strcmp(model_e->Value(), "scale") == 0)
 		{
 			r.order.push_back(transformtype::scale);
 			r.scale = new point;
@@ -49,7 +49,7 @@ transform xml_transform(XMLElement* models_e)
 			model_e->QueryAttribute("y", &r.scale->y);
 			model_e->QueryAttribute("z", &r.scale->z);
 		}
-		XMLElement* model_e = models_e->NextSiblingElement();
+		model_e = model_e->NextSiblingElement();
 	}
     return r;
 }
@@ -113,7 +113,7 @@ group xml_group(XMLElement* group_e)
 		}
 		else if (strcmp(models_e->Value(), "models") == 0)
 		{
-			grupos_.models = vector<figure>(xml_models(models_e));	// falta ajeitar o xml_models
+			grupos_.models = vector<figure>(xml_models(models_e));
 		}
 		else if (strcmp(models_e->Value(), "group") == 0)
 		{
