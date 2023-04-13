@@ -56,6 +56,10 @@ void changeSize(int w, int h)
 
 void renderFigures(group* grupo)
 {
+	glPushMatrix();
+
+	group r;
+
 	if (grupo->transformations)
 	{
 		float x,y,z;
@@ -83,13 +87,14 @@ void renderFigures(group* grupo)
         figure value = i;
         drawFigure(value);
     }
-	if (grupo->groups.size() > 0)
+	
+	for(int i = 0; i < grupo->groups.size(); i++)
 	{
-		group r = grupo->groups[0];
-		grupo->groups.pop_back();
+		r = grupo->groups[i];
 		renderFigures(&r);
-		grupo->groups.push_back(r);
 	}
+
+	glPopMatrix();
 }
 
 void renderScene(void){
@@ -104,9 +109,7 @@ void renderScene(void){
 
 
 	drawReferencial();
-	glPushMatrix();
 	renderFigures(&grupos);
-	glPopMatrix();
 	// End of frame
 	glutSwapBuffers();
 }
