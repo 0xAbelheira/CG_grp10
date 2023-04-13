@@ -21,10 +21,12 @@ namespace utilities{
 
     std::string getPath();
 
+    enum transformtype { translate, rotate, scale };
     class transform
     {
         private:
         public:
+            std::vector<transformtype> order;
             utilities::point* translate;
             float* rotate_angle;
             utilities::point* rotate_points;

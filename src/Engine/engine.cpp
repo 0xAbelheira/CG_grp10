@@ -59,21 +59,24 @@ void renderFigures(group* grupo)
 	if (grupo->transformations)
 	{
 		float x,y,z;
-		if (grupo->transformations->translate)
+		for(auto i : grupo->transformations->order)
 		{
-			x = grupo->transformations->translate->x; y = grupo->transformations->translate->y; z = grupo->transformations->translate->z;
-			glTranslatef(x, y, z);
-		}
-		if (grupo->transformations->rotate_angle)
-		{
-			x = grupo->transformations->rotate_points->x; y = grupo->transformations->rotate_points->y; z = grupo->transformations->rotate_points->z;
-			float angle = *(grupo->transformations->rotate_angle);
-			glRotatef(angle, x, y, z);
-		}
-		if (grupo->transformations->scale)
-		{
-			x = grupo->transformations->scale->x; y = grupo->transformations->scale->y; z = grupo->transformations->scale->z;
-			glScalef(x, y, z);
+			if (i == transformtype::translate)
+			{
+				x = grupo->transformations->translate->x; y = grupo->transformations->translate->y; z = grupo->transformations->translate->z;
+				glTranslatef(x, y, z);
+			}
+			else if (i == transformtype::rotate)
+			{
+				x = grupo->transformations->rotate_points->x; y = grupo->transformations->rotate_points->y; z = grupo->transformations->rotate_points->z;
+				float angle = *(grupo->transformations->rotate_angle);
+				glRotatef(angle, x, y, z);
+			}
+			else if (i == transformtype::scale)
+			{
+				x = grupo->transformations->scale->x; y = grupo->transformations->scale->y; z = grupo->transformations->scale->z;
+				glScalef(x, y, z);
+			}
 		}
 	}
 	for (auto i : grupo->models) {

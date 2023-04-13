@@ -84,6 +84,7 @@ utilities::transform::transform(const transform& transform)
     this->rotate_angle = transform.rotate_angle;
     this->rotate_points = transform.rotate_points;
     this->scale = transform.scale;
+    this->order = vector<transformtype>();
 }
 
 utilities::group::group()
