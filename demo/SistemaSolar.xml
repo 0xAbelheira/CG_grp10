@@ -1,0 +1,335 @@
+<world> <!-- demo estática com planetas em órbita -->
+	<window width="512" height="512" />
+    <camera>
+	    <position x="20" y="25" z="25" />
+	    <lookAt x="0" y="0" z="0" />
+	    <up x="0" y="1" z="0" />
+        <projection fov="100" near="1" far="1000" />
+    </camera>
+
+	<group>
+        <transform> 
+            <translate x="0" y="0" z="0" />
+        </transform>
+		<!-- Sol -->
+		<group>
+			<transform>
+				<scale x="7" y="7" z="7"/>
+			</transform>
+			<models>
+				<model file="sphere.3d"/> <!-- generator sphere 1 8 8 sphere.3d -->
+			</models>
+		</group>
+		<!-- Mercurio -->
+		<group>
+			<transform> 
+				<translate x="0" y="0" z="10" />
+			</transform>
+			<group>
+				<transform> 
+					<scale x="1" y="1" z="1" />
+				</transform>
+				<models> 
+					<model file="sphere.3d"/> 
+				</models>
+			</group>
+		</group>
+		<!-- Venus -->
+		<group>
+			<transform> 
+				<rotate angle="65" x="0" y="1" z="0"/>
+				<translate x="0" y="0" z="-15"/>
+			</transform>
+			<group>
+				<transform> 
+					<scale x="1" y="1" z="1" />
+				</transform>
+				<models> 
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+		</group>
+		
+		<!-- Terra -->
+		<group>
+			<transform> 
+				<rotate angle="250" x="0" y="1" z="0" />
+				<translate x="0" y="0" z="-20" />
+			</transform>
+			<group>
+				<transform> 
+					<scale x="1" y="1" z="1" />
+				</transform>
+				<models> 
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+
+			<group>
+				<!-- Lua -->
+				<transform> 
+					<translate x="1.5" y="1.5" z="0"/>
+					<scale x="0.125" y="0.125" z="0.125"/>
+				</transform>
+			
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+		</group>
+		<!-- Marte -->
+		<group>
+			<transform> 
+				<rotate angle="215" x="0" y="1" z="0" />
+				<translate x="0" y="0" z="-25" />
+			</transform>
+			<group>
+				<transform> 
+					<scale x="1" y="1" z="1" />
+				</transform>
+				<models> 
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua1 de Marte -->
+				<transform> 
+					<translate x="-2" y="-2" z="0"/>
+					<scale x="0.35" y="0.35" z="0.35"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua2 de Marte -->
+				<transform> 
+					<translate x="2" y="-2" z="0"/>
+					<scale x="0.15" y="0.15" z="0.15"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+		</group>
+		<!-- Jupiter -->
+		<group>
+			<transform> 
+				<rotate angle="15" x="0" y="1" z="0" />
+				<translate x="0" y="0" z="-30" />
+			</transform>
+			<group>
+				<transform> 
+					<scale x="2" y="2" z="2" />
+				</transform>
+				<models> 
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua1 de Jupiter -->
+				<transform> 
+					<translate x="3" y="3" z="0"/>
+					<scale x="0.35" y="0.35" z="0.35"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua2 de Jupiter -->
+				<transform> 
+					<translate x="-3" y="-3" z="0"/>
+					<scale x="0.35" y="0.35" z="0.35"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua3 de Jupiter -->
+				<transform> 
+					<translate x="3" y="-3" z="0"/>
+					<scale x="0.15" y="0.15" z="0.15"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+		</group>
+		<!-- Saturno -->
+		<group>
+			<transform> 
+				<rotate angle="135" x="0" y="1" z="0" />
+				<translate x="0" y="0" z="-35" />
+			</transform>
+			<group>
+				<transform> 
+					<scale x="2" y="2" z="2" />
+				</transform>
+				<models> 
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<!-- Anel de Saturno -->
+			<group>
+				<transform> 
+					<scale x="3" y="0.5" z="3" />
+					<rotate angle="30" x="0" y="0" z="1" />
+				</transform>
+				<models>
+					<model file="torus.3d" /> <!-- generator torus 1 0.1 16 8 torus.3d -->
+				</models>
+			</group>
+			<group>
+				<!-- Lua1 de Saturno -->
+				<transform> 
+					<translate x="3" y="3" z="0"/>
+					<scale x="0.35" y="0.35" z="0.35"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua2 de Saturno -->
+				<transform> 
+					<translate x="-3" y="-3" z="0"/>
+					<scale x="0.35" y="0.35" z="0.35"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua3 de Saturno -->
+				<transform> 
+					<translate x="3" y="-3" z="0"/>
+					<scale x="0.15" y="0.15" z="0.15"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+		</group>
+		<!-- Urano -->
+		<group>
+			<transform> 
+				<rotate angle="55" x="0" y="1" z="0" />
+				<translate x="0" y="0" z="-40" />
+			</transform>
+			<group>
+				<transform> 
+					<scale x="1" y="1" z="1" />
+				</transform>
+				<models> 
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua1 de Urano -->
+				<transform> 
+					<translate x="-2" y="-2" z="0"/>
+					<scale x="0.35" y="0.35" z="0.35"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" />
+				</models>
+			</group>
+			<group>
+				<!-- Lua2 de Urano -->
+				<transform> 
+					<translate x="2" y="-2" z="0"/>
+					<scale x="0.15" y="0.15" z="0.15"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			
+		</group>
+		<!-- Neptuno -->
+		<group>
+			<transform> 
+				<rotate angle="340" x="0" y="1" z="0" />
+				<translate x="0" y="0" z="-45" />
+			</transform>
+			<group>
+				<transform> 
+					<scale x="1" y="1" z="1" />
+				</transform>
+				<models> 
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua1 de Neptuno -->
+				<transform> 
+					<translate x="2" y="2" z="0"/>
+					<scale x="0.35" y="0.35" z="0.35"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua2 de Neptuno -->
+				<transform> 
+					<translate x="-2" y="-2" z="0"/>
+					<scale x="0.35" y="0.35" z="0.35"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua3 de Neptuno -->
+				<transform> 
+					<translate x="2" y="-2" z="0"/>
+					<scale x="0.15" y="0.15" z="0.15"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+		</group>
+		<!-- Plutao -->
+		<group>
+			<transform> 
+				<rotate angle="75" x="0" y="1" z="0" />
+				<translate x="0" y="0" z="-50" />
+			</transform>
+			<group>
+				<transform> 
+					<scale x="0.15" y="0.15" z="0.15" />
+				</transform>
+				<models> 
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua1 de Plutão -->
+				<transform> 
+					<translate x="1" y="1" z="0"/>
+					<scale x="0.05" y="0.05" z="0.05"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+			<group>
+				<!-- Lua2 de Plutão -->
+				<transform> 
+					<translate x="-1" y="-1" z="0"/>
+					<scale x="0.05" y="0.05" z="0.05"/>
+				</transform>
+				<models>
+					<model file="sphere.3d" /> 
+				</models>
+			</group>
+		</group>
+
+	</group>
+
+
+</world>
