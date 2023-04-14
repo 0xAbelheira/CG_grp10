@@ -9,9 +9,7 @@
 using namespace tinyxml2;
 using namespace std;
 using namespace utilities;
-// using namespace group;
 
-extern map<int, figure> figurasMap;
 extern group grupos;
 extern camera cam;
 extern int window_size_w;
@@ -99,10 +97,6 @@ vector<figure> xml_models(XMLElement* models_e)
 group xml_group(XMLElement* group_e)
 {
 	group grupos_ = group();
-	// XMLElement* models_e = group_e->FirstChildElement("models");
-	// if (models_e) {
-	// 	xml_models(models_e);
-	// }
 	XMLElement* models_e = group_e->FirstChildElement();
 	while (models_e)
 	{

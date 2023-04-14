@@ -19,9 +19,7 @@ using namespace draw;
 using namespace std;
 using namespace utilities;
 
-map<int, figure> figurasMap;
 group grupos;
-
 int window_size_w;
 int window_size_h;
 camera cam = camera();
@@ -114,6 +112,60 @@ void renderScene(void){
 	glutSwapBuffers();
 }
 
+void menuCamChoice(int choice){
+    switch (choice) {
+        case 0:
+            cam.mode = 0;
+			px = cam.px;
+			py = cam.py;
+			pz = cam.pz;
+            break;
+        case 1:
+            cam.mode = 1;
+            betaC = 0;
+
+            // cam.explorerCenter = point(cam.px, cam.py, cam.pz);
+            cam.lx = px;
+            cam.ly = py;
+            cam.lz = pz;
+
+            break;
+        case 2:
+            cam.mode = 2;
+            betaC = 0;
+            // cam.firstTime = true;
+            break;
+        default:
+            break;
+    }
+}
+
+void modeChoice(int choice){
+    switch (choice) {
+        case 0:
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            break;
+        case 1:
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            break;
+        case 2:
+            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+            break;
+        default:
+            break;
+    }
+}
+
+void cameraMenu(){
+    int modeMenu = glutCreateMenu(modeChoice);
+    glutAddMenuEntry("Lines", 0);
+    glutAddMenuEntry("Fill", 1);
+    glutAddMenuEntry("Points", 2);
+
+    // glutAddSubMenu("Mode", modeMenu);
+    glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
+
 void mouseFunc(int button, int state,int x, int y) {
 	mouse_x = x;
 	mouse_y = y;
@@ -161,6 +213,8 @@ int glut_main(int argc, char** argv) {
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT, GL_LINE);
 
+	cameraMenu();
+
 	cout << " prepared.\n";
 
 	// enter GLUT's main cycle
@@ -179,7 +233,7 @@ int main(int argc, char** argv) {
 		XMLError err = doc.LoadFile(argv[1]);
 
 		if (err) {
-			fprintf(stderr, "TINYXML FAILURE! Error code: %d\n", err);
+			fprintf(stderr, "TINYXML2 FAILURE! Error code: %d\n", err);
 			return err;
 		}
 
@@ -195,30 +249,8 @@ int main(int argc, char** argv) {
 		}
 	}
 	else {
-		if (argv[1]) {
-			cout << "Loading " << argv[1] << " ...\n";
-		}
-
-		XMLDocument doc;
-		XMLError err = doc.LoadFile("../../test.xml");
-
-		if (err) {
-			fprintf(stderr, "TINYXML FAILURE! Error code: %d\n", err);
-			return err;
-		}
-
-		//world engloba todo o xml
-		XMLElement* world_e = doc.FirstChildElement("world");
-		if (!world_e) {
-			cout << "XML needs a field called \"world\"";
-			return -1;
-		}
-		else {
-			int err = xml_world(world_e);
-			if (err == -1) return -1;
-		}
-		// cout << "Invalid arguments!";
-		// return -1;
+		cout << "Invalid arguments!";
+		return -1;
 	}
 
 	px = cam.px;
