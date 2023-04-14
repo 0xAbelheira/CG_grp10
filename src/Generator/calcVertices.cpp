@@ -234,3 +234,25 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
 
     return cone;
 }
+
+figure generate::createTorus(float rIn, float rOut, int slices, int stacks) {
+
+    float alpha = 2*M_PI/slices;
+    float beta = 2*M_PI/stacks;
+
+    figure torus;
+
+    for(int i = 0; i < slices; i++) {
+        for(int j = 0; j < stacks; j++) {
+            torus.addPoint((rIn + rOut*cos(beta*(j+1))) * cos(alpha*(i+1)), rOut*sin(beta*(j+1)), (rIn + rOut*cos(beta*(j+1))) * sin(alpha*(i+1)));
+            torus.addPoint((rIn + rOut*cos(beta*j)) * cos(alpha*(i+1)), rOut*sin(beta*j), (rIn + rOut*cos(beta*j)) * sin(alpha*(i+1)));
+            torus.addPoint((rIn + rOut*cos(beta*j)) * cos(alpha*i), rOut*sin(beta*j), (rIn + rOut*cos(beta*j)) * sin(alpha*i));
+
+            torus.addPoint((rIn + rOut*cos(beta*j)) * cos(alpha*i), rOut*sin(beta*j), (rIn + rOut*cos(beta*j)) * sin(alpha*i));
+            torus.addPoint((rIn + rOut*cos(beta*(j+1))) * cos(alpha*i), rOut*sin(beta*(j+1)), (rIn + rOut*cos(beta*(j+1))) * sin(alpha*i));
+            torus.addPoint((rIn + rOut*cos(beta*(j+1))) * cos(alpha*(i+1)), rOut*sin(beta*(j+1)), (rIn + rOut*cos(beta*(j+1))) * sin(alpha*(i+1)));
+        }
+    }
+
+    return torus;
+}

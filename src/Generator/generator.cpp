@@ -89,12 +89,30 @@ int main(int argc, char* argv[]) {
                 
         }
 
+           //Gerar os vértices para o desenho do torua e transcrever para o ficheiro .3d
+        else if ((strcmp(argv[1], "torus") == 0) && (argc == 7)) {
+            float rIn = std::stof(argv[2]);
+            float rOut = std::stof(argv[3]);
+            stringstream aux(argv[4]);
+            int slices = 0;
+            aux >> slices;
+            stringstream aux2(argv[5]);
+            int stacks = 0;
+            aux2 >> stacks;
+
+            f = createTorus(rIn, rOut, slices, stacks);
+
+            createFileType(f.points, argv[6]);
+                
+        }
+
             //Tela de ajuda e comandos
         else if (strcmp(argv[1], "-help") == 0) {
             std::cout << "plane         [size] [divisions] [file.3d]\n"
                          "box           [size] [divisions per edge] [file.3d]\n"
                          "sphere        [radius] [slices] [stacks] [file.3d]\n"
-                         "cone          [radius] [height] [slices] [stacks] [file.3d]\n" << std::endl;
+                         "cone          [radius] [height] [slices] [stacks] [file.3d]\n"
+                         "torus         [radius1] [radius2] [slices] [stacks] [file.3d]\n" << std::endl;
         } else {
             std::cout << "\nInvalid arguments.\n" << std::endl;
         }
