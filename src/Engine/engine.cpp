@@ -52,7 +52,7 @@ void changeSize(int w, int h)
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void renderFigures(group* grupo)
+void drawFigures(group* grupo)
 {
 	glPushMatrix();
 
@@ -89,7 +89,7 @@ void renderFigures(group* grupo)
 	for(int i = 0; i < grupo->groups.size(); i++)
 	{
 		r = grupo->groups[i];
-		renderFigures(&r);
+		drawFigures(&r);
 	}
 
 	glPopMatrix();
@@ -107,7 +107,7 @@ void renderScene(void){
 
 
 	drawReferencial();
-	renderFigures(&grupos);
+	drawFigures(&grupos);
 	// End of frame
 	glutSwapBuffers();
 }
