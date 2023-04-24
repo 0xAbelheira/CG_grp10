@@ -5,7 +5,9 @@
 #include "xmlReader.hpp"
 #ifdef __APPLE__
 #include <GLUT/glut.h>
+#include <GLUT/glew.h>
 #else
+#include <GL/glew.h>
 #include <GL/glut.h>
 #endif
 #include <iostream>
@@ -19,6 +21,8 @@ using namespace draw;
 using namespace std;
 using namespace utilities;
 
+vector<float> vertices_vec;
+GLuint vertices, verticeCount;
 group grupos;
 int window_size_w;
 int window_size_h;
@@ -108,6 +112,24 @@ void renderScene(void){
 
 	drawReferencial();
 	drawFigures(&grupos);
+
+	verticeCount = vertices_vec.size()/3;
+	// criar o VBO
+	glGenBuffers(1, &vertices);
+
+	// copiar o vector para a memória gráfica
+	glBindBuffer(GL_ARRAY_BUFFER, vertices);
+	glBufferData(
+		GL_ARRAY_BUFFER, // tipo do buffer, só é relevante na altura do desenho
+		sizeof(float) * vertices_vec.size(), // tamanho do vector em bytes
+		vertices_vec.data(), // os dados do array associado ao vector
+		GL_STATIC_DRAW // indicativo da utilização (estático e para desenho)
+	);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vertices);
+	glVertexPointer(3, GL_FLOAT, 0, 0);
+	glDrawArrays(GL_TRIANGLES, 0, verticeCount);
+
 	// End of frame
 	glutSwapBuffers();
 }
@@ -209,8 +231,10 @@ int glut_main(int argc, char** argv) {
 	glutMotionFunc(motionFunc);
 
 	//  OpenGL settings
+	glewInit();
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
+	glEnableClientState(GL_VERTEX_ARRAY);
 	glPolygonMode(GL_FRONT, GL_LINE);
 
 	cameraMenu();
@@ -249,8 +273,30 @@ int main(int argc, char** argv) {
 		}
 	}
 	else {
-		cout << "Invalid arguments!";
-		return -1;
+		// if (argv[1]) {
+		// 	cout << "Loading " << argv[1] << " ...\n";
+		// }
+
+		XMLDocument doc;
+		XMLError err = doc.LoadFile("../../test.xml");
+
+		if (err) {
+			fprintf(stderr, "TINYXML2 FAILURE! Error code: %d\n", err);
+			return err;
+		}
+
+		//world engloba todo o xml
+		XMLElement* world_e = doc.FirstChildElement("world");
+		if (!world_e) {
+			cout << "XML needs a field called \"world\"";
+			return -1;
+		}
+		else {
+			int err = xml_world(world_e);
+			if (err == -1) return -1;
+		}
+		// cout << "Invalid arguments!";
+		// return -1;
 	}
 
 	px = cam.px;
@@ -259,7 +305,8 @@ int main(int argc, char** argv) {
 	r = hypot(hypot(px, py), pz);
 	betaC = asin(py/r);
 	alphaC = asin(px/(r*cos(betaC)));
-	
+	vertices_vec = vector<float>();
+
 	glut_main(argc, argv);
 
 	return 0;

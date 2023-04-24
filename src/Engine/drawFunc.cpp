@@ -6,22 +6,36 @@
 #include <GL/glut.h>
 #endif
 
-
 using namespace utilities;
+using namespace std;
+
+extern vector<float> vertices_vec;
 
 // funçao auxiliar que desenha triangulos
 void drawTriangle(point p1, point p2, point p3) {
 
-	glBegin(GL_TRIANGLES);
+	// glBegin(GL_TRIANGLES);
 
-	glColor3f(1,1,1);
+	// glColor3f(1,1,1);
 
-	//desenhar os 3 vertices do triangulo
-	glVertex3f(p1.x, p1.y, p1.z);
-	glVertex3f(p2.x, p2.y, p2.z);
-	glVertex3f(p3.x, p3.y, p3.z);
+	// //desenhar os 3 vertices do triangulo
+	// glVertex3f(p1.x, p1.y, p1.z);
+	// glVertex3f(p2.x, p2.y, p2.z);
+	// glVertex3f(p3.x, p3.y, p3.z);
 
-	glEnd();
+	// glEnd();
+
+	vertices_vec.push_back(p1.x);
+	vertices_vec.push_back(p1.y);
+	vertices_vec.push_back(p1.z);
+
+	vertices_vec.push_back(p2.x);
+	vertices_vec.push_back(p2.y);
+	vertices_vec.push_back(p2.z);
+
+	vertices_vec.push_back(p3.x);
+	vertices_vec.push_back(p3.y);
+	vertices_vec.push_back(p3.z);
 }
 
 
