@@ -75,7 +75,13 @@ void drawFigures(group* grupo)
 			else if (i == transformtype::rotate)
 			{
 				x = grupo->transformations->rotate_points->x; y = grupo->transformations->rotate_points->y; z = grupo->transformations->rotate_points->z;
-				float angle = *(grupo->transformations->rotate_angle);
+				float angle;
+				if(!grupo->transformations->time)
+					angle = *(grupo->transformations->rotate_angle);
+				else {
+					int gluttime = glutGet(GLUT_ELAPSED_TIME); //vem em milisegundos
+            		angle = (gluttime * 360) / *(grupo->transformations->time);
+				}
 				glRotatef(angle, x, y, z);
 			}
 			else if (i == transformtype::scale)
