@@ -22,7 +22,7 @@ using namespace std;
 using namespace utilities;
 
 vector<float> vertices_vec;
-GLuint vertices, verticeCount;
+GLuint vertices, verticeCount, actualVertice;
 group grupos;
 int window_size_w;
 int window_size_h;
@@ -85,10 +85,21 @@ void drawFigures(group* grupo)
 			}
 		}
 	}
-	for (auto i : grupo->models) {
+
+	for (auto i : grupo->models)
+	{
         figure value = i;
         drawFigure(value);
     }
+
+	// if (!grupo->models.empty())
+	// {
+	// 	GLuint maxVertice = actualVertice;
+	// 	for (auto i : grupo->models)
+	// 		maxVertice += i.points.size();
+	// 	drawFiguresVBO(actualVertice, maxVertice);
+	// 	actualVertice = maxVertice;
+	// }
 	
 	for(int i = 0; i < grupo->groups.size(); i++)
 	{
@@ -100,6 +111,7 @@ void drawFigures(group* grupo)
 }
 
 void renderScene(void){
+
 	// clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -111,24 +123,8 @@ void renderScene(void){
 
 
 	drawReferencial();
+	actualVertice = 0;
 	drawFigures(&grupos);
-
-	verticeCount = vertices_vec.size()/3;
-	// criar o VBO
-	glGenBuffers(1, &vertices);
-
-	// copiar o vector para a memória gráfica
-	glBindBuffer(GL_ARRAY_BUFFER, vertices);
-	glBufferData(
-		GL_ARRAY_BUFFER, // tipo do buffer, só é relevante na altura do desenho
-		sizeof(float) * vertices_vec.size(), // tamanho do vector em bytes
-		vertices_vec.data(), // os dados do array associado ao vector
-		GL_STATIC_DRAW // indicativo da utilização (estático e para desenho)
-	);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vertices);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
-	glDrawArrays(GL_TRIANGLES, 0, verticeCount);
 
 	// End of frame
 	glutSwapBuffers();
@@ -234,10 +230,25 @@ int glut_main(int argc, char** argv) {
 	glewInit();
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glEnableClientState(GL_VERTEX_ARRAY);
 	glPolygonMode(GL_FRONT, GL_LINE);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
 	cameraMenu();
+
+	verticeCount = vertices_vec.size()/3;
+	// criar o VBO
+	glGenBuffers(1, &vertices);
+
+	// copiar o vector para a memória gráfica
+	glBindBuffer(GL_ARRAY_BUFFER, vertices);
+	glBufferData(
+		GL_ARRAY_BUFFER, // tipo do buffer, só é relevante na altura do desenho
+		sizeof(float) * vertices_vec.size(), // tamanho do vector em bytes
+		vertices_vec.data(), // os dados do array associado ao vector
+		GL_STATIC_DRAW // indicativo da utilização (estático e para desenho)
+	);
+	vertices_vec.clear();
+	vertices_vec.~vector();
 
 	cout << " prepared.\n";
 
@@ -268,6 +279,7 @@ int main(int argc, char** argv) {
 			return -1;
 		}
 		else {
+			vertices_vec = vector<float>();
 			int err = xml_world(world_e);
 			if (err == -1) return -1;
 		}
@@ -292,6 +304,7 @@ int main(int argc, char** argv) {
 			return -1;
 		}
 		else {
+			vertices_vec = vector<float>();
 			int err = xml_world(world_e);
 			if (err == -1) return -1;
 		}
@@ -305,7 +318,6 @@ int main(int argc, char** argv) {
 	r = hypot(hypot(px, py), pz);
 	betaC = asin(py/r);
 	alphaC = asin(px/(r*cos(betaC)));
-	vertices_vec = vector<float>();
 
 	glut_main(argc, argv);
 

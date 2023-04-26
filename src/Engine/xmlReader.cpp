@@ -14,6 +14,7 @@ extern group grupos;
 extern camera cam;
 extern int window_size_w;
 extern int window_size_h;
+extern vector<float> vertices_vec;
 
 transform xml_transform(XMLElement* models_e)
 {
@@ -81,6 +82,9 @@ vector<figure> xml_models(XMLElement* models_e)
 				}
 				x1=cood[0],y1=cood[1],z1=cood[2];
 				figura.addPoint(x1,y1,z1);
+				vertices_vec.push_back(x1);
+				vertices_vec.push_back(y1);
+				vertices_vec.push_back(z1);
 			}
 			fs.close();
 			r.push_back(figura);
