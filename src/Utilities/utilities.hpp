@@ -29,6 +29,7 @@ namespace utilities{
             std::vector<transformtype> order;
             utilities::point* translate;
             float* rotate_angle;
+            float* time;
             utilities::point* rotate_points;
             utilities::point* scale;
             transform();

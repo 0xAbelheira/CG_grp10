@@ -27,6 +27,13 @@ int createFileType (vector<point> vertices, string name){
     return 0;
 }
 
+figure createBezier(char* file, size_t t) {
+    figure fig;
+
+    return fig;
+}
+
+
 int main(int argc, char* argv[]) {
     figure f;
 
@@ -89,7 +96,7 @@ int main(int argc, char* argv[]) {
                 
         }
 
-           //Gerar os vértices para o desenho do torua e transcrever para o ficheiro .3d
+           //Gerar os vértices para o desenho do torus e transcrever para o ficheiro .3d
         else if ((strcmp(argv[1], "torus") == 0) && (argc == 7)) {
             float rIn = std::stof(argv[2]);
             float rOut = std::stof(argv[3]);
@@ -106,13 +113,27 @@ int main(int argc, char* argv[]) {
                 
         }
 
+        //Gerar os vértices para o desenho da superficie e transcrever para o ficheiro .3dx  
+        else if ((strcmp(argv[1], "bezier") == 0) && (argc == 6)) {
+            char* patchFile = argv[2];
+            stringstream aux(argv[3]);
+            int tecelation = 0;
+            aux >> tecelation;
+            
+
+            f = createBezier(patchFile,tecelation);
+            if (!f.points.empty())
+                createFileType(f.points, argv[4]);
+        }
+
             //Tela de ajuda e comandos
         else if (strcmp(argv[1], "-help") == 0) {
             std::cout << "plane         [size] [divisions] [file.3d]\n"
                          "box           [size] [divisions per edge] [file.3d]\n"
                          "sphere        [radius] [slices] [stacks] [file.3d]\n"
                          "cone          [radius] [height] [slices] [stacks] [file.3d]\n"
-                         "torus         [radius1] [radius2] [slices] [stacks] [file.3d]\n" << std::endl;
+                         "torus         [radius1] [radius2] [slices] [stacks] [file.3d]\n"
+                         "bezier        [file] [tecelation] [file.3d]" << std::endl;
         } else {
             std::cout << "\nInvalid arguments.\n" << std::endl;
         }

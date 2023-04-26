@@ -64,6 +64,7 @@ utilities::transform::transform()
 {
     this->translate = nullptr;
     this->rotate_angle = nullptr;
+    this->time = nullptr;
     this->rotate_points = nullptr;
     this->scale = nullptr;
     this->order = vector<transformtype>();
