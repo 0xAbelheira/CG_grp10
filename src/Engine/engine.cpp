@@ -22,7 +22,7 @@ using namespace std;
 using namespace utilities;
 
 vector<float> vertices_vec;
-GLuint vertices, verticeCount, actualVertice;
+GLuint vertices, actualVertice;
 group grupos;
 int window_size_w;
 int window_size_h;
@@ -92,20 +92,20 @@ void drawFigures(group* grupo)
 		}
 	}
 
-	for (auto i : grupo->models)
-	{
-        figure value = i;
-        drawFigure(value);
-    }
-
-	// if (!grupo->models.empty())
+	// for (auto i : grupo->models)
 	// {
-	// 	GLuint maxVertice = actualVertice;
-	// 	for (auto i : grupo->models)
-	// 		maxVertice += i.points.size();
-	// 	drawFiguresVBO(actualVertice, maxVertice);
-	// 	actualVertice = maxVertice;
-	// }
+    //     figure value = i;
+    //     drawFigure(value);
+    // }
+
+	if (!grupo->models.empty())
+	{
+		GLuint maxVertice = 0;
+		for (auto i : grupo->models)
+			maxVertice += i.points.size();
+		drawFiguresVBO(actualVertice, maxVertice);
+		actualVertice += maxVertice;
+	}
 	
 	for(int i = 0; i < grupo->groups.size(); i++)
 	{
@@ -241,7 +241,6 @@ int glut_main(int argc, char** argv) {
 
 	cameraMenu();
 
-	verticeCount = vertices_vec.size()/3;
 	// criar o VBO
 	glGenBuffers(1, &vertices);
 
