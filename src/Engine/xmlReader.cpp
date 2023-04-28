@@ -24,25 +24,36 @@ transform xml_transform(XMLElement* models_e)
 	{
 		if (strcmp(model_e->Value(), "translate") == 0)
 		{
-			r.order.push_back(transformtype::translate);
-			r.translate = new point;
-			model_e->QueryAttribute("x", &r.translate->x);
-			model_e->QueryAttribute("y", &r.translate->y);
-			model_e->QueryAttribute("z", &r.translate->z);
+			r.order.push_back(transformtype::TRANSLATE);
+			r.translate = new translate();
+			model_e->QueryAttribute("time", &r.translate->time);
+			model_e->QueryAttribute("align", &r.translate->align);
+			XMLElement* points = model_e->FirstChildElement();
+			while (points)
+			{
+				float x, y, z;
+				model_e->QueryAttribute("x", &x);
+				model_e->QueryAttribute("y", &y);
+				model_e->QueryAttribute("z", &z);
+				r.translate->points.addPoint(x,y,z);
+
+				points->NextSiblingElement();
+			}
 		}
 		else if (strcmp(model_e->Value(), "rotate") == 0)
 		{
-			r.order.push_back(transformtype::rotate);
+			r.order.push_back(transformtype::ROTATE);
 			r.rotate_angle = new float;
 			r.rotate_points = new point;
-			model_e->QueryAttribute("angle", r.rotate_angle);
+			if(!model_e->QueryAttribute("angle", r.rotate_angle))
+				model_e->QueryAttribute("time", r.rotate_time);
 			model_e->QueryAttribute("x", &r.rotate_points->x);
 			model_e->QueryAttribute("y", &r.rotate_points->y);
 			model_e->QueryAttribute("z", &r.rotate_points->z);
 		}
 		else if (strcmp(model_e->Value(), "scale") == 0)
 		{
-			r.order.push_back(transformtype::scale);
+			r.order.push_back(transformtype::SCALE);
 			r.scale = new point;
 			model_e->QueryAttribute("x", &r.scale->x);
 			model_e->QueryAttribute("y", &r.scale->y);

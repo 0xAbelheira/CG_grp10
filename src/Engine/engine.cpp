@@ -67,24 +67,24 @@ void drawFigures(group* grupo)
 		float x,y,z;
 		for(auto i : grupo->transformations->order)
 		{
-			if (i == transformtype::translate)
+			if (i == transformtype::TRANSLATE)
 			{
-				x = grupo->transformations->translate->x; y = grupo->transformations->translate->y; z = grupo->transformations->translate->z;
+				// x = grupo->transformations->translate->x; y = grupo->transformations->translate->y; z = grupo->transformations->translate->z;
 				glTranslatef(x, y, z);
 			}
-			else if (i == transformtype::rotate)
+			else if (i == transformtype::ROTATE)
 			{
 				x = grupo->transformations->rotate_points->x; y = grupo->transformations->rotate_points->y; z = grupo->transformations->rotate_points->z;
 				float angle;
-				if(!grupo->transformations->time)
+				if(!grupo->transformations->rotate_time)
 					angle = *(grupo->transformations->rotate_angle);
 				else {
 					int gluttime = glutGet(GLUT_ELAPSED_TIME); //vem em milisegundos
-            		angle = (gluttime * 360) / *(grupo->transformations->time);
+            		angle = (gluttime * 360) / *(grupo->transformations->rotate_time);
 				}
 				glRotatef(angle, x, y, z);
 			}
-			else if (i == transformtype::scale)
+			else if (i == transformtype::SCALE)
 			{
 				x = grupo->transformations->scale->x; y = grupo->transformations->scale->y; z = grupo->transformations->scale->z;
 				glScalef(x, y, z);

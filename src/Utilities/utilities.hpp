@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <map>
 
 namespace utilities{
     struct point {
@@ -21,15 +22,27 @@ namespace utilities{
 
     std::string getPath();
 
-    enum transformtype { translate, rotate, scale };
+    class translate
+    {
+        private:
+        public:
+            utilities::figure points;
+            float time;
+            bool align;
+            std::map<int,float> point_time;
+            translate();
+
+    };
+
+    enum transformtype { TRANSLATE, ROTATE, SCALE };
     class transform
     {
         private:
         public:
             std::vector<transformtype> order;
-            utilities::point* translate;
+            translate* translate;
             float* rotate_angle;
-            float* time;
+            float* rotate_time;
             utilities::point* rotate_points;
             utilities::point* scale;
             transform();

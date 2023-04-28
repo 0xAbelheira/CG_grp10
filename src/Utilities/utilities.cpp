@@ -60,11 +60,18 @@ std::string utilities::getPath(){
     return "";
 }
 
+utilities::translate::translate()
+{
+    this->time = 0;
+    this->align = false;
+    this->point_time = map<int,float>();
+}
+
 utilities::transform::transform()
 {
     this->translate = nullptr;
     this->rotate_angle = nullptr;
-    this->time = nullptr;
+    this->rotate_time = nullptr;
     this->rotate_points = nullptr;
     this->scale = nullptr;
     this->order = vector<transformtype>();
