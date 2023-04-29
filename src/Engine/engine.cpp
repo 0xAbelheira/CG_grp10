@@ -22,6 +22,8 @@ using namespace tinyxml2;
 using namespace draw;
 using namespace std;
 using namespace utilities;
+using namespace catmull;
+using namespace matrixUtils;
 
 vector<float> vertices_vec;
 GLuint vertices, actualVertice;
@@ -81,30 +83,51 @@ void drawFigures(group* grupo)
 				}
 				else
 				{
-					vector<point> pontos = grupo->transformations->translate->points.points;
-					// Desenhar a curva => drawFunctions.cpp
-					glPushMatrix();
-					drawCatmull(pontos);
-					glPopMatrix();
-					// Escolher um ponto da curva
-					float pos[3] = { 0.0, 0.0, 0.0 };
-					float deriv[3] = { 0.0, 0.0, 0.0 };
-		
-					float timeT = ((float) glutGet(GLUT_ELAPSED_TIME) / 1000) / (float)(grupo->transformations->translate->time);
-					catmull::getGlobalCatmullRomPoint(timeT, pontos, (float*)pos, (float*)deriv);
-		
-					glTranslatef(pos[0], pos[1], pos[2]);
-		
-					float m[4][4];
-					float x[3], z[3];
-		
-					matrixUtils::cross(deriv, aux_y, z);
-					matrixUtils::cross(z, deriv, aux_y);
-					matrixUtils::normalize(deriv);
-					matrixUtils::normalize(aux_y);
-					matrixUtils::normalize(z);
-					matrixUtils::buildRotMatrix(deriv, aux_y, z, *m);
-					glMultMatrixf(*m);
+					//point in the curve
+					float res[3];
+					//vector tangent to the curve
+					float deriv[3];
+
+					float glt = glutGet(GLUT_ELAPSED_TIME) / (grupo->transformations->translate->time * 1000);
+					
+					//render the curve
+					glColor3f(1, 1, 1);
+					glBegin(GL_LINE_LOOP);
+					for (int i = 0; i < 100; i++) {
+						getGlobalCatmullRomPoint(i/100.0f, grupo->transformations->translate->points.points, res, deriv);
+						glVertex3fv(res);
+					}
+					glEnd();
+
+					//animation without align to the curve
+					if(grupo->transformations->translate->align){
+						getGlobalCatmullRomPoint(glt,grupo->transformations->translate->points.points,res,deriv);
+						glTranslatef(res[0], res[1], res[2]);
+
+						//Xi = p'(t)
+						//deriv = X
+							
+						//Zi = Xi * Yi-1
+						float Z[3]; 
+						cross(deriv,aux_y,Z);
+						//Yi = Zi * Xi
+						cross(Z,deriv,aux_y);
+
+						//all vectors have to be normalized
+						normalize(deriv);
+						normalize(aux_y);
+						normalize(Z);
+
+						//OpenGL matrices are column major => so it's used the transpose of the rotation instead
+						float rotationMatrix[16];
+						buildRotMatrix(deriv,aux_y,Z,rotationMatrix);
+
+						glMultMatrixf(rotationMatrix);
+					}else{
+						//animation without align to the curve
+						getGlobalCatmullRomPoint(glt,grupo->transformations->translate->points.points,res,deriv);
+						glTranslatef(res[0], res[1], res[2]);
+					}
 				}
 			}
 			else if (i == transformtype::ROTATE)
