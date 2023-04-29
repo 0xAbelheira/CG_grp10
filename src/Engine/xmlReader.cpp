@@ -38,7 +38,7 @@ transform xml_transform(XMLElement* models_e)
 					points->QueryAttribute("z", &z);
 					r.translate->points.addPoint(x,y,z);
 
-					points->NextSiblingElement();
+					points = points->NextSiblingElement();
 				}
 			}
 			else

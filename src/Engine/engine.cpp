@@ -105,7 +105,7 @@ void drawFigures(group* grupo)
 					matrixUtils::normalize(z);
 					matrixUtils::buildRotMatrix(deriv, aux_y, z, *m);
 					glMultMatrixf(*m);
-					}
+				}
 			}
 			else if (i == transformtype::ROTATE)
 			{
