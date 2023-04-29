@@ -36,6 +36,8 @@ float r;
 float betaC ;
 float alphaC;
 
+int frame = 0, timebase = 0;
+
 void changeSize(int w, int h)
 {
 	// Prevent a divide by zero, when window is too short
@@ -69,8 +71,15 @@ void drawFigures(group* grupo)
 		{
 			if (i == transformtype::TRANSLATE)
 			{
-				// x = grupo->transformations->translate->x; y = grupo->transformations->translate->y; z = grupo->transformations->translate->z;
-				glTranslatef(x, y, z);
+				if (grupo->transformations->translate->points.points.size() < 4)
+				{
+					point temp = grupo->transformations->translate->points.points[0];
+					glTranslatef(temp.x, temp.y, temp.z);
+				}
+				else
+				{
+
+				}
 			}
 			else if (i == transformtype::ROTATE)
 			{
@@ -118,6 +127,10 @@ void drawFigures(group* grupo)
 
 void renderScene(void){
 
+	float fps = 0;
+	int time;
+	char s[64];
+
 	// clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -131,6 +144,16 @@ void renderScene(void){
 	drawReferencial();
 	actualVertice = 0;
 	drawFigures(&grupos);
+
+	frame++;
+	time=glutGet(GLUT_ELAPSED_TIME); 
+	if (time - timebase > 1000) { 
+		fps = frame*1000.0/(time-timebase); 
+		timebase = time; 
+		frame = 0;
+		sprintf(s, "FPS: %6.2f", fps);
+		glutSetWindowTitle(s);
+	}
 
 	// End of frame
 	glutSwapBuffers();
@@ -226,6 +249,7 @@ int glut_main(int argc, char** argv) {
 
 	// Required callback registry 
 	glutDisplayFunc(renderScene);
+	glutIdleFunc(renderScene);
 	glutReshapeFunc(changeSize);
 
 	// Callback registration for keyboard processing
@@ -233,7 +257,10 @@ int glut_main(int argc, char** argv) {
 	glutMotionFunc(motionFunc);
 
 	//  OpenGL settings
-	glewInit();
+	#ifndef __APPLE__	
+		// init GLEW
+		glewInit();
+	#endif	
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT, GL_LINE);

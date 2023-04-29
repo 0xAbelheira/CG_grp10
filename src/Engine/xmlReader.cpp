@@ -26,18 +26,28 @@ transform xml_transform(XMLElement* models_e)
 		{
 			r.order.push_back(transformtype::TRANSLATE);
 			r.translate = new translate();
-			model_e->QueryAttribute("time", &r.translate->time);
-			model_e->QueryAttribute("align", &r.translate->align);
-			XMLElement* points = model_e->FirstChildElement();
-			while (points)
+			if(model_e->QueryAttribute("time", &r.translate->time) != XML_NO_ATTRIBUTE)
+			{
+				model_e->QueryAttribute("align", &r.translate->align);
+				XMLElement* points = model_e->FirstChildElement();
+				while (points)
+				{
+					float x, y, z;
+					points->QueryAttribute("x", &x);
+					points->QueryAttribute("y", &y);
+					points->QueryAttribute("z", &z);
+					r.translate->points.addPoint(x,y,z);
+
+					points->NextSiblingElement();
+				}
+			}
+			else
 			{
 				float x, y, z;
 				model_e->QueryAttribute("x", &x);
 				model_e->QueryAttribute("y", &y);
 				model_e->QueryAttribute("z", &z);
 				r.translate->points.addPoint(x,y,z);
-
-				points->NextSiblingElement();
 			}
 		}
 		else if (strcmp(model_e->Value(), "rotate") == 0)
@@ -45,7 +55,7 @@ transform xml_transform(XMLElement* models_e)
 			r.order.push_back(transformtype::ROTATE);
 			r.rotate_angle = new float;
 			r.rotate_points = new point;
-			if(!model_e->QueryAttribute("angle", r.rotate_angle))
+			if(model_e->QueryAttribute("angle", r.rotate_angle) == XML_NO_ATTRIBUTE)
 				model_e->QueryAttribute("time", r.rotate_time);
 			model_e->QueryAttribute("x", &r.rotate_points->x);
 			model_e->QueryAttribute("y", &r.rotate_points->y);
