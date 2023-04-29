@@ -5,8 +5,8 @@ PROJECT(Fase1)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-add_executable(generator ./src/Generator/generator.cpp ./src/Generator/calcVertices.cpp ./src/Utilities/utilities.cpp)
-add_executable(engine ./src/Engine/engine.cpp ./src/Utilities/tinyxml2/tinyxml2.cpp ./src/Engine/drawFunc.cpp ./src/Engine/xmlReader.cpp ./src/Utilities/utilities.cpp)
+add_executable(generator ./src/Generator/generator.cpp ./src/Generator/calcVertices.cpp ./src/Generator/bezier.cpp ./src/Utilities/utilities.cpp ./src/Utilities/matrix.cpp)
+add_executable(engine ./src/Engine/engine.cpp ./src/Utilities/tinyxml2/tinyxml2.cpp ./src/Engine/drawFunc.cpp ./src/Engine/xmlReader.cpp ./src/Engine/catmullrom.cpp ./src/Utilities/utilities.cpp ./src/Utilities/matrix.cpp)
 
 
 find_package(OpenGL REQUIRED)

@@ -68,3 +68,14 @@ void draw::drawReferencial() {
 	
 	glEnd();
 }
+
+void draw::drawCatmull(vector<point> pontos) {
+    glBegin(GL_LINES);
+    for (size_t i = 0; i < pontos.size() - 1; i++) {
+        float pos1[3] = { pontos[i].x, pontos[i].y, pontos[i].z };
+        glVertex3fv(pos1);
+        float pos2[3] = { pontos[i + 1].x, pontos[i + 1].y, pontos[i + 1].z };
+        glVertex3fv(pos2);
+    }
+    glEnd();
+}

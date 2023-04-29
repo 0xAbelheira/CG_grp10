@@ -1,6 +1,5 @@
-#include "../Utilities/utilities.hpp"
 
 namespace catmull{
-    void getCatmullRomPoint(float, utilities::point[], float*, float*);
-    //void getGlobalCatmullRomPoint(transUtils::transfTime*, float , float* , float* );
+    void getCatmullRomPoint(float , float* , float* , float* , float* , float* , float*);
+    void getGlobalCatmullRomPoint(float, std::vector<utilities::point> , float* , float* );
 }

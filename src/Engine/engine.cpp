@@ -1,4 +1,6 @@
 #include "../Utilities/utilities.hpp"
+#include "../Utilities/matrix.hpp"
+#include "catmullrom.hpp"
 #include "drawFunc.hpp"
 #include "../Utilities/tinyxml2/tinyxml2.h"
 #include "../Utilities/camara.cpp"
@@ -35,6 +37,7 @@ float pz;
 float r;
 float betaC ;
 float alphaC;
+float aux_y[3] = { 0,1,0 };
 
 int frame = 0, timebase = 0;
 
@@ -78,8 +81,31 @@ void drawFigures(group* grupo)
 				}
 				else
 				{
-
-				}
+					vector<point> pontos = grupo->transformations->translate->points.points;
+					// Desenhar a curva => drawFunctions.cpp
+					glPushMatrix();
+					drawCatmull(pontos);
+					glPopMatrix();
+					// Escolher um ponto da curva
+					float pos[3] = { 0.0, 0.0, 0.0 };
+					float deriv[3] = { 0.0, 0.0, 0.0 };
+		
+					float timeT = ((float) glutGet(GLUT_ELAPSED_TIME) / 1000) / (float)(grupo->transformations->translate->time);
+					catmull::getGlobalCatmullRomPoint(timeT, pontos, (float*)pos, (float*)deriv);
+		
+					glTranslatef(pos[0], pos[1], pos[2]);
+		
+					float m[4][4];
+					float x[3], z[3];
+		
+					matrixUtils::cross(deriv, aux_y, z);
+					matrixUtils::cross(z, deriv, aux_y);
+					matrixUtils::normalize(deriv);
+					matrixUtils::normalize(aux_y);
+					matrixUtils::normalize(z);
+					matrixUtils::buildRotMatrix(deriv, aux_y, z, *m);
+					glMultMatrixf(*m);
+					}
 			}
 			else if (i == transformtype::ROTATE)
 			{

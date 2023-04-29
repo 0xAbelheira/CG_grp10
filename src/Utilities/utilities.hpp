@@ -40,7 +40,7 @@ namespace utilities{
         private:
         public:
             std::vector<transformtype> order;
-            translate* translate;
+            utilities::translate* translate;
             float* rotate_angle;
             float* rotate_time;
             utilities::point* rotate_points;

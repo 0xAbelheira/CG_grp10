@@ -1,4 +1,4 @@
-#include "matrixUtils.hpp"
+#include "matrix.hpp"
 #include <math.h>
 
 

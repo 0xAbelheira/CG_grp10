@@ -11,5 +11,5 @@ namespace draw {
     void drawFigure(utilities::figure);
     void drawFiguresVBO(GLuint, GLuint);
     void drawReferencial();
-
+    void drawCatmull(std::vector<utilities::point>);
 }
