@@ -137,8 +137,8 @@ void drawFigures(group* grupo)
 				if(!grupo->transformations->rotate_time)
 					angle = *(grupo->transformations->rotate_angle);
 				else {
-					int gluttime = glutGet(GLUT_ELAPSED_TIME); //vem em milisegundos
-            		angle = (gluttime * 360) / *(grupo->transformations->rotate_time);
+            		angle = (((float)glutGet(GLUT_ELAPSED_TIME) / 1000)* 360) / *(grupo->transformations->rotate_time);
+					cout << "aaa" << endl;
 				}
 				glRotatef(angle, x, y, z);
 			}

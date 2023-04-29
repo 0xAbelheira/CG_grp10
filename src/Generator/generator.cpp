@@ -1,5 +1,6 @@
 #include <string.h>
 #include "calcVertices.hpp"
+#include "bezier.hpp"
 #include <iostream>
 
 using namespace std;
@@ -28,7 +29,58 @@ int createFileType (vector<point> vertices, string name){
 }
 
 figure createBezier(char* file, size_t t) {
-    figure fig;
+    fstream f;
+    f.open(getPath() + file);
+    std::string line;      // String auxiliar que irá corresponder a uma 
+    size_t numPatches = 0;
+    size_t linhaNum = 0;
+    std::string delimiter = ",";
+
+    figure auxVertices;
+    std::vector<size_t> auxIndices;
+    if (f.is_open()) {
+        while (getline(f, line)) {
+            if (linhaNum == 0)
+                numPatches = atoi(line.c_str());
+
+            if (linhaNum >= 1 && linhaNum <= numPatches) {
+                std::string token;
+                size_t pos = 0;
+                std::istringstream tokenizer(line);
+                for (size_t i = 0; i < 15; i++) {
+                    std::getline(tokenizer, token, ',');
+                    auxIndices.push_back(stof(token));
+                }
+                std::getline(tokenizer, token);
+                auxIndices.push_back(stof(token));
+            }
+            if (linhaNum > numPatches + 1) {
+                std::string token;
+                size_t pos = 0;
+                size_t i = 0;
+                float coord[3];
+                string tokens[3];
+                std::istringstream tokenizer(line);
+
+                std::getline(tokenizer, tokens[0], ','); // then get the tokens from it
+                std::getline(tokenizer, tokens[1], ',');
+                std::getline(tokenizer, tokens[2]);
+
+                auxVertices.addPoint(stof(tokens[0]), stof(tokens[1]), stof(tokens[2]));
+                
+            }
+            linhaNum++;
+        }
+    }
+    else {
+        std::cout << "File not found" << std::endl;
+        figure fig;
+        return fig;
+    }
+    f.close();
+    
+    
+    figure fig = bezier::generateBezierPatches(auxVertices, auxIndices, t);
 
     return fig;
 }
@@ -113,8 +165,8 @@ int main(int argc, char* argv[]) {
                 
         }
 
-        //Gerar os vértices para o desenho da superficie e transcrever para o ficheiro .3dx  
-        else if ((strcmp(argv[1], "bezier") == 0) && (argc == 6)) {
+        //Gerar os vértices para o desenho da superficie e transcrever para o ficheiro .3d
+        else if ((strcmp(argv[1], "patch") == 0) && (argc == 5)) {
             char* patchFile = argv[2];
             stringstream aux(argv[3]);
             int tecelation = 0;
@@ -133,7 +185,7 @@ int main(int argc, char* argv[]) {
                          "sphere        [radius] [slices] [stacks] [file.3d]\n"
                          "cone          [radius] [height] [slices] [stacks] [file.3d]\n"
                          "torus         [radius1] [radius2] [slices] [stacks] [file.3d]\n"
-                         "bezier        [file] [tecelation] [file.3d]" << std::endl;
+                         "patch         [file] [tecelation] [file.3d]" << std::endl;
         } else {
             std::cout << "\nInvalid arguments.\n" << std::endl;
         }

@@ -54,10 +54,11 @@ transform xml_transform(XMLElement* models_e)
 		{
 			r.order.push_back(transformtype::ROTATE);
 			r.rotate_angle = new float;
-			r.rotate_time = new float;
 			r.rotate_points = new point;
-			if(model_e->QueryAttribute("angle", r.rotate_angle) == XML_NO_ATTRIBUTE)
+			if(model_e->QueryAttribute("angle", r.rotate_angle) == XML_NO_ATTRIBUTE) {
+				r.rotate_time = new float;
 				model_e->QueryAttribute("time", r.rotate_time);
+			}
 			model_e->QueryAttribute("x", &r.rotate_points->x);
 			model_e->QueryAttribute("y", &r.rotate_points->y);
 			model_e->QueryAttribute("z", &r.rotate_points->z);

@@ -1,3 +1,5 @@
+#include "../Utilities/matrix.hpp"
+#include "../Utilities/utilities.hpp"
 #include "bezier.hpp"
 
 using namespace matrixUtils;

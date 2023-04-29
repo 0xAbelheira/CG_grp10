@@ -1,6 +1,3 @@
-#include "../Utilities/matrix.hpp"
-#include "../Utilities/utilities.hpp"
-
 using namespace utilities;
 
 namespace bezier{
