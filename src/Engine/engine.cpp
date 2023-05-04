@@ -139,10 +139,6 @@ void drawFigures(group* grupo)
 					angle = *(grupo->transformations->rotate_angle);
 				else
             		angle = (((float)glutGet(GLUT_ELAPSED_TIME) / 1000)* 360) / *(grupo->transformations->rotate_time);
-<<<<<<< HEAD
-				}
-=======
->>>>>>> 27fc6fbd0d3d2b212beb80575ed2f78bf47c7873
 				glRotatef(angle, x, y, z);
 			}
 			else if (i == transformtype::SCALE)
@@ -370,31 +366,8 @@ int main(int argc, char** argv) {
 		}
 	}
 	else {
-		// if (argv[1]) {
-		// 	cout << "Loading " << argv[1] << " ...\n";
-		// }
-
-		XMLDocument doc;
-		XMLError err = doc.LoadFile("../../test.xml");
-
-		if (err) {
-			fprintf(stderr, "TINYXML2 FAILURE! Error code: %d\n", err);
-			return err;
-		}
-
-		//world engloba todo o xml
-		XMLElement* world_e = doc.FirstChildElement("world");
-		if (!world_e) {
-			cout << "XML needs a field called \"world\"";
-			return -1;
-		}
-		else {
-			vertices_vec = vector<float>();
-			int err = xml_world(world_e);
-			if (err == -1) return -1;
-		}
-		// cout << "Invalid arguments!";
-		// return -1;
+		cout << "Invalid arguments!";
+		return -1;
 	}
 
 	px = cam.px;
