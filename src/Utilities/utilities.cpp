@@ -64,7 +64,6 @@ utilities::translate::translate()
 {
     this->time = 0;
     this->align = false;
-    this->point_time = map<int,float>();
 }
 
 utilities::transform::transform()
