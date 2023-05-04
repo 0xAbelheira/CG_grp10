@@ -29,9 +29,7 @@ namespace utilities{
             utilities::figure points;
             float time;
             bool align;
-            std::map<int,float> point_time;
             translate();
-
     };
 
     enum transformtype { TRANSLATE, ROTATE, SCALE };

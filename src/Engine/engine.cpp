@@ -137,9 +137,12 @@ void drawFigures(group* grupo)
 				float angle;
 				if(!grupo->transformations->rotate_time)
 					angle = *(grupo->transformations->rotate_angle);
-				else {
+				else
             		angle = (((float)glutGet(GLUT_ELAPSED_TIME) / 1000)* 360) / *(grupo->transformations->rotate_time);
+<<<<<<< HEAD
 				}
+=======
+>>>>>>> 27fc6fbd0d3d2b212beb80575ed2f78bf47c7873
 				glRotatef(angle, x, y, z);
 			}
 			else if (i == transformtype::SCALE)

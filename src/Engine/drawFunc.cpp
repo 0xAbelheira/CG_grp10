@@ -42,6 +42,7 @@ void draw::drawFigure(figure f) {
 // recebe a lista de pontos, e o n�mero de triangulos a ser desenhados pelo VBO
 void draw::drawFiguresVBO(GLuint from, GLuint size)
 {
+	glColor3f(1,1,1);
 	glBindBuffer(GL_ARRAY_BUFFER, vertices);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 	glDrawArrays(GL_TRIANGLES, from, size);
