@@ -26,7 +26,7 @@ using namespace catmull;
 using namespace matrixUtils;
 
 vector<float> vertices_vec;
-GLuint vertices, actualVertice;
+GLuint vertices, current_vertice;
 group grupos;
 int window_size_w;
 int window_size_h;
@@ -40,6 +40,7 @@ float r;
 float betaC ;
 float alphaC;
 float aux_y[3] = { 0,1,0 };
+bool vbo_enable = true;
 
 int frame = 0, timebase = 0;
 
@@ -138,7 +139,6 @@ void drawFigures(group* grupo)
 					angle = *(grupo->transformations->rotate_angle);
 				else {
             		angle = (((float)glutGet(GLUT_ELAPSED_TIME) / 1000)* 360) / *(grupo->transformations->rotate_time);
-					cout << "aaa" << endl;
 				}
 				glRotatef(angle, x, y, z);
 			}
@@ -150,20 +150,26 @@ void drawFigures(group* grupo)
 		}
 	}
 
-	// for (auto i : grupo->models)
-	// {
-    //     figure value = i;
-    //     drawFigure(value);
-    // }
-
-	if (!grupo->models.empty())
+	if (vbo_enable)
 	{
-		GLuint maxVertice = 0;
-		for (auto i : grupo->models)
-			maxVertice += i.points.size();
-		drawFiguresVBO(actualVertice, maxVertice);
-		actualVertice += maxVertice;
+		if (!grupo->models.empty())
+		{
+			GLuint figures_size = 0;
+			for (auto i : grupo->models)
+				figures_size += i.points.size();
+			drawFiguresVBO(current_vertice, figures_size);
+			current_vertice += figures_size;
+		}
 	}
+	else
+	{
+		for (auto i : grupo->models)
+		{
+			figure value = i;
+			drawFigure(value);
+		}
+	}
+
 	
 	for(int i = 0; i < grupo->groups.size(); i++)
 	{
@@ -191,7 +197,7 @@ void renderScene(void){
 
 
 	drawReferencial();
-	actualVertice = 0;
+	current_vertice = 0;
 	drawFigures(&grupos);
 
 	frame++;
@@ -208,35 +214,22 @@ void renderScene(void){
 	glutSwapBuffers();
 }
 
-void menuCamChoice(int choice){
-    switch (choice) {
+void vbo_Choice(int choice)
+{
+	switch (choice) {
         case 0:
-            cam.mode = 0;
-			px = cam.px;
-			py = cam.py;
-			pz = cam.pz;
+			vbo_enable = false;
             break;
         case 1:
-            cam.mode = 1;
-            betaC = 0;
-
-            // cam.explorerCenter = point(cam.px, cam.py, cam.pz);
-            cam.lx = px;
-            cam.ly = py;
-            cam.lz = pz;
-
-            break;
-        case 2:
-            cam.mode = 2;
-            betaC = 0;
-            // cam.firstTime = true;
+			vbo_enable = true;
             break;
         default:
             break;
-    }
+	}
 }
 
-void modeChoice(int choice){
+void modeChoice(int choice)
+{
     switch (choice) {
         case 0:
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -253,12 +246,20 @@ void modeChoice(int choice){
 }
 
 void cameraMenu(){
-    int modeMenu = glutCreateMenu(modeChoice);
+    int drawMode = glutCreateMenu(modeChoice);
     glutAddMenuEntry("Lines", 0);
     glutAddMenuEntry("Fill", 1);
     glutAddMenuEntry("Points", 2);
 
-    // glutAddSubMenu("Mode", modeMenu);
+	int vboMode = glutCreateMenu(vbo_Choice);
+    glutAddMenuEntry("Disable", 0);
+    glutAddMenuEntry("Enable", 1);
+
+	glutCreateMenu(modeChoice);
+	glutAddMenuEntry("void", -1);
+    glutAddSubMenu("Draw Type", drawMode);
+	glutAddSubMenu("VBOs", vboMode);
+
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
