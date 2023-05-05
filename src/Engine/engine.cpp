@@ -179,6 +179,40 @@ void drawFigures(group* grupo)
 	glPopMatrix();
 }
 
+void renderText() {
+    // save projection
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+
+    // set projection so that coordinates match window pixels
+    gluOrtho2D(0, window_size_w, window_size_h, 0);
+    glMatrixMode(GL_MODELVIEW);
+
+    // disable depth test (assuming text is written in the end)
+    glDisable(GL_DEPTH_TEST);
+
+    // set modelview matrix
+    glPushMatrix();
+    glLoadIdentity();
+    glRasterPos2d(10, 20); // text position in pixels
+
+    // render text
+    char text[100];
+    sprintf(text, "Position: ");
+
+    for (char *c = text; *c != '\0'; c++) {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+    }
+
+    // Restore matrices and reenable depth test
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+    glEnable(GL_DEPTH_TEST);
+}
+
 void renderScene(void){
 
 	float fps = 0;
@@ -208,6 +242,8 @@ void renderScene(void){
 		sprintf(s, "FPS: %6.2f", fps);
 		glutSetWindowTitle(s);
 	}
+
+	// renderText();
 
 	// End of frame
 	glutSwapBuffers();
