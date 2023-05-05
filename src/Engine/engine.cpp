@@ -41,6 +41,7 @@ float betaC ;
 float alphaC;
 float aux_y[3] = { 0,1,0 };
 bool vbo_enable = true;
+float fps_display;
 
 int frame = 0, timebase = 0;
 
@@ -179,7 +180,8 @@ void drawFigures(group* grupo)
 	glPopMatrix();
 }
 
-void renderText() {
+void renderText()
+{
     // save projection
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -199,7 +201,11 @@ void renderText() {
 
     // render text
     char text[100];
-    sprintf(text, "Position: ");
+    sprintf(text, "FPS: %6.2f    |    ", fps_display);
+	if (vbo_enable)
+    	sprintf(text, "%sVBO Enable", text);
+	else
+    	sprintf(text, "%sVBO Disable", text);
 
     for (char *c = text; *c != '\0'; c++) {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
@@ -239,11 +245,10 @@ void renderScene(void){
 		fps = frame*1000.0/(time-timebase); 
 		timebase = time; 
 		frame = 0;
-		sprintf(s, "FPS: %6.2f", fps);
-		glutSetWindowTitle(s);
+		fps_display = fps;
 	}
 
-	// renderText();
+	renderText();
 
 	// End of frame
 	glutSwapBuffers();
@@ -281,18 +286,16 @@ void modeChoice(int choice)
 }
 
 void cameraMenu(){
-    int drawMode = glutCreateMenu(modeChoice);
-    glutAddMenuEntry("Lines", 0);
-    glutAddMenuEntry("Fill", 1);
-    glutAddMenuEntry("Points", 2);
 
 	int vboMode = glutCreateMenu(vbo_Choice);
     glutAddMenuEntry("Disable", 0);
     glutAddMenuEntry("Enable", 1);
 
-	glutCreateMenu(modeChoice);
-	glutAddMenuEntry("void", -1);
-    glutAddSubMenu("Draw Type", drawMode);
+    int drawMode = glutCreateMenu(modeChoice);
+    glutAddMenuEntry("Lines", 0);
+    glutAddMenuEntry("Fill", 1);
+    glutAddMenuEntry("Points", 2);
+
 	glutAddSubMenu("VBOs", vboMode);
 
     glutAttachMenu(GLUT_RIGHT_BUTTON);
