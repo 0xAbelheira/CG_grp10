@@ -118,6 +118,54 @@ vector<figure> xml_models(XMLElement* models_e)
 		}
 		model_e = model_e->NextSiblingElement("model");
 	}
+	
+	XMLElement* model_color_e = model_e->FirstChildElement("texture");
+	if (model_color_e)
+	{
+		string texture = model_color_e->Attribute("file");
+		// adicionar a estrutura
+	}
+	
+	model_color_e = model_e->FirstChildElement("color");
+	if (model_color_e)
+	{
+		XMLElement* diffuse = model_color_e->FirstChildElement("diffuse");
+		int diffuse_r, diffuse_g, diffuse_b;
+		diffuse->QueryAttribute("R", &diffuse_r);
+		diffuse->QueryAttribute("G", &diffuse_g);
+		diffuse->QueryAttribute("B", &diffuse_b);
+
+		XMLElement* ambient = model_color_e->FirstChildElement("ambient");
+		int ambient_r, ambient_g, ambient_b;
+		ambient->QueryAttribute("R", &ambient_r);
+		ambient->QueryAttribute("G", &ambient_g);
+		ambient->QueryAttribute("B", &ambient_b);
+
+		XMLElement* specular = model_color_e->FirstChildElement("specular");
+		int specular_r, specular_g, specular_b;
+		specular->QueryAttribute("R", &specular_r);
+		specular->QueryAttribute("G", &specular_g);
+		specular->QueryAttribute("B", &specular_b);
+
+		XMLElement* emissive = model_color_e->FirstChildElement("emissive");
+		int emissive_r, emissive_g, emissive_b;
+		emissive->QueryAttribute("R", &emissive_r);
+		emissive->QueryAttribute("G", &emissive_g);
+		emissive->QueryAttribute("B", &emissive_b);
+
+		XMLElement* shininess = model_color_e->FirstChildElement("shininess");
+		float shininess_value;
+		shininess->QueryAttribute("value", &shininess_value);
+	}
+	else
+	{
+		int diffuse_r = 200, diffuse_g = 200, diffuse_b = 200;
+		int ambient_r = 50, ambient_g = 50, ambient_b = 50;
+		int specular_r = 0, specular_g = 0, specular_b = 0;
+		int emissive_r = 0, emissive_g = 0, emissive_b = 0;
+		float shininess_value = 0;
+	}
+	
 	return r;
 }
 
@@ -143,6 +191,46 @@ group xml_group(XMLElement* group_e)
 		models_e = models_e->NextSiblingElement();
 	}
 	return grupos_;
+}
+
+void xml_lights(XMLElement* lights_e)
+{
+	XMLElement* light_e = lights_e->FirstChildElement();
+	while (light_e)
+	{
+		if (strcmp(light_e->Attribute("type"), "point") == 0)
+		{
+			float posX, posY, posZ;
+			light_e->QueryAttribute("posX", &posX);
+			light_e->QueryAttribute("posY", &posY);
+			light_e->QueryAttribute("posZ", &posZ);
+		}
+		else if (strcmp(light_e->Attribute("type"), "directional") == 0)
+		{
+			float dirX, dirY, dirZ;
+			light_e->QueryAttribute("dirX", &dirX);
+			light_e->QueryAttribute("dirY", &dirY);
+			light_e->QueryAttribute("dirZ", &dirZ);
+		}
+		else if (strcmp(light_e->Attribute("type"), "spotlight") == 0)
+		{
+			float 	posX, posY, posZ,
+					dirX, dirY, dirZ,
+					cutoff;
+			light_e->QueryAttribute("posX", &posX);
+			light_e->QueryAttribute("posY", &posY);
+			light_e->QueryAttribute("posZ", &posZ);
+
+			light_e->QueryAttribute("dirX", &dirX);
+			light_e->QueryAttribute("dirY", &dirY);
+			light_e->QueryAttribute("dirZ", &dirZ);
+
+			light_e->QueryAttribute("cutoff", &cutoff);
+		}
+		
+		light_e = light_e->NextSiblingElement();
+	}
+	
 }
 
 void xml_camera(XMLElement* camera_e) {
