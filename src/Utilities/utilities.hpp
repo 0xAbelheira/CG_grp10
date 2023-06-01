@@ -63,7 +63,7 @@ namespace utilities{
     {
         private:
         public:
-            map<colortype,std::tuple<int,int,int,int>> colors;
+            std::map<colortype,std::tuple<int,int,int,int>> colors;
             int *shininess;
             color();
     };
@@ -73,7 +73,7 @@ namespace utilities{
         private:
         public:
             utilities::figure model;
-            string *texture;
+            std::string *texture;
             color *color;
             models();
     };
