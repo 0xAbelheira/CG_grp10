@@ -46,13 +46,46 @@ namespace utilities{
             transform();
     };
 
+    enum lighttype { POINT, DIRECTIONAL, SPOTLIGHT };
+    class light
+    {
+        private:
+        public:
+            lighttype *type;
+            point *pos;
+            point *dir;
+            int *cutoff;
+            light();
+    };
+
+    enum colortype { DIFFUSE, AMBIENT, SPECULAR, EMISSIVE };
+    class color
+    {
+        private:
+        public:
+            map<colortype,std::tuple<int,int,int,int>> colors;
+            int *shininess;
+            color();
+    };
+
+    class models
+    {
+        private:
+        public:
+            utilities::figure model;
+            string *texture;
+            color *color;
+            models();
+    };
+
     class group
     {
         private:
         public:
+            std::vector<light> lights;
             std::vector<group> groups;
             transform* transformations;
-            std::vector<utilities::figure> models;
+            std::vector<utilities::models> models;
             group();
     };
 }

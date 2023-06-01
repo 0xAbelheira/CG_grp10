@@ -48,7 +48,8 @@ bool folderExists(const std::string& folderPath)
 }
 #endif
 
-std::string utilities::getPath(){
+std::string utilities::getPath()
+{
     char path[128];
     getDir(path, 90);
     if(folderExists(path + slash + "3dFiles"))
@@ -76,9 +77,30 @@ utilities::transform::transform()
     this->order = vector<transformtype>();
 }
 
+utilities::light::light()
+{
+    this->type = nullptr;
+    this->pos = nullptr;
+    this->dir = nullptr;
+    this->cutoff = nullptr;
+}
+
+utilities::color::color()
+{
+    this->colors = map<colortype,std::tuple<int,int,int,int>>();
+    this->shininess = nullptr;
+}
+
+utilities::models::models()
+{
+    this->texture = nullptr;
+    this->color = nullptr;
+}
+
 utilities::group::group()
 {
+    this->lights = vector<utilities::light>();
     this->groups = vector<group>();
     this->transformations = nullptr;
-    this->models = vector<figure>();
+    this->models = vector<utilities::models>();
 }

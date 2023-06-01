@@ -156,7 +156,7 @@ void drawFigures(group* grupo)
 		{
 			GLuint figures_size = 0;
 			for (auto i : grupo->models)
-				figures_size += i.points.size();
+				figures_size += i.model.points.size();
 			drawFiguresVBO(current_vertice, figures_size);
 			current_vertice += figures_size;
 		}
@@ -165,7 +165,7 @@ void drawFigures(group* grupo)
 	{
 		for (auto i : grupo->models)
 		{
-			figure value = i;
+			figure value = i.model;
 			drawFigure(value);
 		}
 	}

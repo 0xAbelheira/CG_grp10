@@ -76,15 +76,16 @@ transform xml_transform(XMLElement* models_e)
     return r;
 }
 
-vector<figure> xml_models(XMLElement* models_e)
+vector<models> xml_models(XMLElement* models_e)
 {
-	vector<figure> r = vector<figure>();
+	vector<models> r = vector<models>();
 	XMLElement* model_e = models_e->FirstChildElement("model");
 	while (model_e) {
 		const char* filename = model_e->Attribute("file");
 		fstream fs;
 		fs.open(getPath()+filename);
 		if (fs.is_open()) {
+			models temp;
 			figure figura;
 			string line;
 			float x1, y1, z1 = 0.0f; //Inicializa as coordenadas de cada ponto
@@ -110,60 +111,79 @@ vector<figure> xml_models(XMLElement* models_e)
 				vertices_vec.push_back(z1);
 			}
 			fs.close();
-			r.push_back(figura);
+			temp.model = figura;
+			
+			
+			XMLElement* model_color_e = model_e->FirstChildElement("texture");
+			if (model_color_e)
+			{
+				string texture = model_color_e->Attribute("file");
+				temp.texture = new string(texture);
+			}
+			
+			model_color_e = model_e->FirstChildElement("color");
+			if (model_color_e)
+			{
+				temp.color = new color();
+
+				XMLElement* diffuse = model_color_e->FirstChildElement("diffuse");
+				if (diffuse)
+				{
+					int diffuse_r, diffuse_g, diffuse_b;
+					diffuse->QueryAttribute("R", &diffuse_r);
+					diffuse->QueryAttribute("G", &diffuse_g);
+					diffuse->QueryAttribute("B", &diffuse_b);
+					temp.color->colors[DIFFUSE] = tuple<int,int,int,int>(diffuse_r, diffuse_g, diffuse_b, 1);
+				}
+
+				XMLElement* ambient = model_color_e->FirstChildElement("ambient");
+				if (ambient)
+				{
+					int ambient_r, ambient_g, ambient_b;
+					ambient->QueryAttribute("R", &ambient_r);
+					ambient->QueryAttribute("G", &ambient_g);
+					ambient->QueryAttribute("B", &ambient_b);
+					temp.color->colors[AMBIENT] = tuple<int,int,int,int>(ambient_r, ambient_g, ambient_b, 1);
+				}
+
+				XMLElement* specular = model_color_e->FirstChildElement("specular");
+				if (specular)
+				{
+					int specular_r, specular_g, specular_b;
+					specular->QueryAttribute("R", &specular_r);
+					specular->QueryAttribute("G", &specular_g);
+					specular->QueryAttribute("B", &specular_b);
+					temp.color->colors[SPECULAR] = tuple<int,int,int,int>(specular_r, specular_g, specular_b, 1);
+				}
+
+				XMLElement* emissive = model_color_e->FirstChildElement("emissive");
+				if (emissive)
+				{
+					int emissive_r, emissive_g, emissive_b;
+					emissive->QueryAttribute("R", &emissive_r);
+					emissive->QueryAttribute("G", &emissive_g);
+					emissive->QueryAttribute("B", &emissive_b);
+					temp.color->colors[EMISSIVE] = tuple<int,int,int,int>(emissive_r, emissive_g, emissive_b, 1);
+				}
+
+				XMLElement* shininess = model_color_e->FirstChildElement("shininess");
+				if (shininess)
+					shininess->QueryAttribute("value", temp.color->shininess);
+			}
+			else
+			{
+				int diffuse_r = 200, diffuse_g = 200, diffuse_b = 200;
+				int ambient_r = 50, ambient_g = 50, ambient_b = 50;
+				int specular_r = 0, specular_g = 0, specular_b = 0;
+				int emissive_r = 0, emissive_g = 0, emissive_b = 0;
+				float shininess_value = 0;
+			}
 		}
 
 		else{
 			std::cout << "Can't open file!"<< std::endl;
 		}
 		model_e = model_e->NextSiblingElement("model");
-	}
-	
-	XMLElement* model_color_e = model_e->FirstChildElement("texture");
-	if (model_color_e)
-	{
-		string texture = model_color_e->Attribute("file");
-		// adicionar a estrutura
-	}
-	
-	model_color_e = model_e->FirstChildElement("color");
-	if (model_color_e)
-	{
-		XMLElement* diffuse = model_color_e->FirstChildElement("diffuse");
-		int diffuse_r, diffuse_g, diffuse_b;
-		diffuse->QueryAttribute("R", &diffuse_r);
-		diffuse->QueryAttribute("G", &diffuse_g);
-		diffuse->QueryAttribute("B", &diffuse_b);
-
-		XMLElement* ambient = model_color_e->FirstChildElement("ambient");
-		int ambient_r, ambient_g, ambient_b;
-		ambient->QueryAttribute("R", &ambient_r);
-		ambient->QueryAttribute("G", &ambient_g);
-		ambient->QueryAttribute("B", &ambient_b);
-
-		XMLElement* specular = model_color_e->FirstChildElement("specular");
-		int specular_r, specular_g, specular_b;
-		specular->QueryAttribute("R", &specular_r);
-		specular->QueryAttribute("G", &specular_g);
-		specular->QueryAttribute("B", &specular_b);
-
-		XMLElement* emissive = model_color_e->FirstChildElement("emissive");
-		int emissive_r, emissive_g, emissive_b;
-		emissive->QueryAttribute("R", &emissive_r);
-		emissive->QueryAttribute("G", &emissive_g);
-		emissive->QueryAttribute("B", &emissive_b);
-
-		XMLElement* shininess = model_color_e->FirstChildElement("shininess");
-		float shininess_value;
-		shininess->QueryAttribute("value", &shininess_value);
-	}
-	else
-	{
-		int diffuse_r = 200, diffuse_g = 200, diffuse_b = 200;
-		int ambient_r = 50, ambient_g = 50, ambient_b = 50;
-		int specular_r = 0, specular_g = 0, specular_b = 0;
-		int emissive_r = 0, emissive_g = 0, emissive_b = 0;
-		float shininess_value = 0;
 	}
 	
 	return r;
@@ -182,7 +202,7 @@ group xml_group(XMLElement* group_e)
 		}
 		else if (strcmp(models_e->Value(), "models") == 0)
 		{
-			grupos_.models = vector<figure>(xml_models(models_e));
+			grupos_.models = vector<models>(xml_models(models_e));
 		}
 		else if (strcmp(models_e->Value(), "group") == 0)
 		{
