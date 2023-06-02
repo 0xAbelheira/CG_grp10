@@ -43,6 +43,7 @@ float aux_y[3] = { 0,1,0 };
 bool vbo_enable = true;
 float fps_display;
 
+
 int frame = 0, timebase = 0;
 
 void changeSize(int w, int h)
@@ -150,13 +151,78 @@ void drawFigures(group* grupo)
 		}
 	}
 
+	if(grupo->lights.size()) {
+		int c = 0;
+		glEnable(GL_LIGHTING);
+
+		for (auto light : grupo->lights) {
+			glEnable(GL_LIGHT0 + c);
+			float dark[4] = { 0.2, 0.2, 0.2, 1.0 };
+        	float white[4] = { 1.0, 1.0, 1.0, 1.0 };
+        	float black[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+        	glLightfv(GL_LIGHT0 + c, GL_AMBIENT, dark);
+        	glLightfv(GL_LIGHT0 + c, GL_DIFFUSE, white);
+        	glLightfv(GL_LIGHT0 + c, GL_SPECULAR, white);
+
+			if(*light.type == POINT) {
+				GLfloat pos[4] = {light.pos->x,light.pos->y,light.pos->z,1};
+        		glLightfv(GL_LIGHT0 + c, GL_POSITION, pos);
+			}
+
+			if(*light.type == DIRECTIONAL) {
+				GLfloat dir[4] = {light.dir->x,light.dir->y,light.dir->z,0};
+        		glLightfv(GL_LIGHT0 + c, GL_POSITION, dir);
+			}
+
+			if(*light.type == SPOTLIGHT) {
+				GLfloat pos[4] = {light.pos->x,light.pos->y,light.pos->z,1};
+				GLfloat dir[4] = {light.dir->x,light.dir->y,light.dir->z,0};
+				GLfloat cut[1] = {*light.cutoff};
+        		glLightfv(GL_LIGHT0 + c, GL_POSITION, pos);
+        		glLightfv(GL_LIGHT0 + c, GL_SPOT_DIRECTION, dir);
+        		glLightfv(GL_LIGHT0 + c, GL_SPOT_CUTOFF, cut);
+			}
+
+			++c;
+		}
+
+	}
+
 	if (vbo_enable)
 	{
 		if (!grupo->models.empty())
 		{
 			GLuint figures_size = 0;
-			for (auto i : grupo->models)
+			for (auto i : grupo->models) {
 				figures_size += i.model.points.size();
+
+				if(i.color->shininess) {
+					glMaterialf(GL_FRONT, GL_SHININESS, (GLfloat)*i.color->shininess);
+				}
+
+				for(auto c : i.color->colors) {
+					float v[4];
+					v[0] = (float)get<0>(c.second)/255;
+				    v[1] = (float)get<1>(c.second)/255;
+					v[2] = (float)get<2>(c.second)/255;
+					v[3] = (float)get<3>(c.second);
+
+					if(c.first == AMBIENT) {
+						glMaterialfv(GL_FRONT, GL_AMBIENT, v);
+					}
+					if(c.first == DIFFUSE) {
+						glMaterialfv(GL_FRONT, GL_DIFFUSE, v);
+					}
+					if(c.first == SPECULAR) {
+						glMaterialfv(GL_FRONT, GL_SPECULAR, v);
+					}
+					if(c.first == EMISSIVE) {
+						glMaterialfv(GL_FRONT, GL_EMISSION, v);
+					}
+				}
+
+			}
 			drawFiguresVBO(current_vertice, figures_size);
 			current_vertice += figures_size;
 		}
@@ -169,7 +235,6 @@ void drawFigures(group* grupo)
 			drawFigure(value);
 		}
 	}
-
 	
 	for(int i = 0; i < grupo->groups.size(); i++)
 	{
@@ -353,6 +418,10 @@ int glut_main(int argc, char** argv) {
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT, GL_LINE);
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_NORMALIZE);
+	glEnable(GL_TEXTURE_2D);
 
 	cameraMenu();
 

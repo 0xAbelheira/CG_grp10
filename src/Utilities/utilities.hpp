@@ -74,7 +74,7 @@ namespace utilities{
         public:
             utilities::figure model;
             std::string *texture;
-            color *color;
+            utilities::color *color;
             models();
     };
 
