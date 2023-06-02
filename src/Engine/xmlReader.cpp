@@ -168,7 +168,10 @@ vector<models> xml_models(XMLElement* models_e)
 
 				XMLElement* shininess = model_color_e->FirstChildElement("shininess");
 				if (shininess)
+				{
+					temp.color->shininess = new int;
 					shininess->QueryAttribute("value", temp.color->shininess);
+				}
 			}
 			else
 			{
