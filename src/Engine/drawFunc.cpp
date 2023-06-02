@@ -18,8 +18,6 @@ void drawTriangle(point p1, point p2, point p3) {
 
 	glBegin(GL_TRIANGLES);
 
-	glColor3f(1,1,1);
-
 	//desenhar os 3 vertices do triangulo
 	glVertex3f(p1.x, p1.y, p1.z);
 	glVertex3f(p2.x, p2.y, p2.z);
@@ -42,7 +40,6 @@ void draw::drawFigure(figure f) {
 // recebe a lista de pontos, e o n�mero de triangulos a ser desenhados pelo VBO
 void draw::drawFiguresVBO(GLuint from, GLuint size)
 {
-	glColor3f(1,1,1);
 	glBindBuffer(GL_ARRAY_BUFFER, vertices);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 	glDrawArrays(GL_TRIANGLES, from, size);

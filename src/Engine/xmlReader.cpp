@@ -12,6 +12,8 @@ using namespace utilities;
 
 extern group grupos;
 extern camera cam;
+extern vector<light> ls;
+extern int nLights = 0;
 extern int window_size_w;
 extern int window_size_h;
 extern vector<float> vertices_vec;
@@ -227,37 +229,45 @@ void xml_lights(XMLElement* lights_e)
 	XMLElement* light_e = lights_e->FirstChildElement();
 	while (light_e)
 	{
+		light *l = new light();
+		l->type = new lighttype;
 		if (strcmp(light_e->Attribute("type"), "point") == 0)
 		{
-			float posX, posY, posZ;
-			light_e->QueryAttribute("posX", &posX);
-			light_e->QueryAttribute("posY", &posY);
-			light_e->QueryAttribute("posZ", &posZ);
+			l->pos = new point;
+			light_e->QueryAttribute("posX", &l->pos->x);
+			light_e->QueryAttribute("posY", &l->pos->y);
+			light_e->QueryAttribute("posZ", &l->pos->z);
+			*l->type = POINT;
 		}
 		else if (strcmp(light_e->Attribute("type"), "directional") == 0)
 		{
-			float dirX, dirY, dirZ;
-			light_e->QueryAttribute("dirX", &dirX);
-			light_e->QueryAttribute("dirY", &dirY);
-			light_e->QueryAttribute("dirZ", &dirZ);
+			l->dir = new point;
+			light_e->QueryAttribute("dirX", &l->dir->x);
+			light_e->QueryAttribute("dirY", &l->dir->y);
+			light_e->QueryAttribute("dirZ", &l->dir->z);
+			*l->type = DIRECTIONAL;
 		}
 		else if (strcmp(light_e->Attribute("type"), "spotlight") == 0)
 		{
-			float 	posX, posY, posZ,
-					dirX, dirY, dirZ,
-					cutoff;
-			light_e->QueryAttribute("posX", &posX);
-			light_e->QueryAttribute("posY", &posY);
-			light_e->QueryAttribute("posZ", &posZ);
+			l->pos = new point;
+			l->dir = new point;
+			l->cutoff = new int;
+			light_e->QueryAttribute("posX", &l->pos->x);
+			light_e->QueryAttribute("posY", &l->pos->y);
+			light_e->QueryAttribute("posZ", &l->pos->z);
 
-			light_e->QueryAttribute("dirX", &dirX);
-			light_e->QueryAttribute("dirY", &dirY);
-			light_e->QueryAttribute("dirZ", &dirZ);
+			light_e->QueryAttribute("dirX", &l->dir->x);
+			light_e->QueryAttribute("dirY", &l->dir->y);
+			light_e->QueryAttribute("dirZ", &l->dir->z);
 
-			light_e->QueryAttribute("cutoff", &cutoff);
+			light_e->QueryAttribute("cutoff", l->cutoff);
+
+			*l->type = SPOTLIGHT;
 		}
 		
 		light_e = light_e->NextSiblingElement();
+		ls.push_back(*l);
+		++nLights;
 	}
 	
 }
@@ -316,6 +326,10 @@ int xml_world(XMLElement* world_e) {
 	}
 	else {
 		cout << "WARNING: \"camera\" not detected.";
+	}
+	XMLElement* lights_e = world_e->FirstChildElement("lights");
+	if (lights_e) {
+		xml_lights(lights_e);
 	}
 	XMLElement* group_e = world_e->FirstChildElement("group");
 	if (group_e) {

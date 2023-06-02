@@ -99,7 +99,6 @@ utilities::models::models()
 
 utilities::group::group()
 {
-    this->lights = vector<utilities::light>();
     this->groups = vector<group>();
     this->transformations = nullptr;
     this->models = vector<utilities::models>();

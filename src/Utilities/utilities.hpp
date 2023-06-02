@@ -82,7 +82,6 @@ namespace utilities{
     {
         private:
         public:
-            std::vector<light> lights;
             std::vector<group> groups;
             transform* transformations;
             std::vector<utilities::models> models;
