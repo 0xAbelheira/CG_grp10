@@ -121,10 +121,10 @@ vector<models> xml_models(XMLElement* models_e)
 				temp.texture = new string(texture);
 			}
 			
+			temp.color = new color();
 			model_color_e = model_e->FirstChildElement("color");
 			if (model_color_e)
 			{
-				temp.color = new color();
 
 				XMLElement* diffuse = model_color_e->FirstChildElement("diffuse");
 				if (diffuse)
@@ -176,8 +176,14 @@ vector<models> xml_models(XMLElement* models_e)
 				int ambient_r = 50, ambient_g = 50, ambient_b = 50;
 				int specular_r = 0, specular_g = 0, specular_b = 0;
 				int emissive_r = 0, emissive_g = 0, emissive_b = 0;
-				float shininess_value = 0;
+				temp.color->shininess = new int;
+				temp.color->shininess = 0;
+				temp.color->colors[DIFFUSE] = tuple<int,int,int,int>(diffuse_r, diffuse_g, diffuse_b, 1);
+				temp.color->colors[AMBIENT] = tuple<int,int,int,int>(ambient_r, ambient_g, ambient_b, 1);
+				temp.color->colors[SPECULAR] = tuple<int,int,int,int>(specular_r, specular_g, specular_b, 1);
+				temp.color->colors[EMISSIVE] = tuple<int,int,int,int>(emissive_r, emissive_g, emissive_b, 1);
 			}
+			r.push_back(temp);
 		}
 
 		else{
@@ -316,5 +322,6 @@ int xml_world(XMLElement* world_e) {
 		cout << "ERROR: \"group\" not detected.";
 		return -1;
 	}
+	auto x = grupos;
 	return 1;
 }
