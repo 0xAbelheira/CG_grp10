@@ -76,6 +76,33 @@ void drawFigures(group* grupo)
 
 	group r;
 
+	for (auto i : grupo->models) {
+		if(i.color->shininess) {
+			glMaterialf(GL_FRONT, GL_SHININESS, (GLfloat)*i.color->shininess);
+		}
+
+		for(auto c : i.color->colors) {
+			float v[4];
+			v[0] = (float)get<0>(c.second)/255.0;
+		    v[1] = (float)get<1>(c.second)/255.0;
+			v[2] = (float)get<2>(c.second)/255.0;
+			v[3] = (float)get<3>(c.second);
+
+			if(c.first == AMBIENT) {
+				glMaterialfv(GL_FRONT, GL_AMBIENT, v);
+			}
+			if(c.first == DIFFUSE) {
+				glMaterialfv(GL_FRONT, GL_DIFFUSE, v);
+			}
+			if(c.first == SPECULAR) {
+				glMaterialfv(GL_FRONT, GL_SPECULAR, v);
+			}
+			if(c.first == EMISSIVE) {
+				glMaterialfv(GL_FRONT, GL_EMISSION, v);
+			}
+		}
+	}
+
 	if (grupo->transformations)
 	{
 		float x,y,z;
@@ -155,40 +182,6 @@ void drawFigures(group* grupo)
 		}
 	}
 
-	for (auto i : grupo->models) {
-		if(i.color->shininess) {
-			glMaterialf(GL_FRONT, GL_SHININESS, (GLfloat)*i.color->shininess);
-		}
-
-		for(auto c : i.color->colors) {
-			float v[4];
-			v[0] = (float)get<0>(c.second)/255.0;
-		    v[1] = (float)get<1>(c.second)/255.0;
-			v[2] = (float)get<2>(c.second)/255.0;
-			v[3] = (float)get<3>(c.second);
-
-			for (size_t j = 0; j < 4; j++)
-			{
-				cout << v[j] << endl;
-			}
-			
-			
-
-			if(c.first == AMBIENT) {
-				glMaterialfv(GL_FRONT, GL_AMBIENT, v);
-			}
-			if(c.first == DIFFUSE) {
-				glMaterialfv(GL_FRONT, GL_DIFFUSE, v);
-			}
-			if(c.first == SPECULAR) {
-				glMaterialfv(GL_FRONT, GL_SPECULAR, v);
-			}
-			if(c.first == EMISSIVE) {
-				glMaterialfv(GL_FRONT, GL_EMISSION, v);
-			}
-		}
-	}
-
 	if (vbo_enable)
 	{
 		if (!grupo->models.empty())
@@ -251,6 +244,7 @@ void renderLights() {
 
 void renderText()
 {
+	glDisable(GL_LIGHTING);
     // save projection
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -285,7 +279,18 @@ void renderText()
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
+	glEnable(GL_LIGHTING);
+	if (nLights > 0) {
+		glEnable(GL_LIGHTING);
+		for (int i = 0; i < nLights; i++) {
+			glEnable(GL_LIGHT0 + i);
+			glLightfv(GL_LIGHT0 + i, GL_AMBIENT, dark);
+         	glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, white);
+        	glLightfv(GL_LIGHT0 + i, GL_SPECULAR, white);
+		}
+	}
     glEnable(GL_DEPTH_TEST);
+
 }
 
 void renderScene(void){
@@ -305,10 +310,6 @@ void renderScene(void){
 
 	drawReferencial();
 
-	renderLights();
-	current_vertice = 0;
-	drawFigures(&grupos);
-
 	frame++;
 	time=glutGet(GLUT_ELAPSED_TIME); 
 	if (time - timebase > 1000) { 
@@ -319,6 +320,10 @@ void renderScene(void){
 	}
 
 	renderText();
+	renderLights();
+	current_vertice = 0;
+	drawFigures(&grupos);
+
 
 	// End of frame
 	glutSwapBuffers();
