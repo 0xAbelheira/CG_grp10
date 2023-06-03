@@ -7,12 +7,19 @@ using namespace std;
 using namespace generate;
 
 
-int createFileType (vector<point> vertices, string name){
+int createFileType (figure f, string name){
 
     fstream file;
 
     file.open(utilities::getPath() + name,ios::out);
-    for(point p : vertices){
+    for(point p : f.points){
+        file << p.x << " ";
+        file << p.y << " ";
+        file << p.z << " ";
+        file << "\n";
+    }
+    file << f.normais.size() << "\n";
+    for (point p : f.normais) {
         file << p.x << " ";
         file << p.y << " ";
         file << p.z << " ";
@@ -101,7 +108,7 @@ int main(int argc, char* argv[]) {
             aux >> camadas;
 
             f = createPlane(x, camadas);
-            createFileType(f.points, argv[4]);
+            createFileType(f, argv[4]);
         }
 
             //Gerar os vértices para o desenho do cubo/caixa e transcrever para o ficheiro .3d
@@ -112,7 +119,7 @@ int main(int argc, char* argv[]) {
             aux >> camadas;
 
             f = createBox(l , camadas);
-            createFileType(f.points, argv[4]);
+            createFileType(f, argv[4]);
         }
 
             //Gerar os vértices para o desenho da esfera e transcrever para o ficheiro .3d
@@ -127,7 +134,7 @@ int main(int argc, char* argv[]) {
 
             f = createSphere(radius, slices, stacks);
 
-            createFileType(f.points, argv[5]);
+            createFileType(f, argv[5]);
 
         }
 
@@ -144,7 +151,7 @@ int main(int argc, char* argv[]) {
 
             f = createCone(radius, height, slices, stacks);
 
-            createFileType(f.points, argv[6]);
+            createFileType(f, argv[6]);
                 
         }
 
@@ -161,7 +168,7 @@ int main(int argc, char* argv[]) {
 
             f = createTorus(rIn, rOut, slices, stacks);
 
-            createFileType(f.points, argv[6]);
+            createFileType(f, argv[6]);
                 
         }
 
@@ -175,7 +182,7 @@ int main(int argc, char* argv[]) {
 
             f = createBezier(patchFile,tecelation);
             if (!f.points.empty())
-                createFileType(f.points, argv[4]);
+                createFileType(f, argv[4]);
         }
 
             //Tela de ajuda e comandos

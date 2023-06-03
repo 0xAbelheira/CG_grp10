@@ -25,8 +25,8 @@ using namespace utilities;
 using namespace catmull;
 using namespace matrixUtils;
 
-vector<float> vertices_vec;
-GLuint vertices, current_vertice;
+vector<float> vertices_vec, normais_vec;
+GLuint vertices, current_vertice, normais;
 group grupos;
 int window_size_w;
 int window_size_h;
@@ -162,10 +162,16 @@ void drawFigures(group* grupo)
 
 		for(auto c : i.color->colors) {
 			float v[4];
-			v[0] = (float)get<0>(c.second)/255;
-		    v[1] = (float)get<1>(c.second)/255;
-			v[2] = (float)get<2>(c.second)/255;
+			v[0] = (float)get<0>(c.second)/255.0;
+		    v[1] = (float)get<1>(c.second)/255.0;
+			v[2] = (float)get<2>(c.second)/255.0;
 			v[3] = (float)get<3>(c.second);
+
+			for (size_t j = 0; j < 4; j++)
+			{
+				cout << v[j] << endl;
+			}
+			
 			
 
 			if(c.first == AMBIENT) {
@@ -214,29 +220,31 @@ void drawFigures(group* grupo)
 }
 
 void renderLights() {
-	int asd = nLights;
+	int c = 0;
 	if(nLights != 0) {
 
 		for (auto light : ls) {
 
 			if(*light.type == POINT) {
 				GLfloat pos[4] = {light.pos->x,light.pos->y,light.pos->z,1};
-        		glLightfv(GL_LIGHT0 + nLights, GL_POSITION, pos);
+        		glLightfv(GL_LIGHT0 + c, GL_POSITION, pos);
 			}
 
 			if(*light.type == DIRECTIONAL) {
 				GLfloat dir[4] = {light.dir->x,light.dir->y,light.dir->z,0};
-        		glLightfv(GL_LIGHT0 + nLights, GL_POSITION, dir);
+        		glLightfv(GL_LIGHT0 + c, GL_POSITION, dir);
 			}
 
 			if(*light.type == SPOTLIGHT) {
 				GLfloat pos[4] = {light.pos->x,light.pos->y,light.pos->z,1};
 				GLfloat dir[4] = {light.dir->x,light.dir->y,light.dir->z,0};
 				GLfloat cut[1] = {*light.cutoff};
-        		glLightfv(GL_LIGHT0 + nLights, GL_POSITION, pos);
-        		glLightfv(GL_LIGHT0 + nLights, GL_SPOT_DIRECTION, dir);
-        		glLightfv(GL_LIGHT0 + nLights, GL_SPOT_CUTOFF, cut);
+        		glLightfv(GL_LIGHT0 + c, GL_POSITION, pos);
+        		glLightfv(GL_LIGHT0 + c, GL_SPOT_DIRECTION, dir);
+        		glLightfv(GL_LIGHT0 + c, GL_SPOT_CUTOFF, cut);
 			}
+
+			++c;
 		}
 	}
 }	
@@ -295,9 +303,9 @@ void renderScene(void){
 			cam.lx, cam.ly, cam.lz,
 			cam.ux, cam.uy, cam.uz);
 
-	renderLights();
-
 	drawReferencial();
+
+	renderLights();
 	current_vertice = 0;
 	drawFigures(&grupos);
 
@@ -334,10 +342,10 @@ void modeChoice(int choice)
 {
     switch (choice) {
         case 0:
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             break;
         case 1:
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
             break;
         case 2:
             glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
@@ -354,8 +362,8 @@ void cameraMenu(){
     glutAddMenuEntry("Enable", 1);
 
     int drawMode = glutCreateMenu(modeChoice);
-    glutAddMenuEntry("Lines", 0);
-    glutAddMenuEntry("Fill", 1);
+    glutAddMenuEntry("Fill", 0);
+    glutAddMenuEntry("Lines", 1);
     glutAddMenuEntry("Points", 2);
 
 	glutAddSubMenu("VBOs", vboMode);
@@ -411,28 +419,32 @@ int glut_main(int argc, char** argv) {
 		// init GLEW
 		glewInit();
 	#endif	
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT, GL_LINE);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_TEXTURE_2D);
 
-	cameraMenu();
+	glPolygonMode(GL_FRONT, GL_FILL);
 
 	if (nLights > 0) {
 		glEnable(GL_LIGHTING);
 		for (int i = 0; i < nLights; i++) {
 			glEnable(GL_LIGHT0 + i);
+			glLightfv(GL_LIGHT0 + i, GL_AMBIENT, dark);
+         	glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, white);
+        	glLightfv(GL_LIGHT0 + i, GL_SPECULAR, white);
 		}
-		for(auto l : ls) {
-			glLightfv(GL_LIGHT0 + nLights, GL_AMBIENT, dark);
-        	glLightfv(GL_LIGHT0 + nLights, GL_DIFFUSE, white);
-        	glLightfv(GL_LIGHT0 + nLights, GL_SPECULAR, white);
-		}
+		//for(auto l : ls) {
+		//	glLightfv(GL_LIGHT0 + nLights, GL_AMBIENT, dark);
+       // 	glLightfv(GL_LIGHT0 + nLights, GL_DIFFUSE, white);
+        //	glLightfv(GL_LIGHT0 + nLights, GL_SPECULAR, white);
+		//}
 	}
+
+	cameraMenu();
 
 	// criar o VBO
 	glGenBuffers(1, &vertices);
@@ -447,6 +459,20 @@ int glut_main(int argc, char** argv) {
 	);
 	vertices_vec.clear();
 	vertices_vec.~vector();
+
+	// criar o VBO Normais
+	glGenBuffers(1, &normais);
+
+	// copiar o vector para a memória gráfica
+	glBindBuffer(GL_ARRAY_BUFFER, normais);
+	glBufferData(
+		GL_ARRAY_BUFFER, // tipo do buffer, só é relevante na altura do desenho
+		sizeof(float) * normais_vec.size(), // tamanho do vector em bytes
+		normais_vec.data(), // os dados do array associado ao vector
+		GL_STATIC_DRAW // indicativo da utilização (estático e para desenho)
+	);
+	normais_vec.clear();
+	normais_vec.~vector();
 
 	cout << " prepared.\n";
 

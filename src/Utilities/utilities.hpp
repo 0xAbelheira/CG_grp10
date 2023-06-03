@@ -17,7 +17,9 @@ namespace utilities{
         
     public:
         std::vector<point> points;
+        std::vector<point> normais;
         void addPoint(float, float, float);
+        void addNormal(float, float, float);
     };
 
     std::string getPath();

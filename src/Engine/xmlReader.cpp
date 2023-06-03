@@ -15,7 +15,7 @@ extern camera cam;
 extern vector<light> ls;
 extern int window_size_w;
 extern int window_size_h;
-extern vector<float> vertices_vec;
+extern vector<float> vertices_vec, normais_vec;
 extern int nLights;
 
 transform xml_transform(XMLElement* models_e)
@@ -90,10 +90,11 @@ vector<models> xml_models(XMLElement* models_e)
 			models temp;
 			figure figura;
 			string line;
+			int f = 0;
 			float x1, y1, z1 = 0.0f; //Inicializa as coordenadas de cada ponto
 
 			//Lê linha a linha do ficheiro, não esquecendo que cada linha é um vértice/ponto
-			while (getline(fs, line)) {
+			while(getline(fs, line)) {
 				float cood[3]; //guarda num array as coordenadas de cada ponto
 
 				std::string delimiter = " ";
@@ -106,11 +107,22 @@ vector<models> xml_models(XMLElement* models_e)
 					i++;
 					line.erase(0, pos + delimiter.length());
 				}
+				if(i != 3) f = 1;
 				x1=cood[0],y1=cood[1],z1=cood[2];
-				figura.addPoint(x1,y1,z1);
-				vertices_vec.push_back(x1);
-				vertices_vec.push_back(y1);
-				vertices_vec.push_back(z1);
+
+				if(f == 0) {
+					figura.addPoint(x1,y1,z1);
+					vertices_vec.push_back(x1);
+					vertices_vec.push_back(y1);
+					vertices_vec.push_back(z1);
+				}
+				else {
+					figura.addNormal(x1,y1,z1);
+					normais_vec.push_back(x1);
+					normais_vec.push_back(y1);
+					normais_vec.push_back(z1);
+				}
+
 			}
 			fs.close();
 			temp.model = figura;
@@ -137,6 +149,10 @@ vector<models> xml_models(XMLElement* models_e)
 					diffuse->QueryAttribute("B", &diffuse_b);
 					temp.color->colors[DIFFUSE] = tuple<int,int,int,int>(diffuse_r, diffuse_g, diffuse_b, 1);
 				}
+				else {
+					int diffuse_r = 200, diffuse_g = 200, diffuse_b = 200;
+					temp.color->colors[DIFFUSE] = tuple<int,int,int,int>(diffuse_r, diffuse_g, diffuse_b, 1);
+				}
 
 				XMLElement* ambient = model_color_e->FirstChildElement("ambient");
 				if (ambient)
@@ -145,6 +161,10 @@ vector<models> xml_models(XMLElement* models_e)
 					ambient->QueryAttribute("R", &ambient_r);
 					ambient->QueryAttribute("G", &ambient_g);
 					ambient->QueryAttribute("B", &ambient_b);
+					temp.color->colors[AMBIENT] = tuple<int,int,int,int>(ambient_r, ambient_g, ambient_b, 1);
+				}
+				else {
+					int ambient_r = 50, ambient_g = 50, ambient_b = 50;
 					temp.color->colors[AMBIENT] = tuple<int,int,int,int>(ambient_r, ambient_g, ambient_b, 1);
 				}
 
@@ -157,6 +177,10 @@ vector<models> xml_models(XMLElement* models_e)
 					specular->QueryAttribute("B", &specular_b);
 					temp.color->colors[SPECULAR] = tuple<int,int,int,int>(specular_r, specular_g, specular_b, 1);
 				}
+				else {
+					int specular_r = 0, specular_g = 0, specular_b = 0;
+					temp.color->colors[SPECULAR] = tuple<int,int,int,int>(specular_r, specular_g, specular_b, 1);
+				}
 
 				XMLElement* emissive = model_color_e->FirstChildElement("emissive");
 				if (emissive)
@@ -167,12 +191,20 @@ vector<models> xml_models(XMLElement* models_e)
 					emissive->QueryAttribute("B", &emissive_b);
 					temp.color->colors[EMISSIVE] = tuple<int,int,int,int>(emissive_r, emissive_g, emissive_b, 1);
 				}
+				else {
+					int emissive_r = 0, emissive_g = 0, emissive_b = 0;
+					temp.color->colors[EMISSIVE] = tuple<int,int,int,int>(emissive_r, emissive_g, emissive_b, 1);
+				}
 
 				XMLElement* shininess = model_color_e->FirstChildElement("shininess");
 				if (shininess)
 				{
 					temp.color->shininess = new int;
 					shininess->QueryAttribute("value", temp.color->shininess);
+				}
+				else {
+					temp.color->shininess = new int;
+					temp.color->shininess = 0;
 				}
 			}
 			else

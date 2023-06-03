@@ -22,6 +22,13 @@ figure generate::createPlane(float size, int nrDiv){
             pl.addPoint(-x + av,0.0f, -z);
             pl.addPoint(-x,0.0f, -z + av);
 
+            pl.addNormal(0, 1, 0);
+            pl.addNormal(0, 1, 0);
+            pl.addNormal(0, 1, 0);
+            pl.addNormal(0, 1, 0);
+            pl.addNormal(0, 1, 0);
+            pl.addNormal(0, 1, 0);
+
             x -= av;
         }
         z -= av;
@@ -50,6 +57,13 @@ figure generate::createBox(float size, int nrDiv){
             box.addPoint(-x + av, -y, -z);
             box.addPoint(-x + av , -y, -z + av);
 
+            box.addNormal(0, -1, 0);
+            box.addNormal(0, -1, 0);
+            box.addNormal(0, -1, 0);
+            box.addNormal(0, -1, 0);
+            box.addNormal(0, -1, 0);
+            box.addNormal(0, -1, 0);
+
             x -= av;
         }
         z -= av;
@@ -69,6 +83,13 @@ figure generate::createBox(float size, int nrDiv){
             box.addPoint(-x + av , y, -z + av);
             box.addPoint(-x + av, y, -z);
             box.addPoint(-x, y, -z + av);
+
+            box.addNormal(0, 1, 0);
+            box.addNormal(0, 1, 0);
+            box.addNormal(0, 1, 0);
+            box.addNormal(0, 1, 0);
+            box.addNormal(0, 1, 0);
+            box.addNormal(0, 1, 0);
 
             x -= av;
         }
@@ -90,6 +111,13 @@ figure generate::createBox(float size, int nrDiv){
             box.addPoint(-x, -y + av, z);
             box.addPoint(-x + av, -y, z);
 
+            box.addNormal(0, 0, 1);
+            box.addNormal(0, 0, 1);
+            box.addNormal(0, 0, 1);
+            box.addNormal(0, 0, 1);
+            box.addNormal(0, 0, 1);
+            box.addNormal(0, 0, 1);
+
             x -= av;
         }
         y -= av;
@@ -109,6 +137,13 @@ figure generate::createBox(float size, int nrDiv){
             box.addPoint(-x + av, -y, -z);
             box.addPoint(-x, -y + av, -z);
             box.addPoint(-x + av, -y + av,-z);
+
+            box.addNormal(0, 0, -1);
+            box.addNormal(0, 0, -1);
+            box.addNormal(0, 0, -1);
+            box.addNormal(0, 0, -1);
+            box.addNormal(0, 0, -1);
+            box.addNormal(0, 0, -1);
 
             x -= av;
         }
@@ -130,6 +165,13 @@ figure generate::createBox(float size, int nrDiv){
             box.addPoint(x, -y, -z + av);
             box.addPoint(x, -y + av, -z);
 
+            box.addNormal(1, 0, 0);
+            box.addNormal(1, 0, 0);
+            box.addNormal(1, 0, 0);
+            box.addNormal(1, 0, 0);
+            box.addNormal(1, 0, 0);
+            box.addNormal(1, 0, 0);
+
             y -= av;
         }
         z -= av;
@@ -149,6 +191,13 @@ figure generate::createBox(float size, int nrDiv){
             box.addPoint(-x, -y + av, -z);
             box.addPoint(-x, -y, -z + av);
             box.addPoint(-x, -y + av, -z + av);
+
+            box.addNormal(-1, 0, 0);
+            box.addNormal(-1, 0, 0);
+            box.addNormal(-1, 0, 0);
+            box.addNormal(-1, 0, 0);
+            box.addNormal(-1, 0, 0);
+            box.addNormal(-1, 0, 0);
 
             y -= av;
         }
@@ -172,20 +221,36 @@ figure generate::createSphere(float radius, int slices, int stacks){
 		sphere.addPoint(radius * sin(beta) * sin(alpha*i), radius * cos(beta), radius * sin(beta) * cos(alpha*i));
 		sphere.addPoint(radius * sin(beta) * sin(alpha*(i+1)), radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
 
+        sphere.addNormal(0, 1, 0);
+		sphere.addNormal(sin(beta) * sin(alpha*i), cos(beta), sin(beta) * cos(alpha*i));
+		sphere.addNormal(sin(beta) * sin(alpha*(i+1)), cos(beta), sin(beta) * cos(alpha*(i+1)));
+
 		for(int j = 1; j < stacks-1; j++) {
 			sphere.addPoint(radius * sin(beta*j) * sin(alpha*i), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*i));
 			sphere.addPoint(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
 			sphere.addPoint(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
 
+            sphere.addNormal(sin(beta*j) * sin(alpha*i), cos(beta*j), sin(beta*j) * cos(alpha*i));
+			sphere.addNormal(sin(beta*(j+1)) * sin(alpha*i), cos(beta*(j+1)), sin(beta*(j+1)) * cos(alpha*i));
+			sphere.addNormal(sin(beta*j) * sin(alpha*(i+1)), cos(beta*j), sin(beta*j) * cos(alpha*(i+1)));
+
 			sphere.addPoint(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
 			sphere.addPoint(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
 			sphere.addPoint(radius * sin(beta*(j+1)) * sin(alpha*(i+1)), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*(i+1)));
+
+            sphere.addNormal(sin(beta*j) * sin(alpha*(i+1)), cos(beta*j), sin(beta*j) * cos(alpha*(i+1)));
+			sphere.addNormal(sin(beta*(j+1)) * sin(alpha*i), cos(beta*(j+1)), sin(beta*(j+1)) * cos(alpha*i));
+			sphere.addNormal(sin(beta*(j+1)) * sin(alpha*(i+1)), cos(beta*(j+1)), sin(beta*(j+1)) * cos(alpha*(i+1)));
 		}
 
         //parte baixo
 		sphere.addPoint(radius * sin(beta) * sin(alpha*(i+1)), -radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
 		sphere.addPoint(radius * sin(beta) * sin(alpha*i), -radius * cos(beta), radius * sin(beta) * cos(alpha*i));
 		sphere.addPoint(0, -radius, 0);
+
+        sphere.addNormal(sin(beta) * sin(alpha*(i+1)), -cos(beta), sin(beta) * cos(alpha*(i+1)));
+		sphere.addNormal(sin(beta) * sin(alpha*i), -cos(beta), sin(beta) * cos(alpha*i));
+		sphere.addNormal(0, -1, 0);
 	}
 
     return sphere;
@@ -198,6 +263,7 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
     float difH = height/stacks;
     float difR = radius/stacks;
     float rTop, rLow;
+    float ny = cos(atan(height / radius));
 
     figure cone;
 
@@ -209,6 +275,10 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
 		cone.addPoint(radius*sin(alpha*i), 0, radius*cos(alpha*i));
 		cone.addPoint(0, 0, 0);
 
+        cone.addNormal(0, -1, 0);
+        cone.addNormal(0, -1, 0);
+        cone.addNormal(0, -1, 0);
+
         for(int j = 0; j < stacks-1; j++) {
             rTop = rLow - difR;
             hTop = hLow + difH;
@@ -217,9 +287,18 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
             cone.addPoint(rLow*sin(alpha*(i+1)), hLow, rLow*cos(alpha*(i+1)));
 		    cone.addPoint(rTop*sin(alpha*i), hTop, rTop*cos(alpha*i));
 
+            cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
+            cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
+		    cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
+
             cone.addPoint(rLow*sin(alpha*(i+1)), hLow, rLow*cos(alpha*(i+1)));
             cone.addPoint(rTop*sin(alpha*(i+1)), hTop, rTop*cos(alpha*(i+1)));
             cone.addPoint(rTop*sin(alpha*i), hTop, rTop*cos(alpha*i));
+
+            cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
+            cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
+            cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
+
             rLow = rTop;
             hLow += difH;
         }
@@ -230,6 +309,10 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
         cone.addPoint(rLow*sin(alpha*i), hLow, rLow*cos(alpha*i));
         cone.addPoint(rLow*sin(alpha*(i+1)), hLow, rLow*cos(alpha*(i+1)));
 		cone.addPoint(rTop*sin(alpha*i), hTop, rTop*cos(alpha*i));
+
+        cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
+        cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
+		cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
 	}
 
     return cone;
@@ -248,9 +331,17 @@ figure generate::createTorus(float rIn, float rOut, int slices, int stacks) {
             torus.addPoint((rIn + rOut*cos(beta*j)) * cos(alpha*(i+1)), rOut*sin(beta*j), (rIn + rOut*cos(beta*j)) * sin(alpha*(i+1)));
             torus.addPoint((rIn + rOut*cos(beta*j)) * cos(alpha*i), rOut*sin(beta*j), (rIn + rOut*cos(beta*j)) * sin(alpha*i));
 
+            torus.addNormal(cos(beta*(j+1)) * cos(alpha*(i+1)), sin(beta*(j+1)), cos(beta*(j+1)) * sin(alpha*(i+1)));
+            torus.addNormal(cos(beta*j) * cos(alpha*(i+1)), sin(beta*j), cos(beta*j) * sin(alpha*(i+1)));
+            torus.addNormal(cos(beta*j) * cos(alpha*i), sin(beta*j), cos(beta*j) * sin(alpha*i));
+
             torus.addPoint((rIn + rOut*cos(beta*j)) * cos(alpha*i), rOut*sin(beta*j), (rIn + rOut*cos(beta*j)) * sin(alpha*i));
             torus.addPoint((rIn + rOut*cos(beta*(j+1))) * cos(alpha*i), rOut*sin(beta*(j+1)), (rIn + rOut*cos(beta*(j+1))) * sin(alpha*i));
             torus.addPoint((rIn + rOut*cos(beta*(j+1))) * cos(alpha*(i+1)), rOut*sin(beta*(j+1)), (rIn + rOut*cos(beta*(j+1))) * sin(alpha*(i+1)));
+
+            torus.addNormal(cos(beta*j) * cos(alpha*i), sin(beta*j), cos(beta*j) * sin(alpha*i));
+            torus.addNormal(cos(beta*(j+1)) * cos(alpha*i), sin(beta*(j+1)), cos(beta*(j+1)) * sin(alpha*i));
+            torus.addNormal(cos(beta*(j+1)) * cos(alpha*(i+1)), sin(beta*(j+1)), cos(beta*(j+1)) * sin(alpha*(i+1)));
         }
     }
 
