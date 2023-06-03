@@ -75,6 +75,34 @@ void drawFigures(group* grupo)
 	glPushMatrix();
 
 	group r;
+	
+	for (auto i : grupo->models) {
+		if(i.color->shininess) {
+			glMaterialf(GL_FRONT, GL_SHININESS, (GLfloat)*i.color->shininess);
+		}
+
+		for(auto c : i.color->colors) {
+			float v[4];
+			v[0] = (float)get<0>(c.second)/255.0;
+		    v[1] = (float)get<1>(c.second)/255.0;
+			v[2] = (float)get<2>(c.second)/255.0;
+			v[3] = (float)get<3>(c.second);
+
+
+			if(c.first == AMBIENT) {
+				glMaterialfv(GL_FRONT, GL_AMBIENT, v);
+			}
+			if(c.first == DIFFUSE) {
+				glMaterialfv(GL_FRONT, GL_DIFFUSE, v);
+			}
+			if(c.first == SPECULAR) {
+				glMaterialfv(GL_FRONT, GL_SPECULAR, v);
+			}
+			if(c.first == EMISSIVE) {
+				glMaterialfv(GL_FRONT, GL_EMISSION, v);
+			}
+		}
+	}
 
 	if (grupo->transformations)
 	{
@@ -155,39 +183,6 @@ void drawFigures(group* grupo)
 		}
 	}
 
-	for (auto i : grupo->models) {
-		if(i.color->shininess) {
-			glMaterialf(GL_FRONT, GL_SHININESS, (GLfloat)*i.color->shininess);
-		}
-
-		for(auto c : i.color->colors) {
-			float v[4];
-			v[0] = (float)get<0>(c.second)/255.0;
-		    v[1] = (float)get<1>(c.second)/255.0;
-			v[2] = (float)get<2>(c.second)/255.0;
-			v[3] = (float)get<3>(c.second);
-
-			for (size_t j = 0; j < 4; j++)
-			{
-				cout << v[j] << endl;
-			}
-			
-			
-
-			if(c.first == AMBIENT) {
-				glMaterialfv(GL_FRONT, GL_AMBIENT, v);
-			}
-			if(c.first == DIFFUSE) {
-				glMaterialfv(GL_FRONT, GL_DIFFUSE, v);
-			}
-			if(c.first == SPECULAR) {
-				glMaterialfv(GL_FRONT, GL_SPECULAR, v);
-			}
-			if(c.first == EMISSIVE) {
-				glMaterialfv(GL_FRONT, GL_EMISSION, v);
-			}
-		}
-	}
 
 	if (vbo_enable)
 	{
@@ -437,11 +432,6 @@ int glut_main(int argc, char** argv) {
          	glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, white);
         	glLightfv(GL_LIGHT0 + i, GL_SPECULAR, white);
 		}
-		//for(auto l : ls) {
-		//	glLightfv(GL_LIGHT0 + nLights, GL_AMBIENT, dark);
-       // 	glLightfv(GL_LIGHT0 + nLights, GL_DIFFUSE, white);
-        //	glLightfv(GL_LIGHT0 + nLights, GL_SPECULAR, white);
-		//}
 	}
 
 	cameraMenu();

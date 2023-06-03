@@ -4,6 +4,7 @@
 #if  defined(__unix__) || defined(__APPLE__) 
 #include <unistd.h>
 #include <dirent.h>
+#include <math.h>
 #define getDir getcwd
 static const std::string slash = "/";
 #else
@@ -28,11 +29,13 @@ void figure::addPoint(float a, float b, float c){
 
 void figure::addNormal(float a, float b, float c){
     point p;
-    p.x = a;
-    p.y = b;
-    p.z = c;
+    float l = sqrt(a*a + b * b + c * c);
+    p.x = a/l;
+    p.y = b/l;
+    p.z = c/l;
     normais.push_back(p);
 }
+
 
 #if  defined(__unix__) || defined(__APPLE__) 
 bool folderExists(const std::string& folderPath)
