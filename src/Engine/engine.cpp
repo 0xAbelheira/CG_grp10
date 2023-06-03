@@ -42,12 +42,12 @@ float alphaC;
 float aux_y[3] = { 0,1,0 };
 bool vbo_enable = true;
 float fps_display;
-int nLigths;
+int nLights;
 vector<light> ls;
 float dark[4] = { 0.2, 0.2, 0.2, 1.0 };
 float white[4] = { 1.0, 1.0, 1.0, 1.0 };
 float black[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
- 
+
 int frame = 0, timebase = 0;
 
 void changeSize(int w, int h)
@@ -214,27 +214,28 @@ void drawFigures(group* grupo)
 }
 
 void renderLights() {
-	if(nLigths != 0) {
+	int asd = nLights;
+	if(nLights != 0) {
 
 		for (auto light : ls) {
 
 			if(*light.type == POINT) {
 				GLfloat pos[4] = {light.pos->x,light.pos->y,light.pos->z,1};
-        		glLightfv(GL_LIGHT0 + nLigths, GL_POSITION, pos);
+        		glLightfv(GL_LIGHT0 + nLights, GL_POSITION, pos);
 			}
 
 			if(*light.type == DIRECTIONAL) {
 				GLfloat dir[4] = {light.dir->x,light.dir->y,light.dir->z,0};
-        		glLightfv(GL_LIGHT0 + nLigths, GL_POSITION, dir);
+        		glLightfv(GL_LIGHT0 + nLights, GL_POSITION, dir);
 			}
 
 			if(*light.type == SPOTLIGHT) {
 				GLfloat pos[4] = {light.pos->x,light.pos->y,light.pos->z,1};
 				GLfloat dir[4] = {light.dir->x,light.dir->y,light.dir->z,0};
 				GLfloat cut[1] = {*light.cutoff};
-        		glLightfv(GL_LIGHT0 + nLigths, GL_POSITION, pos);
-        		glLightfv(GL_LIGHT0 + nLigths, GL_SPOT_DIRECTION, dir);
-        		glLightfv(GL_LIGHT0 + nLigths, GL_SPOT_CUTOFF, cut);
+        		glLightfv(GL_LIGHT0 + nLights, GL_POSITION, pos);
+        		glLightfv(GL_LIGHT0 + nLights, GL_SPOT_DIRECTION, dir);
+        		glLightfv(GL_LIGHT0 + nLights, GL_SPOT_CUTOFF, cut);
 			}
 		}
 	}
@@ -421,15 +422,15 @@ int glut_main(int argc, char** argv) {
 
 	cameraMenu();
 
-	if (nLigths > 0) {
+	if (nLights > 0) {
 		glEnable(GL_LIGHTING);
-		for (int i = 0; i < nLigths; i++) {
+		for (int i = 0; i < nLights; i++) {
 			glEnable(GL_LIGHT0 + i);
 		}
 		for(auto l : ls) {
-			glLightfv(GL_LIGHT0 + nLigths, GL_AMBIENT, dark);
-        	glLightfv(GL_LIGHT0 + nLigths, GL_DIFFUSE, white);
-        	glLightfv(GL_LIGHT0 + nLigths, GL_SPECULAR, white);
+			glLightfv(GL_LIGHT0 + nLights, GL_AMBIENT, dark);
+        	glLightfv(GL_LIGHT0 + nLights, GL_DIFFUSE, white);
+        	glLightfv(GL_LIGHT0 + nLights, GL_SPECULAR, white);
 		}
 	}
 
@@ -482,8 +483,28 @@ int main(int argc, char** argv) {
 		}
 	}
 	else {
-		cout << "Invalid arguments!";
-		return -1;
+		// cout << "Invalid arguments!";
+		// return -1;
+
+		XMLDocument doc;
+		XMLError err = doc.LoadFile("../../demo/test.xml");
+
+		if (err) {
+			fprintf(stderr, "TINYXML2 FAILURE! Error code: %d\n", err);
+			return err;
+		}
+
+		//world engloba todo o xml
+		XMLElement* world_e = doc.FirstChildElement("world");
+		if (!world_e) {
+			cout << "XML needs a field called \"world\"";
+			return -1;
+		}
+		else {
+			vertices_vec = vector<float>();
+			int err = xml_world(world_e);
+			if (err == -1) return -1;
+		}
 	}
 
 	px = cam.px;

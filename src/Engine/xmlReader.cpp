@@ -13,10 +13,10 @@ using namespace utilities;
 extern group grupos;
 extern camera cam;
 extern vector<light> ls;
-extern int nLights = 0;
 extern int window_size_w;
 extern int window_size_h;
 extern vector<float> vertices_vec;
+extern int nLights;
 
 transform xml_transform(XMLElement* models_e)
 {
@@ -226,6 +226,7 @@ group xml_group(XMLElement* group_e)
 
 void xml_lights(XMLElement* lights_e)
 {
+	nLights = 0;
 	XMLElement* light_e = lights_e->FirstChildElement();
 	while (light_e)
 	{
@@ -339,6 +340,5 @@ int xml_world(XMLElement* world_e) {
 		cout << "ERROR: \"group\" not detected.";
 		return -1;
 	}
-	auto x = grupos;
 	return 1;
 }
