@@ -570,7 +570,7 @@ int main(int argc, char** argv) {
 		// return -1;
 
 		XMLDocument doc;
-		XMLError err = doc.LoadFile("../../demo/test.xml");
+		XMLError err = doc.LoadFile("../../demo/SistemaSolarText.xml");
 
 		if (err) {
 			fprintf(stderr, "TINYXML2 FAILURE! Error code: %d\n", err);
