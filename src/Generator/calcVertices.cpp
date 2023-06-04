@@ -268,80 +268,93 @@ figure generate::createSphere(float radius, int slices, int stacks){
 
 // Função que cria o Cone. Recebe o raio da base, altura, slices e stacks
 figure generate::createCone(float radius, float height, int slices, int stacks){
-	float alpha = 2 * M_PI / slices;
-    float hTop, hLow;
-    float difH = height/stacks;
-    float difR = radius/stacks;
-    float rTop, rLow;
+	 figure f;
+
+    float theta = 0;
+    float nextTheta = 0;
+    float delta = (2 * M_PI) / slices;
+    float raio = radius / stacks;
+    float alturas = height / stacks;
+    int i, j;
+    int indexCount = 0;
+
+    float textH = 1.0f / slices;
+    float textV = 1.0f / stacks;
+
+    float var = (2 * radius * M_PI) / slices;
+
+
+    for (i = 0; i < slices; i++) {
+
+        nextTheta = theta + delta;
+
+        f.addPoint(0, 0, 0);
+        f.addPoint(radius * sin(nextTheta), 0, radius * cos(nextTheta));
+        f.addPoint(radius * sin(theta), 0, radius * cos(theta));
+
+        f.addNormal(0, -1, 0);
+        f.addNormal(0, -1, 0);
+        f.addNormal(0, -1, 0);
+
+        f.addText(var / 2, 1, 0);
+        f.addText(i * var, 0, 0);
+        f.addText((i + 1) * var, 0, 0);
+        
+        theta = nextTheta;
+        indexCount += 3;
+    }
+
+    // Fazer as laterais
+    float r1 = radius;
+    float r2 = radius - raio;
+    float alt1 = 0;
+    float alt2 = alturas;
+    theta = 0;
+    nextTheta = 0;
     float ny = cos(atan(height / radius));
 
-    figure cone;
+    for (i = 0; i < slices; i++) {
 
-	for(int i = 0; i < slices; i++) {
-        hLow = 0;
-        rLow = radius;
-        //base
-		cone.addPoint(radius*sin(alpha*(i+1)), 0, radius*cos(alpha*(i+1)));
-		cone.addPoint(radius*sin(alpha*i), 0, radius*cos(alpha*i));
-		cone.addPoint(0, 0, 0);
+        nextTheta += delta;
 
-        cone.addNormal(0, -1, 0);
-        cone.addNormal(0, -1, 0);
-        cone.addNormal(0, -1, 0);
+        for (j = 0; j < stacks; j++) {
+            f.addPoint(r1 * sin(nextTheta), alt1, r1 * cos(nextTheta));
+            f.addPoint(r2 * sin(nextTheta), alt2, r2 * cos(nextTheta));
+            f.addPoint(r1 * sin(theta), alt1, r1 * cos(theta));
 
-        cone.addText((i+1)/slices,0,0);
-        cone.addText(i/slices,0,0);
-        cone.addText(i/slices,0,0);
+            f.addPoint(r2 * sin(nextTheta), alt2, r2 * cos(nextTheta));
+            f.addPoint(r2 * sin(theta), alt2, r2 * cos(theta));
+            f.addPoint(r1 * sin(theta), alt1, r1 * cos(theta));
 
-        for(int j = 0; j < stacks-1; j++) {
-            rTop = rLow - difR;
-            hTop = hLow + difH;
+            f.addText((i + 1) * textH, j * textV, 0);
+            f.addText((i + 1) * textH, (j + 1) * textV, 0);
+            f.addText(i * textH, j * textV, 0);
+            f.addText((i + 1) * textH, (j + 1) * textV, 0);
+            f.addText(i * textH, (j + 1) * textV, 0);
+            f.addText(i * textH, j * textV, 0);
 
-		    cone.addPoint(rLow*sin(alpha*i), hLow, rLow*cos(alpha*i));
-            cone.addPoint(rLow*sin(alpha*(i+1)), hLow, rLow*cos(alpha*(i+1)));
-		    cone.addPoint(rTop*sin(alpha*i), hTop, rTop*cos(alpha*i));
+            f.addNormal(sin(nextTheta), ny, cos(nextTheta));
+            f.addNormal(sin(nextTheta), ny, cos(nextTheta));
+            f.addNormal(sin(theta), ny, cos(theta));
 
-            cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
-            cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
-		    cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
+            f.addNormal(sin(nextTheta), ny, cos(nextTheta));
+            f.addNormal(sin(theta), ny, cos(theta));
+            f.addNormal(sin(theta), ny, cos(theta));
 
-            cone.addPoint(rLow*sin(alpha*(i+1)), hLow, rLow*cos(alpha*(i+1)));
-            cone.addPoint(rTop*sin(alpha*(i+1)), hTop, rTop*cos(alpha*(i+1)));
-            cone.addPoint(rTop*sin(alpha*i), hTop, rTop*cos(alpha*i));
 
-            cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
-            cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
-            cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
-
-            cone.addText(i/slices, (j+1)/stacks,0);
-            cone.addText((i+1)/slices, (j+1)/stacks,0);
-            cone.addText(i/slices, (j+2)/stacks,0);
-
-            cone.addText((i+1)/slices, (j+1)/stacks,0);
-            cone.addText((i+1)/slices, (j+2)/stacks,0);
-            cone.addText(i/slices, (j+2)/stacks,0);
-
-            rLow = rTop;
-            hLow += difH;
+            r1 -= raio;
+            r2 -= raio;
+            alt1 += alturas;
+            alt2 += alturas;
+            indexCount+=4;
         }
-
-        rTop = rLow - difR;
-        hTop = hLow + difH;
-
-        cone.addPoint(rLow*sin(alpha*i), hLow, rLow*cos(alpha*i));
-        cone.addPoint(rLow*sin(alpha*(i+1)), hLow, rLow*cos(alpha*(i+1)));
-		cone.addPoint(rTop*sin(alpha*i), hTop, rTop*cos(alpha*i));
-
-        cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
-        cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
-		cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
-
-        cone.addText(i/slices, (stacks-1)/stacks,0);
-        cone.addText((i+1)/slices, (stacks-1)/stacks,0);
-        cone.addText(i/slices, 1,0);
-	}
-
-    return cone;
+        r1 = radius;
+        r2 = radius - raio;
+        alt1 = 0;
+        alt2 = alturas;
+        theta = nextTheta;
+    }
+    return f;
 }
 
 figure generate::createTorus(float rIn, float rOut, int slices, int stacks) {
