@@ -25,6 +25,13 @@ int createFileType (figure f, string name){
         file << p.z << " ";
         file << "\n";
     }
+    file << f.text.size() << "\n";
+    for (point p : f.text) {
+        file << p.x << " ";
+        file << p.y << " ";
+        file << p.z << " ";
+        file << "\n";
+    }
 
     if(!file){
         cout<<"\n!!!Error in creating file!!!\n";

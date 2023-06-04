@@ -9,6 +9,13 @@ figure generate::createPlane(float size, int nrDiv){
     x = z = (float)size/2;
     av = (float)size/nrDiv;
 
+    float hor = 1.0f / 3.0f;
+    float ver = 1.0f / 2.0f;
+    float textH = hor / (float)nrDiv;
+    float textV = ver / (float)nrDiv;
+    float tetoH = hor; 
+    float tetoV = ver - textV;
+
     figure pl;
 
     for(int i = 0; i < nrDiv; i++){
@@ -29,10 +36,20 @@ figure generate::createPlane(float size, int nrDiv){
             pl.addNormal(0, 1, 0);
             pl.addNormal(0, 1, 0);
 
+            pl.addText(tetoH, tetoV + textV, 0);
+            pl.addText(tetoH, tetoV, 0);
+            pl.addText(tetoH + textH, tetoV + textV, 0);
+            pl.addText(tetoH + textH, tetoV, 0);
+            pl.addText(tetoH + textH, tetoV + textV, 0);
+            pl.addText(tetoH, tetoV, 0);
+
             x -= av;
+            tetoH += textH;
         }
         z -= av;
         x += nrDiv*av;
+        tetoV -= textV;
+        tetoH = ver - textH;
     }
     return pl;
 }
@@ -44,6 +61,14 @@ figure generate::createBox(float size, int nrDiv){
     av = (float)size/nrDiv;
 
     figure box;
+
+    float baseH = 0;
+    float baseV = 0;
+    float hor = 1.0f / 3.0f;
+    float ver = 1.0f / 2.0f;
+    float textH = hor / (float)nrDiv;
+    float textV = ver / (float)nrDiv;
+
 
     // Piso da caixa
     for(int i = 0; i < nrDiv; i++) {
@@ -64,13 +89,26 @@ figure generate::createBox(float size, int nrDiv){
             box.addNormal(0, -1, 0);
             box.addNormal(0, -1, 0);
 
+            box.addText(baseH + textH, baseV, 0);
+            box.addText(baseH, baseV + textV, 0);
+            box.addText(baseH, baseV, 0);
+            box.addText(baseH, baseV + textV, 0);
+            box.addText(baseH + textH, baseV, 0);
+            box.addText(baseH + textH, baseV + textV, 0);
+
             x -= av;
+            baseH += textH;
         }
         z -= av;
         x += nrDiv*av;
+        baseV += textV;
+        baseH = 0;
     }
 
     z += nrDiv*av;
+
+    float tetoH = hor; 
+    float tetoV = ver - textV;
 
     // Teto da caixa
     for(int i = 0; i < nrDiv; i++) {
@@ -91,10 +129,20 @@ figure generate::createBox(float size, int nrDiv){
             box.addNormal(0, 1, 0);
             box.addNormal(0, 1, 0);
 
+            box.addText(tetoH, tetoV + textV, 0);
+            box.addText(tetoH, tetoV, 0);
+            box.addText(tetoH + textH, tetoV + textV, 0);
+            box.addText(tetoH + textH, tetoV, 0);
+            box.addText(tetoH + textH, tetoV + textV, 0);
+            box.addText(tetoH, tetoV, 0);
+
             x -= av;
+            tetoH += textH;
         }
         z -= av;
         x += nrDiv*av;
+        tetoV -= textV;
+        tetoH = ver - textH;
     }
 
     z += nrDiv*av;

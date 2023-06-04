@@ -5,13 +5,7 @@
 #include "../Utilities/tinyxml2/tinyxml2.h"
 #include "../Utilities/camara.cpp"
 #include "xmlReader.hpp"
-#ifdef __APPLE__
-#include <GLUT/glut.h>
-#include <GLUT/glew.h>
-#else
-#include <GL/glew.h>
-#include <GL/glut.h>
-#endif
+#include <IL/il.h>
 #include <iostream>
 #include <iterator>
 #include <map>
@@ -25,8 +19,8 @@ using namespace utilities;
 using namespace catmull;
 using namespace matrixUtils;
 
-vector<float> vertices_vec, normais_vec;
-GLuint vertices, current_vertice, normais;
+vector<float> vertices_vec, normais_vec, text_vec;
+GLuint vertices, current_vertice, normais, text;
 group grupos;
 int window_size_w;
 int window_size_h;
@@ -101,6 +95,30 @@ void drawFigures(group* grupo)
 			if(c.first == EMISSIVE) {
 				glMaterialfv(GL_FRONT, GL_EMISSION, v);
 			}
+		}
+
+		if(i.texture) {
+			unsigned int t, tw, th;
+			unsigned char* texData;
+			ilEnable(IL_ORIGIN_SET);
+			ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+			ilGenImages(1, &t);
+			ilBindImage(t);
+			ilLoadImage((ILstring)i.texture);
+			tw = ilGetInteger(IL_IMAGE_WIDTH);
+			th = ilGetInteger(IL_IMAGE_HEIGHT);
+			ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+			texData = ilGetData();
+			
+			glGenTextures(1, &i.textID);
+			glBindTexture(GL_TEXTURE_2D, i.textID);
+			
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
 		}
 	}
 
@@ -475,6 +493,20 @@ int glut_main(int argc, char** argv) {
 	);
 	normais_vec.clear();
 	normais_vec.~vector();
+
+	// criar o VBO Normais
+	glGenBuffers(1, &text);
+
+	// copiar o vector para a memória gráfica
+	glBindBuffer(GL_ARRAY_BUFFER, text);
+	glBufferData(
+		GL_ARRAY_BUFFER, // tipo do buffer, só é relevante na altura do desenho
+		sizeof(float) * text_vec.size(), // tamanho do vector em bytes
+		text_vec.data(), // os dados do array associado ao vector
+		GL_STATIC_DRAW // indicativo da utilização (estático e para desenho)
+	);
+	text_vec.clear();
+	text_vec.~vector();
 
 	cout << " prepared.\n";
 

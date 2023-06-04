@@ -15,7 +15,7 @@ extern camera cam;
 extern vector<light> ls;
 extern int window_size_w;
 extern int window_size_h;
-extern vector<float> vertices_vec, normais_vec;
+extern vector<float> vertices_vec, normais_vec, text_vec;
 extern int nLights;
 
 transform xml_transform(XMLElement* models_e)
@@ -107,7 +107,7 @@ vector<models> xml_models(XMLElement* models_e)
 					i++;
 					line.erase(0, pos + delimiter.length());
 				}
-				if(i != 3) f = 1;
+				if(i != 3) ++f;
 				else
 				{
 					x1=cood[0],y1=cood[1],z1=cood[2];
@@ -118,11 +118,18 @@ vector<models> xml_models(XMLElement* models_e)
 						vertices_vec.push_back(y1);
 						vertices_vec.push_back(z1);
 					}
-					else {
+					else if (f == 1)
+					{
 						figura.addNormal(x1,y1,z1);
 						normais_vec.push_back(x1);
 						normais_vec.push_back(y1);
 						normais_vec.push_back(z1);
+					}
+					else {
+						figura.addText(x1,y1,z1);
+						text_vec.push_back(x1);
+						text_vec.push_back(y1);
+						text_vec.push_back(z1);
 					}	
 				}
 			}

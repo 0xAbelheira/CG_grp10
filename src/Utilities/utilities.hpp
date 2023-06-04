@@ -5,6 +5,13 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#include <GLUT/glew.h>
+#else
+#include <GL/glew.h>
+#include <GL/glut.h>
+#endif
 
 namespace utilities{
     struct point {
@@ -18,8 +25,10 @@ namespace utilities{
     public:
         std::vector<point> points;
         std::vector<point> normais;
+        std::vector<point> text;
         void addPoint(float, float, float);
         void addNormal(float, float, float);
+        void addText(float, float, float);
     };
 
     std::string getPath();
@@ -76,6 +85,7 @@ namespace utilities{
         public:
             utilities::figure model;
             std::string *texture;
+            GLuint textID;
             utilities::color *color;
             models();
     };
