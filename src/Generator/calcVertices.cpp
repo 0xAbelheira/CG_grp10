@@ -221,26 +221,26 @@ figure generate::createSphere(float radius, int slices, int stacks){
 		sphere.addPoint(radius * sin(beta) * sin(alpha*i), radius * cos(beta), radius * sin(beta) * cos(alpha*i));
 		sphere.addPoint(radius * sin(beta) * sin(alpha*(i+1)), radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
 
-        sphere.addNormal(0, 1, 0);
-		sphere.addNormal(sin(beta) * sin(alpha*i), cos(beta), sin(beta) * cos(alpha*i));
-		sphere.addNormal(sin(beta) * sin(alpha*(i+1)), cos(beta), sin(beta) * cos(alpha*(i+1)));
+        sphere.addNormal(0, radius, 0);
+		sphere.addNormal(radius * sin(beta) * sin(alpha*i), radius * cos(beta), radius * sin(beta) * cos(alpha*i));
+		sphere.addNormal(radius * sin(beta) * sin(alpha*(i+1)), radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
 
 		for(int j = 1; j < stacks-1; j++) {
 			sphere.addPoint(radius * sin(beta*j) * sin(alpha*i), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*i));
 			sphere.addPoint(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
 			sphere.addPoint(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
 
-            sphere.addNormal(sin(beta*j) * sin(alpha*i), cos(beta*j), sin(beta*j) * cos(alpha*i));
-			sphere.addNormal(sin(beta*(j+1)) * sin(alpha*i), cos(beta*(j+1)), sin(beta*(j+1)) * cos(alpha*i));
-			sphere.addNormal(sin(beta*j) * sin(alpha*(i+1)), cos(beta*j), sin(beta*j) * cos(alpha*(i+1)));
+            sphere.addNormal(radius * sin(beta*j) * sin(alpha*i), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*i));
+			sphere.addNormal(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
+			sphere.addNormal(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
 
 			sphere.addPoint(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
 			sphere.addPoint(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
 			sphere.addPoint(radius * sin(beta*(j+1)) * sin(alpha*(i+1)), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*(i+1)));
 
-            sphere.addNormal(sin(beta*j) * sin(alpha*(i+1)), cos(beta*j), sin(beta*j) * cos(alpha*(i+1)));
-			sphere.addNormal(sin(beta*(j+1)) * sin(alpha*i), cos(beta*(j+1)), sin(beta*(j+1)) * cos(alpha*i));
-			sphere.addNormal(sin(beta*(j+1)) * sin(alpha*(i+1)), cos(beta*(j+1)), sin(beta*(j+1)) * cos(alpha*(i+1)));
+            sphere.addNormal(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
+			sphere.addNormal(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
+			sphere.addNormal(radius * sin(beta*(j+1)) * sin(alpha*(i+1)), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*(i+1)));
 		}
 
         //parte baixo
@@ -248,9 +248,9 @@ figure generate::createSphere(float radius, int slices, int stacks){
 		sphere.addPoint(radius * sin(beta) * sin(alpha*i), -radius * cos(beta), radius * sin(beta) * cos(alpha*i));
 		sphere.addPoint(0, -radius, 0);
 
-        sphere.addNormal(sin(beta) * sin(alpha*(i+1)), -cos(beta), sin(beta) * cos(alpha*(i+1)));
-		sphere.addNormal(sin(beta) * sin(alpha*i), -cos(beta), sin(beta) * cos(alpha*i));
-		sphere.addNormal(0, -1, 0);
+        sphere.addNormal(radius * sin(beta) * sin(alpha*(i+1)), -radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
+		sphere.addNormal(radius * sin(beta) * sin(alpha*i), -radius * cos(beta), radius * sin(beta) * cos(alpha*i));
+		sphere.addNormal(0, -radius, 0);
 	}
 
     return sphere;

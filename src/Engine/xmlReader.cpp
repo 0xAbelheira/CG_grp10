@@ -108,21 +108,23 @@ vector<models> xml_models(XMLElement* models_e)
 					line.erase(0, pos + delimiter.length());
 				}
 				if(i != 3) f = 1;
-				x1=cood[0],y1=cood[1],z1=cood[2];
+				else
+				{
+					x1=cood[0],y1=cood[1],z1=cood[2];
 
-				if(f == 0) {
-					figura.addPoint(x1,y1,z1);
-					vertices_vec.push_back(x1);
-					vertices_vec.push_back(y1);
-					vertices_vec.push_back(z1);
+					if(f == 0) {
+						figura.addPoint(x1,y1,z1);
+						vertices_vec.push_back(x1);
+						vertices_vec.push_back(y1);
+						vertices_vec.push_back(z1);
+					}
+					else {
+						figura.addNormal(x1,y1,z1);
+						normais_vec.push_back(x1);
+						normais_vec.push_back(y1);
+						normais_vec.push_back(z1);
+					}	
 				}
-				else {
-					figura.addNormal(x1,y1,z1);
-					normais_vec.push_back(x1);
-					normais_vec.push_back(y1);
-					normais_vec.push_back(z1);
-				}
-
 			}
 			fs.close();
 			temp.model = figura;
@@ -267,17 +269,17 @@ void xml_lights(XMLElement* lights_e)
 		if (strcmp(light_e->Attribute("type"), "point") == 0)
 		{
 			l->pos = new point;
-			light_e->QueryAttribute("posX", &l->pos->x);
-			light_e->QueryAttribute("posY", &l->pos->y);
-			light_e->QueryAttribute("posZ", &l->pos->z);
+			light_e->QueryAttribute("posx", &l->pos->x);
+			light_e->QueryAttribute("posy", &l->pos->y);
+			light_e->QueryAttribute("posz", &l->pos->z);
 			*l->type = POINT;
 		}
 		else if (strcmp(light_e->Attribute("type"), "directional") == 0)
 		{
 			l->dir = new point;
-			light_e->QueryAttribute("dirX", &l->dir->x);
-			light_e->QueryAttribute("dirY", &l->dir->y);
-			light_e->QueryAttribute("dirZ", &l->dir->z);
+			light_e->QueryAttribute("dirx", &l->dir->x);
+			light_e->QueryAttribute("diry", &l->dir->y);
+			light_e->QueryAttribute("dirz", &l->dir->z);
 			*l->type = DIRECTIONAL;
 		}
 		else if (strcmp(light_e->Attribute("type"), "spotlight") == 0)
@@ -285,13 +287,13 @@ void xml_lights(XMLElement* lights_e)
 			l->pos = new point;
 			l->dir = new point;
 			l->cutoff = new int;
-			light_e->QueryAttribute("posX", &l->pos->x);
-			light_e->QueryAttribute("posY", &l->pos->y);
-			light_e->QueryAttribute("posZ", &l->pos->z);
+			light_e->QueryAttribute("posx", &l->pos->x);
+			light_e->QueryAttribute("posy", &l->pos->y);
+			light_e->QueryAttribute("posz", &l->pos->z);
 
-			light_e->QueryAttribute("dirX", &l->dir->x);
-			light_e->QueryAttribute("dirY", &l->dir->y);
-			light_e->QueryAttribute("dirZ", &l->dir->z);
+			light_e->QueryAttribute("dirx", &l->dir->x);
+			light_e->QueryAttribute("diry", &l->dir->y);
+			light_e->QueryAttribute("dirz", &l->dir->z);
 
 			light_e->QueryAttribute("cutoff", l->cutoff);
 

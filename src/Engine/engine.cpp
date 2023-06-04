@@ -75,7 +75,7 @@ void drawFigures(group* grupo)
 	glPushMatrix();
 
 	group r;
-
+	
 	for (auto i : grupo->models) {
 		if(i.color->shininess) {
 			glMaterialf(GL_FRONT, GL_SHININESS, (GLfloat)*i.color->shininess);
@@ -87,6 +87,7 @@ void drawFigures(group* grupo)
 		    v[1] = (float)get<1>(c.second)/255.0;
 			v[2] = (float)get<2>(c.second)/255.0;
 			v[3] = (float)get<3>(c.second);
+
 
 			if(c.first == AMBIENT) {
 				glMaterialfv(GL_FRONT, GL_AMBIENT, v);
@@ -244,7 +245,6 @@ void renderLights() {
 
 void renderText()
 {
-	glDisable(GL_LIGHTING);
     // save projection
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
@@ -279,16 +279,6 @@ void renderText()
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
-	glEnable(GL_LIGHTING);
-	if (nLights > 0) {
-		glEnable(GL_LIGHTING);
-		for (int i = 0; i < nLights; i++) {
-			glEnable(GL_LIGHT0 + i);
-			glLightfv(GL_LIGHT0 + i, GL_AMBIENT, dark);
-         	glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, white);
-        	glLightfv(GL_LIGHT0 + i, GL_SPECULAR, white);
-		}
-	}
     glEnable(GL_DEPTH_TEST);
 
 }
@@ -297,7 +287,6 @@ void renderScene(void){
 
 	float fps = 0;
 	int time;
-	char s[64];
 
 	// clear buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -307,6 +296,8 @@ void renderScene(void){
 	gluLookAt(px, py, pz,
 			cam.lx, cam.ly, cam.lz,
 			cam.ux, cam.uy, cam.uz);
+
+	glDisable(GL_LIGHTING);
 
 	drawReferencial();
 
@@ -318,8 +309,19 @@ void renderScene(void){
 		frame = 0;
 		fps_display = fps;
 	}
-
 	renderText();
+
+	glEnable(GL_LIGHTING);
+	// if (nLights > 0) {
+	// 	glEnable(GL_LIGHTING);
+	// 	for (int i = 0; i < nLights; i++) {
+	// 		glEnable(GL_LIGHT0 + i);
+	// 		glLightfv(GL_LIGHT0 + i, GL_AMBIENT, dark);
+	// 		glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, white);
+	// 		glLightfv(GL_LIGHT0 + i, GL_SPECULAR, white);
+	// 	}
+	// }
+
 	renderLights();
 	current_vertice = 0;
 	drawFigures(&grupos);
@@ -442,11 +444,6 @@ int glut_main(int argc, char** argv) {
          	glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, white);
         	glLightfv(GL_LIGHT0 + i, GL_SPECULAR, white);
 		}
-		//for(auto l : ls) {
-		//	glLightfv(GL_LIGHT0 + nLights, GL_AMBIENT, dark);
-       // 	glLightfv(GL_LIGHT0 + nLights, GL_DIFFUSE, white);
-        //	glLightfv(GL_LIGHT0 + nLights, GL_SPECULAR, white);
-		//}
 	}
 
 	cameraMenu();
