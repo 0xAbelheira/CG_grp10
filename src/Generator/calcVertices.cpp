@@ -224,68 +224,46 @@ figure generate::createBox(float size, int nrDiv){
 
 // Função que cria o Esfera. Recebe o raio, slices e stacks
 figure generate::createSphere(float radius, int slices, int stacks){
-    float alpha = (float)2 * M_PI / slices;
-	float beta = (float)M_PI / stacks;
+    figure f;
 
-    figure sphere;
-    //Desenhar apenas um triangulo nas extremidades para evitar pontos desnecessarios
+    float delta1 = M_PI / stacks;
+    float delta2 = 2 * M_PI / slices;
+    float theta1 = -M_PI / 2;
+    float theta2 = 0.0f;
+    int indexCount = 0;
+    float textH = 1.0f / (float)slices;
+    float textV = 1.0f / (float)stacks;
 
-	for(int i = 0; i < slices; i++) {
-        //topo
-		sphere.addPoint(0, radius, 0);
-		sphere.addPoint(radius * sin(beta) * sin(alpha*i), radius * cos(beta), radius * sin(beta) * cos(alpha*i));
-		sphere.addPoint(radius * sin(beta) * sin(alpha*(i+1)), radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
+    for (int i = 0; i < stacks; i++) {
 
-        sphere.addText(i/slices, stacks/stacks, 0);
-        sphere.addText(i/slices, (stacks-1) / stacks, 0);
-        sphere.addText((i+1)/slices, (stacks-1) / stacks, 0);
+        for (int j = 0; j < slices; j++) {
+            theta2 = j * delta2;
+            f.addPoint(cos(theta1 + delta1) * sin(theta2) * radius, sin(theta1 + delta1) * radius, cos(theta1 + delta1) * cos(theta2) * radius);
+            f.addPoint(cos(theta1) * sin(theta2) * radius, sin(theta1) * radius, cos(theta1) * cos(theta2) * radius);
+            f.addPoint(cos(theta1) * sin(theta2 + delta2) * radius, sin(theta1) * radius, cos(theta1) * cos(theta2 + delta2) * radius);
 
+            f.addPoint(cos(theta1 + delta1) * sin(theta2) * radius, sin(theta1 + delta1) * radius, cos(theta1 + delta1) * cos(theta2) * radius);
+            f.addPoint(cos(theta1) * sin(theta2 + delta2) * radius, sin(theta1) * radius, cos(theta1) * cos(theta2 + delta2) * radius);
+            f.addPoint(cos(theta1 + delta1) * sin(theta2 + delta2) * radius, sin(theta1 + delta1) * radius, cos(theta1 + delta1) * cos(theta2 + delta2) * radius);
 
-        sphere.addNormal(0, radius, 0);
-		sphere.addNormal(radius * sin(beta) * sin(alpha*i), radius * cos(beta), radius * sin(beta) * cos(alpha*i));
-		sphere.addNormal(radius * sin(beta) * sin(alpha*(i+1)), radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
+            f.addNormal(cos(theta1 + delta1) * sin(theta2) * radius, sin(theta1 + delta1) * radius, cos(theta1 + delta1) * cos(theta2) * radius);
+            f.addNormal(cos(theta1) * sin(theta2) * radius, sin(theta1) * radius, cos(theta1) * cos(theta2) * radius);
+            f.addNormal(cos(theta1) * sin(theta2 + delta2) * radius, sin(theta1) * radius, cos(theta1) * cos(theta2 + delta2) * radius);
+            f.addNormal(cos(theta1 + delta1) * sin(theta2) * radius, sin(theta1 + delta1) * radius, cos(theta1 + delta1) * cos(theta2) * radius);
+            f.addNormal(cos(theta1) * sin(theta2 + delta2) * radius, sin(theta1) * radius, cos(theta1) * cos(theta2 + delta2) * radius);
+            f.addNormal(cos(theta1 + delta1) * sin(theta2 + delta2) * radius, sin(theta1 + delta1) * radius, cos(theta1 + delta1) * cos(theta2 + delta2) * radius);
 
-		for(int j = 1; j < stacks-1; j++) {
-			sphere.addPoint(radius * sin(beta*j) * sin(alpha*i), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*i));
-			sphere.addPoint(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
-			sphere.addPoint(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
-
-            sphere.addNormal(radius * sin(beta*j) * sin(alpha*i), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*i));
-			sphere.addNormal(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
-			sphere.addNormal(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
-
-			sphere.addPoint(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
-			sphere.addPoint(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
-			sphere.addPoint(radius * sin(beta*(j+1)) * sin(alpha*(i+1)), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*(i+1)));
-
-            sphere.addNormal(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
-			sphere.addNormal(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
-			sphere.addNormal(radius * sin(beta*(j+1)) * sin(alpha*(i+1)), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*(i+1)));
-
-            sphere.addText(i/slices, (stacks-j)/stacks, 0);
-            sphere.addText(i/slices, (stacks-(j+1)) / stacks, 0);
-            sphere.addText((i+1)/slices, (stacks-j) / stacks, 0);
-
-            sphere.addText((i+1)/slices, (stacks-j) / stacks, 0);
-            sphere.addText(i/slices, (stacks-(j+1)) / stacks, 0);
-            sphere.addText((i+1)/slices, (stacks-(j+1)) / stacks, 0);
-		}
-
-        //parte baixo
-		sphere.addPoint(radius * sin(beta) * sin(alpha*(i+1)), -radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
-		sphere.addPoint(radius * sin(beta) * sin(alpha*i), -radius * cos(beta), radius * sin(beta) * cos(alpha*i));
-		sphere.addPoint(0, -radius, 0);
-
-        sphere.addNormal(radius * sin(beta) * sin(alpha*(i+1)), -radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
-		sphere.addNormal(radius * sin(beta) * sin(alpha*i), -radius * cos(beta), radius * sin(beta) * cos(alpha*i));
-		sphere.addNormal(0, -radius, 0);
-
-        sphere.addText((i+1)/slices, 1/stacks, 0);
-        sphere.addText(i/slices, 1/stacks, 0);
-        sphere.addText(i/slices, 0, 0);
-	}
-
-    return sphere;
+            f.addText(j * textH, i * textV + textV, 0);
+            f.addText(j * textH, i * textV, 0);
+            f.addText(j * textH + textH, i * textV, 0);
+            f.addText(j * textH, i * textV + textV, 0);
+            f.addText(j * textH + textH, i * textV, 0);
+            f.addText(j * textH + textH, i * textV + textV, 0);
+        }
+        theta1 += delta1;
+    }
+    
+    return f;
 }
 
 // Função que cria o Cone. Recebe o raio da base, altura, slices e stacks
