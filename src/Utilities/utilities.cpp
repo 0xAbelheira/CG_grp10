@@ -47,7 +47,7 @@ void figure::addText(float a, float b, float c){
 void figure::calTextPlain(float size) {
     point p;
     for(auto a : this->points) {
-        this->addText((a.x*(size/2))/size, (a.y*(size/2))/size, (a.z*(size/2))/size);
+        this->addText((a.x+(size/2))/size, (a.z+(size/2))/size, 0);
     }
 }
 
