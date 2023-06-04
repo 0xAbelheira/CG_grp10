@@ -155,6 +155,15 @@ figure bezier::generateBezierPatches(figure pVertices, std::vector<size_t> pInde
                 fig.addPoint(pos[1][0], pos[1][1], pos[1][2]);
                 fig.addPoint(pos[3][0], pos[3][1], pos[3][2]);
 
+                fig.addText(1.0f - v2, 1.0f - u2, 0);
+                fig.addText(1.0f - v, 1.0f - u2, 0);
+                fig.addText(1.0f - v, 1.0f - u, 0);
+
+                fig.addText(1.0f - v, 1.0f - u, 0);
+                fig.addText(1.0f - v2, 1.0f - u, 0);
+                fig.addText(1.0f - v2, 1.0f - u2, 0);
+
+
                 getBezierNormalPoint(u, v, (float**)matrixX, (float**)matrixY, (float**)matrixZ, pos[0]);
                 getBezierNormalPoint(u, v2, (float**)matrixX, (float**)matrixY, (float**)matrixZ, pos[1]);
                 getBezierNormalPoint(u2, v, (float**)matrixX, (float**)matrixY, (float**)matrixZ, pos[2]);

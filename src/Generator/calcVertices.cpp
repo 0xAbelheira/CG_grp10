@@ -236,6 +236,11 @@ figure generate::createSphere(float radius, int slices, int stacks){
 		sphere.addPoint(radius * sin(beta) * sin(alpha*i), radius * cos(beta), radius * sin(beta) * cos(alpha*i));
 		sphere.addPoint(radius * sin(beta) * sin(alpha*(i+1)), radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
 
+        sphere.addText(i/slices, stacks/stacks, 0);
+        sphere.addText(i/slices, (stacks-1) / stacks, 0);
+        sphere.addText((i+1)/slices, (stacks-1) / stacks, 0);
+
+
         sphere.addNormal(0, radius, 0);
 		sphere.addNormal(radius * sin(beta) * sin(alpha*i), radius * cos(beta), radius * sin(beta) * cos(alpha*i));
 		sphere.addNormal(radius * sin(beta) * sin(alpha*(i+1)), radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
@@ -256,6 +261,14 @@ figure generate::createSphere(float radius, int slices, int stacks){
             sphere.addNormal(radius * sin(beta*j) * sin(alpha*(i+1)), radius * cos(beta*j), radius * sin(beta*j) * cos(alpha*(i+1)));
 			sphere.addNormal(radius * sin(beta*(j+1)) * sin(alpha*i), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*i));
 			sphere.addNormal(radius * sin(beta*(j+1)) * sin(alpha*(i+1)), radius * cos(beta*(j+1)), radius * sin(beta*(j+1)) * cos(alpha*(i+1)));
+
+            sphere.addText(i/slices, (stacks-j)/stacks, 0);
+            sphere.addText(i/slices, (stacks-(j+1)) / stacks, 0);
+            sphere.addText((i+1)/slices, (stacks-j) / stacks, 0);
+
+            sphere.addText((i+1)/slices, (stacks-j) / stacks, 0);
+            sphere.addText(i/slices, (stacks-(j+1)) / stacks, 0);
+            sphere.addText((i+1)/slices, (stacks-(j+1)) / stacks, 0);
 		}
 
         //parte baixo
@@ -266,6 +279,10 @@ figure generate::createSphere(float radius, int slices, int stacks){
         sphere.addNormal(radius * sin(beta) * sin(alpha*(i+1)), -radius * cos(beta), radius * sin(beta) * cos(alpha*(i+1)));
 		sphere.addNormal(radius * sin(beta) * sin(alpha*i), -radius * cos(beta), radius * sin(beta) * cos(alpha*i));
 		sphere.addNormal(0, -radius, 0);
+
+        sphere.addText((i+1)/slices, 1/stacks, 0);
+        sphere.addText(i/slices, 1/stacks, 0);
+        sphere.addText(i/slices, 0, 0);
 	}
 
     return sphere;
@@ -294,6 +311,10 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
         cone.addNormal(0, -1, 0);
         cone.addNormal(0, -1, 0);
 
+        cone.addText((i+1)/slices,0,0);
+        cone.addText(i/slices,0,0);
+        cone.addText(i/slices,0,0);
+
         for(int j = 0; j < stacks-1; j++) {
             rTop = rLow - difR;
             hTop = hLow + difH;
@@ -314,6 +335,14 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
             cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
             cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
 
+            cone.addText(i/slices, j/stacks,0);
+            cone.addText((i+1)/slices, j/stacks,0);
+            cone.addText(i/slices, (j+1)/stacks,0);
+
+            cone.addText((i+1)/slices, j/stacks,0);
+            cone.addText((i+1)/slices, (j+1)/stacks,0);
+            cone.addText(i/slices, (j+1)/stacks,0);
+
             rLow = rTop;
             hLow += difH;
         }
@@ -328,6 +357,10 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
         cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
         cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
 		cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
+
+        cone.addText(i/slices, (stacks-1)/stacks,0);
+        cone.addText((i+1)/slices, (stacks-1)/stacks,0);
+        cone.addText(i/slices, 1,0);
 	}
 
     return cone;

@@ -57,11 +57,12 @@ void figure::calTextBox(float size) {
     {
         if(k < s/3) this->addText((a.x+(size/2))/size, (a.z+(size/2))/size, 0);
         else if (k < 2*s/3) this->addText((a.x+(size/2))/size, (a.y+(size/2))/size, 0);
-        else this->addText((a.y+(size/2))/size, (a.z+(size/2))/size, 0);
+        else this->addText((a.z+(size/2))/size, (a.y+(size/2))/size, 0);
         
         ++k;
     }
 }
+
 
 #if  defined(__unix__) || defined(__APPLE__) 
 bool folderExists(const std::string& folderPath)
