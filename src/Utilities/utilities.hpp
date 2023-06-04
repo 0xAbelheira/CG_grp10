@@ -31,6 +31,7 @@ namespace utilities{
         void addPoint(float, float, float);
         void addNormal(float, float, float);
         void addText(float, float, float);
+        void calTextPlain(float);
     };
 
     std::string getPath();
