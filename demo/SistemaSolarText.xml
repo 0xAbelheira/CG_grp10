@@ -117,7 +117,7 @@
 			
 				<models>
 					<model file="sphere.3d" >
-						<texture file="moon.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -156,7 +156,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" >
-						<texture file="moon1.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -169,7 +169,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" > 
-						<texture file="moon2.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -230,7 +230,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" > 
-						<texture file="moon1.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -243,7 +243,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" >
-						<texture file="moon2.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -256,7 +256,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" >
-						<texture file="moon3.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -298,18 +298,6 @@
 			</group>
 				<!-- Lua1 de Saturno -->
 			<group>
-				<transform> 
-					<rotate time="1.5" x="0" y="1" z="0" />
-					<translate x="3" y="3" z="0"/>
-					<scale x="0.35" y="0.35" z="0.35"/>
-				</transform>
-				<models>
-					<model file="sphere.3d" >
-						<texture file="moon1.jpg" />
-					</model>
-				</models>
-			</group>
-			<group>
 				<!-- Lua2 de Saturno -->
 				<transform> 
 					<rotate time="3" x="0" y="1" z="0" />
@@ -318,7 +306,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" > 
-						<texture file="moon2.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -331,7 +319,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" > 
-						<texture file="moon3.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -370,7 +358,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" >
-						<texture file="moon1.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -383,7 +371,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" > 
-						<texture file="moon2.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -423,7 +411,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" >
-						<texture file="moon1.jpg" />
+						<texture file="relva.jpg" />
 					</model> 
 				</models>
 			</group>
@@ -436,7 +424,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" > 
-						<texture file="moon2.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -449,7 +437,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" > 
-						<texture file="moon3.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -488,7 +476,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" >
-						<texture file="moon1.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
@@ -501,7 +489,7 @@
 				</transform>
 				<models>
 					<model file="sphere.3d" > 
-						<texture file="moon2.jpg" />
+						<texture file="relva.jpg" />
 					</model>
 				</models>
 			</group>
