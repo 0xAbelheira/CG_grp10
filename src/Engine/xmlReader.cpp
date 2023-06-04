@@ -282,7 +282,7 @@ void xml_lights(XMLElement* lights_e)
 			light_e->QueryAttribute("dirz", &l->dir->z);
 			*l->type = DIRECTIONAL;
 		}
-		else if (strcmp(light_e->Attribute("type"), "spotlight") == 0)
+		else if (strcmp(light_e->Attribute("type"), "spot") == 0)
 		{
 			l->pos = new point;
 			l->dir = new point;
@@ -299,6 +299,8 @@ void xml_lights(XMLElement* lights_e)
 
 			*l->type = SPOTLIGHT;
 		}
+		else
+			throw new exception("Erro no nome das luzes");
 		
 		light_e = light_e->NextSiblingElement();
 		ls.push_back(*l);

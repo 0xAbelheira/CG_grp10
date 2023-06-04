@@ -43,7 +43,7 @@ float aux_y[3] = { 0,1,0 };
 bool vbo_enable = true;
 float fps_display;
 int nLights;
-vector<light> ls;
+vector<light> ls = vector<light>();
 float dark[4] = { 0.2, 0.2, 0.2, 1.0 };
 float white[4] = { 1.0, 1.0, 1.0, 1.0 };
 float black[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -84,7 +84,7 @@ void drawFigures(group* grupo)
 		for(auto c : i.color->colors) {
 			float v[4];
 			v[0] = (float)get<0>(c.second)/255.0;
-		    v[1] = (float)get<1>(c.second)/255.0;
+			v[1] = (float)get<1>(c.second)/255.0;
 			v[2] = (float)get<2>(c.second)/255.0;
 			v[3] = (float)get<3>(c.second);
 
@@ -126,7 +126,7 @@ void drawFigures(group* grupo)
 					float glt = glutGet(GLUT_ELAPSED_TIME) / (grupo->transformations->translate->time * 1000);
 					
 					//render the curve
-					glColor3f(1, 1, 1);
+					// glColor3f(1, 1, 1);
 					glBegin(GL_LINE_LOOP);
 					for (int i = 0; i < 100; i++) {
 						getGlobalCatmullRomPoint(i/100.0f, grupo->transformations->translate->points.points, res, deriv);
@@ -172,7 +172,7 @@ void drawFigures(group* grupo)
 				if(!grupo->transformations->rotate_time)
 					angle = *(grupo->transformations->rotate_angle);
 				else
-            		angle = (((float)glutGet(GLUT_ELAPSED_TIME) / 1000)* 360) / *(grupo->transformations->rotate_time);
+					angle = (((float)glutGet(GLUT_ELAPSED_TIME) / 1000)* 360) / *(grupo->transformations->rotate_time);
 				glRotatef(angle, x, y, z);
 			}
 			else if (i == transformtype::SCALE)
@@ -221,21 +221,21 @@ void renderLights() {
 
 			if(*light.type == POINT) {
 				GLfloat pos[4] = {light.pos->x,light.pos->y,light.pos->z,1};
-        		glLightfv(GL_LIGHT0 + c, GL_POSITION, pos);
+				glLightfv(GL_LIGHT0 + c, GL_POSITION, pos);
 			}
 
 			if(*light.type == DIRECTIONAL) {
 				GLfloat dir[4] = {light.dir->x,light.dir->y,light.dir->z,0};
-        		glLightfv(GL_LIGHT0 + c, GL_POSITION, dir);
+				glLightfv(GL_LIGHT0 + c, GL_POSITION, dir);
 			}
 
 			if(*light.type == SPOTLIGHT) {
 				GLfloat pos[4] = {light.pos->x,light.pos->y,light.pos->z,1};
 				GLfloat dir[4] = {light.dir->x,light.dir->y,light.dir->z,0};
 				GLfloat cut[1] = {*light.cutoff};
-        		glLightfv(GL_LIGHT0 + c, GL_POSITION, pos);
-        		glLightfv(GL_LIGHT0 + c, GL_SPOT_DIRECTION, dir);
-        		glLightfv(GL_LIGHT0 + c, GL_SPOT_CUTOFF, cut);
+				glLightfv(GL_LIGHT0 + c, GL_POSITION, pos);
+				glLightfv(GL_LIGHT0 + c, GL_SPOT_DIRECTION, dir);
+				glLightfv(GL_LIGHT0 + c, GL_SPOT_CUTOFF, cut);
 			}
 
 			++c;
@@ -245,41 +245,41 @@ void renderLights() {
 
 void renderText()
 {
-    // save projection
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
+	// save projection
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
 
-    // set projection so that coordinates match window pixels
-    gluOrtho2D(0, window_size_w, window_size_h, 0);
-    glMatrixMode(GL_MODELVIEW);
+	// set projection so that coordinates match window pixels
+	gluOrtho2D(0, window_size_w, window_size_h, 0);
+	glMatrixMode(GL_MODELVIEW);
 
-    // disable depth test (assuming text is written in the end)
-    glDisable(GL_DEPTH_TEST);
+	// disable depth test (assuming text is written in the end)
+	glDisable(GL_DEPTH_TEST);
 
-    // set modelview matrix
-    glPushMatrix();
-    glLoadIdentity();
-    glRasterPos2d(10, 20); // text position in pixels
+	// set modelview matrix
+	glPushMatrix();
+	glLoadIdentity();
+	glRasterPos2d(10, 20); // text position in pixels
 
-    // render text
-    char text[100];
-    sprintf(text, "FPS: %6.2f    |    ", fps_display);
+	// render text
+	char text[100];
+	sprintf(text, "FPS: %6.2f    |    ", fps_display);
 	if (vbo_enable)
-    	sprintf(text, "%sVBO Enable", text);
+		sprintf(text, "%sVBO Enable", text);
 	else
-    	sprintf(text, "%sVBO Disable", text);
+		sprintf(text, "%sVBO Disable", text);
 
-    for (char *c = text; *c != '\0'; c++) {
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
-    }
+	for (char *c = text; *c != '\0'; c++) {
+		glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+	}
 
-    // Restore matrices and reenable depth test
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-    glEnable(GL_DEPTH_TEST);
+	// Restore matrices and reenable depth test
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	glEnable(GL_DEPTH_TEST);
 
 }
 
@@ -334,48 +334,48 @@ void renderScene(void){
 void vbo_Choice(int choice)
 {
 	switch (choice) {
-        case 0:
+		case 0:
 			vbo_enable = false;
-            break;
-        case 1:
+			break;
+		case 1:
 			vbo_enable = true;
-            break;
-        default:
-            break;
+			break;
+		default:
+			break;
 	}
 }
 
 void modeChoice(int choice)
 {
-    switch (choice) {
-        case 0:
-            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            break;
-        case 1:
-            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            break;
-        case 2:
-            glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-            break;
-        default:
-            break;
-    }
+	switch (choice) {
+		case 0:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			break;
+		case 1:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			break;
+		case 2:
+			glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+			break;
+		default:
+			break;
+	}
 }
 
 void cameraMenu(){
 
 	int vboMode = glutCreateMenu(vbo_Choice);
-    glutAddMenuEntry("Disable", 0);
-    glutAddMenuEntry("Enable", 1);
+	glutAddMenuEntry("Disable", 0);
+	glutAddMenuEntry("Enable", 1);
 
-    int drawMode = glutCreateMenu(modeChoice);
-    glutAddMenuEntry("Fill", 0);
-    glutAddMenuEntry("Lines", 1);
-    glutAddMenuEntry("Points", 2);
+	int drawMode = glutCreateMenu(modeChoice);
+	glutAddMenuEntry("Fill", 0);
+	glutAddMenuEntry("Lines", 1);
+	glutAddMenuEntry("Points", 2);
 
 	glutAddSubMenu("VBOs", vboMode);
 
-    glutAttachMenu(GLUT_RIGHT_BUTTON);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
 void mouseFunc(int button, int state,int x, int y) {
@@ -389,11 +389,11 @@ void motionFunc(int x, int y) {
 
 	alphaC += dx*M_PI/400;
 	betaC -= dy*M_PI/400;
-    if(betaC >= M_PI/2) betaC = 1.57079;
-    if(betaC <= -M_PI/2) betaC = -1.57079;
+	if(betaC >= M_PI/2) betaC = 1.57079;
+	if(betaC <= -M_PI/2) betaC = -1.57079;
 
 
-    px = r * cos(betaC) * sin(alphaC);
+	px = r * cos(betaC) * sin(alphaC);
 	py = r * sin(betaC);
 	pz = r * cos(betaC) * cos(alphaC);
 
@@ -418,7 +418,7 @@ int glut_main(int argc, char** argv) {
 	glutReshapeFunc(changeSize);
 
 	// Callback registration for keyboard processing
-    glutMouseFunc(mouseFunc);
+	glutMouseFunc(mouseFunc);
 	glutMotionFunc(motionFunc);
 
 	//  OpenGL settings
@@ -441,8 +441,8 @@ int glut_main(int argc, char** argv) {
 		for (int i = 0; i < nLights; i++) {
 			glEnable(GL_LIGHT0 + i);
 			glLightfv(GL_LIGHT0 + i, GL_AMBIENT, dark);
-         	glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, white);
-        	glLightfv(GL_LIGHT0 + i, GL_SPECULAR, white);
+			glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, white);
+			glLightfv(GL_LIGHT0 + i, GL_SPECULAR, white);
 		}
 	}
 
