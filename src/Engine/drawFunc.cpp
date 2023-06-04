@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #endif
+#include <iostream>
 
 using namespace utilities;
 using namespace std;
@@ -56,7 +57,7 @@ void draw::drawFiguresVBO(GLuint from, GLuint size)
 
 void draw::drawFiguresVBO(GLuint from, GLuint size, GLuint textID)
 {
-	glColor3f(1.0f,1.0f,1.0f);
+	glBindTexture(GL_TEXTURE_2D, textID);
 	glBindBuffer(GL_ARRAY_BUFFER, vertices);
 	glVertexPointer(3, GL_FLOAT, 0, 0);
 
@@ -65,7 +66,6 @@ void draw::drawFiguresVBO(GLuint from, GLuint size, GLuint textID)
 
 	glBindBuffer(GL_ARRAY_BUFFER, text);
 	glTexCoordPointer(2, GL_FLOAT, 0, 0);
-	glBindTexture(GL_TEXTURE_2D, textID);
 
 	glDrawArrays(GL_TRIANGLES, from, size);
 

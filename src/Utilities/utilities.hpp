@@ -12,6 +12,8 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 #endif
+#include <IL/il.h>
+
 
 namespace utilities{
     struct point {
@@ -85,7 +87,7 @@ namespace utilities{
         public:
             utilities::figure model;
             std::string *texture;
-            GLuint textID;
+            GLuint *textID;
             utilities::color *color;
             models();
     };

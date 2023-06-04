@@ -113,6 +113,7 @@ utilities::models::models()
 {
     this->texture = nullptr;
     this->color = nullptr;
+    this->textID = nullptr;
 }
 
 utilities::group::group()

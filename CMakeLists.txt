@@ -39,16 +39,22 @@ if  (WIN32)
 	include_directories(${TOOLKITS_FOLDER}/glut ${TOOLKITS_FOLDER}/glew ${TOOLKITS_FOLDER}/devil)
 	target_link_libraries(engine ${OPENGL_LIBRARIES} 
 										  ${TOOLKITS_FOLDER}/glut/glut32.lib 
-										  ${TOOLKITS_FOLDER}/devil/devIL.lib
-										  ${TOOLKITS_FOLDER}/glew/glew32.lib )
+										  ${TOOLKITS_FOLDER}/glew/glew32.lib
+										  ${TOOLKITS_FOLDER}/devil/devIL.lib )
+
+	target_link_libraries(generator ${OPENGL_LIBRARIES} 
+										  ${TOOLKITS_FOLDER}/glut/glut32.lib 
+										  ${TOOLKITS_FOLDER}/glew/glew32.lib
+										  ${TOOLKITS_FOLDER}/devil/devIL.lib )
 	
 	if (EXISTS "${TOOLKITS_FOLDER}/glut/glut32.dll"  AND EXISTS "${TOOLKITS_FOLDER}/glew/glew32.dll" AND EXISTS "${TOOLKITS_FOLDER}/devil/devil.dll")
 		file(COPY ${TOOLKITS_FOLDER}/glut/glut32.dll DESTINATION ${CMAKE_BINARY_DIR})
-		file(COPY ${TOOLKITS_FOLDER}/devil/devil.dll DESTINATION ${CMAKE_BINARY_DIR})
 		file(COPY ${TOOLKITS_FOLDER}/glew/glew32.dll DESTINATION ${CMAKE_BINARY_DIR})
+		file(COPY ${TOOLKITS_FOLDER}/devil/devil.dll DESTINATION ${CMAKE_BINARY_DIR})
 	endif(EXISTS "${TOOLKITS_FOLDER}/glut/glut32.dll" AND EXISTS "${TOOLKITS_FOLDER}/glew/glew32.dll" AND EXISTS "${TOOLKITS_FOLDER}/devil/devil.dll")
 	
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT engine)
+	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT generator)
 	
 else (WIN32) #Linux and Mac
 

@@ -5,7 +5,6 @@
 #include "../Utilities/tinyxml2/tinyxml2.h"
 #include "../Utilities/camara.cpp"
 #include "xmlReader.hpp"
-#include <IL/il.h>
 #include <iostream>
 #include <iterator>
 #include <map>
@@ -69,56 +68,35 @@ void drawFigures(group* grupo)
 	glPushMatrix();
 
 	group r;
-	
+
 	for (auto i : grupo->models) {
-		if(i.color->shininess) {
-			glMaterialf(GL_FRONT, GL_SHININESS, (GLfloat)*i.color->shininess);
-		}
-
-		for(auto c : i.color->colors) {
-			float v[4];
-			v[0] = (float)get<0>(c.second)/255.0;
-			v[1] = (float)get<1>(c.second)/255.0;
-			v[2] = (float)get<2>(c.second)/255.0;
-			v[3] = (float)get<3>(c.second);
-
-
-			if(c.first == AMBIENT) {
-				glMaterialfv(GL_FRONT, GL_AMBIENT, v);
+		if (!i.texture)
+		{
+			if(i.color->shininess) {
+				glMaterialf(GL_FRONT, GL_SHININESS, (GLfloat)*i.color->shininess);
 			}
-			if(c.first == DIFFUSE) {
-				glMaterialfv(GL_FRONT, GL_DIFFUSE, v);
-			}
-			if(c.first == SPECULAR) {
-				glMaterialfv(GL_FRONT, GL_SPECULAR, v);
-			}
-			if(c.first == EMISSIVE) {
-				glMaterialfv(GL_FRONT, GL_EMISSION, v);
-			}
-		}
 
-		if(i.texture) {
-			unsigned int t, tw, th;
-			unsigned char* texData;
-			ilEnable(IL_ORIGIN_SET);
-			ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
-			ilGenImages(1, &t);
-			ilBindImage(t);
-			ilLoadImage((ILstring)i.texture);
-			tw = ilGetInteger(IL_IMAGE_WIDTH);
-			th = ilGetInteger(IL_IMAGE_HEIGHT);
-			ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-			texData = ilGetData();
-			
-			glGenTextures(1, &i.textID);
-			glBindTexture(GL_TEXTURE_2D, i.textID);
-			
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			for(auto c : i.color->colors) {
+				float v[4];
+				v[0] = (float)get<0>(c.second)/255.0;
+				v[1] = (float)get<1>(c.second)/255.0;
+				v[2] = (float)get<2>(c.second)/255.0;
+				v[3] = (float)get<3>(c.second);
 
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+
+				if(c.first == AMBIENT) {
+					glMaterialfv(GL_FRONT, GL_AMBIENT, v);
+				}
+				if(c.first == DIFFUSE) {
+					glMaterialfv(GL_FRONT, GL_DIFFUSE, v);
+				}
+				if(c.first == SPECULAR) {
+					glMaterialfv(GL_FRONT, GL_SPECULAR, v);
+				}
+				if(c.first == EMISSIVE) {
+					glMaterialfv(GL_FRONT, GL_EMISSION, v);
+				}
+			}
 		}
 	}
 
@@ -208,9 +186,12 @@ void drawFigures(group* grupo)
 			GLuint figures_size = 0;
 			for (auto i : grupo->models) {
 				figures_size += i.model.points.size();
+				if (i.texture)
+					drawFiguresVBO(current_vertice, figures_size, *(i.textID));
+				else
+					drawFiguresVBO(current_vertice, figures_size);
+				current_vertice += figures_size;
 			}
-			drawFiguresVBO(current_vertice, figures_size);
-			current_vertice += figures_size;
 		}
 	}
 	else
@@ -431,8 +412,8 @@ int glut_main(int argc, char** argv) {
 	glutCreateWindow("CG_PROJECT");
 
 	// Required callback registry 
-	glutDisplayFunc(renderScene);
 	glutIdleFunc(renderScene);
+	glutDisplayFunc(renderScene);
 	glutReshapeFunc(changeSize);
 
 	// Callback registration for keyboard processing
@@ -443,17 +424,12 @@ int glut_main(int argc, char** argv) {
 	#ifndef __APPLE__	
 		// init GLEW
 		glewInit();
-	#endif	
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+	#endif
+
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_TEXTURE_2D);
-
-	glPolygonMode(GL_FRONT, GL_FILL);
-
 	if (nLights > 0) {
 		glEnable(GL_LIGHTING);
 		for (int i = 0; i < nLights; i++) {
@@ -462,7 +438,15 @@ int glut_main(int argc, char** argv) {
 			glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, white);
 			glLightfv(GL_LIGHT0 + i, GL_SPECULAR, white);
 		}
+		glEnable(GL_RESCALE_NORMAL);
 	}
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	glPolygonMode(GL_FRONT, GL_FILL);
+
 
 	cameraMenu();
 
@@ -494,7 +478,7 @@ int glut_main(int argc, char** argv) {
 	normais_vec.clear();
 	normais_vec.~vector();
 
-	// criar o VBO Normais
+	// criar o VBO texturas
 	glGenBuffers(1, &text);
 
 	// copiar o vector para a memória gráfica
@@ -508,6 +492,36 @@ int glut_main(int argc, char** argv) {
 	text_vec.clear();
 	text_vec.~vector();
 
+	for (auto& i : grupos.models)
+	{
+		if(i.texture) {
+			unsigned int t, tw, th;
+			unsigned char* texData;
+			i.textID = new GLuint;
+
+			ilInit();
+			ilEnable(IL_ORIGIN_SET);
+			ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+			ilGenImages(1, &t);
+			ilBindImage(t);
+			string path = getPath().append(*(i.texture));
+			ilLoadImage((ILstring) path.c_str());
+			tw = ilGetInteger(IL_IMAGE_WIDTH);
+			th = ilGetInteger(IL_IMAGE_HEIGHT);
+			ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+			texData = ilGetData();
+			
+			glGenTextures(1, i.textID);
+			glBindTexture(GL_TEXTURE_2D, *(i.textID));
+			
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+		}
+	}
 	cout << " prepared.\n";
 
 	// enter GLUT's main cycle

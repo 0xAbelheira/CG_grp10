@@ -120,17 +120,17 @@ vector<models> xml_models(XMLElement* models_e)
 					}
 					else if (f == 1)
 					{
-						figura.addNormal(x1,y1,z1);
+						// figura.addNormal(x1,y1,z1);
 						normais_vec.push_back(x1);
 						normais_vec.push_back(y1);
 						normais_vec.push_back(z1);
 					}
-					else {
-						figura.addText(x1,y1,z1);
+					else if (f == 2) {
+						// figura.addText(x1,y1,z1);
 						text_vec.push_back(x1);
 						text_vec.push_back(y1);
-						text_vec.push_back(z1);
-					}	
+						// text_vec.push_back(z1);
+					}
 				}
 			}
 			fs.close();
