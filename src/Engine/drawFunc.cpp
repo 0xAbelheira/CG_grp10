@@ -11,7 +11,7 @@
 using namespace utilities;
 using namespace std;
 
-extern GLuint vertices, normais;
+extern GLuint vertices, normais, text;
 extern float dark[4];
 extern float white[4];
 extern float black[4];
@@ -53,6 +53,24 @@ void draw::drawFiguresVBO(GLuint from, GLuint size)
 	glNormalPointer(GL_FLOAT, 0, 0);
 
 	glDrawArrays(GL_TRIANGLES, from, size);
+}
+
+void draw::drawFiguresVBO(GLuint from, GLuint size, GLuint textID)
+{
+	glColor3f(1.0f,1.0f,1.0f);
+	glBindBuffer(GL_ARRAY_BUFFER, vertices);
+	glVertexPointer(3, GL_FLOAT, 0, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, normais);
+	glNormalPointer(GL_FLOAT, 0, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, text);
+	glTexCoordPointer(2, GL_FLOAT, 0, 0);
+	glBindTexture(GL_TEXTURE_2D, textID);
+
+	glDrawArrays(GL_TRIANGLES, from, size);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void draw::drawReferencial() {
