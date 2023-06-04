@@ -44,6 +44,13 @@ void figure::addText(float a, float b, float c){
     text.push_back(p);
 }
 
+void figure::calTextPlain(float size) {
+    point p;
+    for(auto a : this->points) {
+        this->addText((a.x*(size/2))/size, (a.y*(size/2))/size, (a.z*(size/2))/size);
+    }
+}
+
 #if  defined(__unix__) || defined(__APPLE__) 
 bool folderExists(const std::string& folderPath)
 {

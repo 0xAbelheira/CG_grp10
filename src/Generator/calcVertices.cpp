@@ -9,13 +9,6 @@ figure generate::createPlane(float size, int nrDiv){
     x = z = (float)size/2;
     av = (float)size/nrDiv;
 
-    float hor = 1.0f / 3.0f;
-    float ver = 1.0f / 2.0f;
-    float textH = hor / (float)nrDiv;
-    float textV = ver / (float)nrDiv;
-    float tetoH = hor; 
-    float tetoV = ver - textV;
-
     figure pl;
 
     for(int i = 0; i < nrDiv; i++){
@@ -36,21 +29,14 @@ figure generate::createPlane(float size, int nrDiv){
             pl.addNormal(0, 1, 0);
             pl.addNormal(0, 1, 0);
 
-            pl.addText(tetoH, tetoV + textV, 0);
-            pl.addText(tetoH, tetoV, 0);
-            pl.addText(tetoH + textH, tetoV + textV, 0);
-            pl.addText(tetoH + textH, tetoV, 0);
-            pl.addText(tetoH + textH, tetoV + textV, 0);
-            pl.addText(tetoH, tetoV, 0);
-
             x -= av;
-            tetoH += textH;
         }
         z -= av;
         x += nrDiv*av;
-        tetoV -= textV;
-        tetoH = ver - textH;
     }
+
+    pl.calTextPlain(size);
+
     return pl;
 }
 
