@@ -335,13 +335,13 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
             cone.addNormal(sin(alpha*(i+1)), ny, cos(alpha*(i+1)));
             cone.addNormal(sin(alpha*i), ny, cos(alpha*i));
 
-            cone.addText(i/slices, j/stacks,0);
-            cone.addText((i+1)/slices, j/stacks,0);
             cone.addText(i/slices, (j+1)/stacks,0);
-
-            cone.addText((i+1)/slices, j/stacks,0);
             cone.addText((i+1)/slices, (j+1)/stacks,0);
-            cone.addText(i/slices, (j+1)/stacks,0);
+            cone.addText(i/slices, (j+2)/stacks,0);
+
+            cone.addText((i+1)/slices, (j+1)/stacks,0);
+            cone.addText((i+1)/slices, (j+2)/stacks,0);
+            cone.addText(i/slices, (j+2)/stacks,0);
 
             rLow = rTop;
             hLow += difH;
