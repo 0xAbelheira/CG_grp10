@@ -402,6 +402,43 @@ void motionFunc(int x, int y) {
 	mouse_y = y;
 }
 
+void textInit(group* asd)
+{
+	for (auto& i : asd->models)
+	{
+		if(i.texture) {
+			unsigned int t, tw, th;
+			unsigned char* texData;
+			i.textID = new GLuint;
+
+			ilInit();
+			ilEnable(IL_ORIGIN_SET);
+			ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+			ilGenImages(1, &t);
+			ilBindImage(t);
+			string path = getPath().append(*(i.texture));
+			if (!ilLoadImage((ILstring) path.c_str()))
+				throw new exception("imagem da textura nao existe");
+			tw = ilGetInteger(IL_IMAGE_WIDTH);
+			th = ilGetInteger(IL_IMAGE_HEIGHT);
+			ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+			texData = ilGetData();
+			
+			glGenTextures(1, i.textID);
+			glBindTexture(GL_TEXTURE_2D, *(i.textID));
+			
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+		}
+	}
+	for (auto& i : asd->groups)
+		textInit(&i);
+}
+
 int glut_main(int argc, char** argv) {
 
 	// init GLUT and the window
@@ -492,36 +529,8 @@ int glut_main(int argc, char** argv) {
 	text_vec.clear();
 	text_vec.~vector();
 
-	for (auto& i : grupos.models)
-	{
-		if(i.texture) {
-			unsigned int t, tw, th;
-			unsigned char* texData;
-			i.textID = new GLuint;
-
-			ilInit();
-			ilEnable(IL_ORIGIN_SET);
-			ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
-			ilGenImages(1, &t);
-			ilBindImage(t);
-			string path = getPath().append(*(i.texture));
-			ilLoadImage((ILstring) path.c_str());
-			tw = ilGetInteger(IL_IMAGE_WIDTH);
-			th = ilGetInteger(IL_IMAGE_HEIGHT);
-			ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-			texData = ilGetData();
-			
-			glGenTextures(1, i.textID);
-			glBindTexture(GL_TEXTURE_2D, *(i.textID));
-			
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
-		}
-	}
+	textInit(&grupos);
+	
 	cout << " prepared.\n";
 
 	// enter GLUT's main cycle
