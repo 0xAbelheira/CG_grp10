@@ -45,9 +45,21 @@ void figure::addText(float a, float b, float c){
 }
 
 void figure::calTextPlain(float size) {
-    point p;
     for(auto a : this->points) {
         this->addText((a.x+(size/2))/size, (a.z+(size/2))/size, 0);
+    }
+}
+
+void figure::calTextBox(float size) {
+    int s = this->points.size();
+    int k = 0;
+    for (auto a : this->points)
+    {
+        if(k < s/3) this->addText((a.x+(size/2))/size, (a.z+(size/2))/size, 0);
+        else if (k < 2*s/3) this->addText((a.x+(size/2))/size, (a.y+(size/2))/size, 0);
+        else this->addText((a.y+(size/2))/size, (a.z+(size/2))/size, 0);
+        
+        ++k;
     }
 }
 
