@@ -276,7 +276,6 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
     float raio = radius / stacks;
     float alturas = height / stacks;
     int i, j;
-    int indexCount = 0;
 
     float textH = 1.0f / slices;
     float textV = 1.0f / stacks;
@@ -301,7 +300,6 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
         f.addText((i + 1) * var, 0, 0);
         
         theta = nextTheta;
-        indexCount += 3;
     }
 
     // Fazer as laterais
@@ -346,7 +344,6 @@ figure generate::createCone(float radius, float height, int slices, int stacks){
             r2 -= raio;
             alt1 += alturas;
             alt2 += alturas;
-            indexCount+=4;
         }
         r1 = radius;
         r2 = radius - raio;
